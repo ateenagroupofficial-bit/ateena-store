@@ -151,6 +151,7 @@ select.sstat{font-size:11px;padding:3px 7px;width:auto;min-width:90px;border-rad
 
 /* KALKULATOR */
 .kalc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.kalc-fab{display:none}
 .sablon-row{background:var(--p4);border:1.5px solid var(--bd);border-radius:var(--rr);padding:11px;margin-bottom:7px;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:7px;align-items:end}
 .ukuran-row{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;align-items:end;margin-bottom:7px}
 .summary-box{background:linear-gradient(135deg,var(--p4),#faf5ff);border:1.5px solid var(--bd);border-radius:var(--rl);padding:14px}
@@ -453,6 +454,35 @@ body.dark .katalog-doc{filter:brightness(.92)}
   #tbl-keuangan th:nth-child(6),#tbl-keuangan td:nth-child(6){width:18%}
   #tbl-keuangan th:nth-child(7),#tbl-keuangan td:nth-child(7){width:12%}
 
+  /* ===== KALKULATOR MOBILE - 1 kolom + popup panel ===== */
+  .kalc-grid{grid-template-columns:1fr!important}
+  .kalc-grid > div:last-child{display:none!important}
+  #btn-lihat-kalkulasi{display:block!important}
+  #modal-kalkulasi-mobile{display:flex!important}
+  .kalc-fab{display:flex!important;position:fixed;bottom:80px;right:16px;z-index:500;
+    background:var(--p1);color:#fff;border:none;border-radius:50px;
+    padding:12px 18px;font-size:13px;font-weight:800;cursor:pointer;
+    align-items:center;gap:8px;box-shadow:0 4px 20px rgba(108,59,255,.5)}
+  #kalc-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600}
+  #kalc-popup-overlay.open{display:block}
+  #kalc-popup{display:none;position:fixed;bottom:0;left:0;right:0;
+    max-height:85vh;overflow-y:auto;background:var(--sf);
+    border-radius:20px 20px 0 0;border-top:2px solid var(--p1);
+    z-index:601;padding:16px;transform:translateY(100%);
+    transition:transform .3s cubic-bezier(.4,0,.2,1)}
+  #kalc-popup.open{display:block;transform:translateY(0)}
+
+  /* ===== DASHBOARD ORDER TERBARU - card list di mobile ===== */
+  #dash-tbl-wrap { display:none !important; }
+  #dash-card-list { display:block !important; }
+  #dash-card-list > div { padding:14px 16px !important; margin-bottom:10px !important; }
+  #dash-card-list [style*="font-size:14px"] { font-size:15px !important; }
+  #dash-card-list [style*="font-size:12px"] { font-size:13px !important; }
+  #dash-card-list [style*="font-size:11px"] { font-size:12px !important; }
+  #dash-card-list .mono { font-size:12px !important; }
+  #dash-card-list .badge { font-size:11px !important; padding:4px 10px !important; }
+  #dash-card-list .lunas-badge { font-size:12px !important; }
+
   /* Tabel rekap & lainnya - beri tbl-wrap scroll jika masih tidak cukup */
   #page-rekap .tbl-wrap,#page-database .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
   #page-rekap table,#page-database table{min-width:400px!important}
@@ -508,6 +538,52 @@ input, select, textarea { font-size: 16px !important; }
 @keyframes slideUpBanner { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
 /* ===== INSTALL PWA BUTTON ===== */
 #install-pwa-btn { display:none; position:fixed; bottom:80px; right:16px; background:linear-gradient(135deg,#6c3bff,#8b5cf6); color:#fff; border:none; border-radius:50px; padding:13px 20px; font-weight:800; font-size:13px; z-index:9998; box-shadow:0 4px 20px rgba(108,59,255,.5); cursor:pointer; }
+/* ===== TOMBOL KALKULASI MOBILE ===== */
+#btn-lihat-kalkulasi {
+  display:none;
+  position:sticky; bottom:80px; left:0; right:0;
+  width:calc(100% - 28px); margin:14px auto 0;
+  background:linear-gradient(135deg,#dc2626,#ef4444);
+  color:#fff; border:none; border-radius:14px;
+  padding:14px 20px; font-size:14px; font-weight:800;
+  cursor:pointer; letter-spacing:.02em;
+  box-shadow:0 4px 18px rgba(220,38,38,.4);
+  z-index:50;
+}
+/* ===== MODAL KALKULASI MOBILE ===== */
+#modal-kalkulasi-mobile {
+  display:none;
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,.6);
+  align-items:flex-end; justify-content:center;
+}
+#modal-kalkulasi-inner {
+  background:var(--sf); width:100%; max-height:88vh;
+  border-radius:22px 22px 0 0; overflow-y:auto;
+  padding:0 0 90px;
+  animation:slideUpModal .3s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUpModal {
+  from{transform:translateY(100%);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+.modal-kalkulasi-handle {
+  width:40px; height:4px; background:rgba(255,255,255,.2);
+  border-radius:2px; margin:12px auto 0;
+}
+.modal-kalkulasi-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 20px 12px; border-bottom:1px solid var(--bd);
+  position:sticky; top:0; background:var(--sf); z-index:2;
+}
+.modal-kalkulasi-title { font-size:16px; font-weight:800; color:var(--tx); }
+.modal-kalkulasi-close {
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(255,255,255,.08); border:none;
+  color:var(--mt); font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.modal-kalkulasi-body { padding:16px 16px 0; }
 /* ===== MORE MENU GRID BUTTON ===== */
 .more-menu-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;border:none;background:var(--sf2);border-radius:12px;cursor:pointer;font-size:10px;font-weight:700;color:var(--tx);font-family:inherit;transition:.15s;border:1px solid var(--bd);}
 .more-menu-btn:active{transform:scale(.95);background:var(--p2);}
@@ -650,12 +726,13 @@ input, select, textarea { font-size: 16px !important; }
   </div>
   <div class="card">
     <div class="card-header"><div class="card-title"><span class="ct-dot"></span>Order Terbaru</div></div>
-    <div class="tbl-wrap">
+    <div class="tbl-wrap" id="dash-tbl-wrap">
       <table>
         <thead><tr><th>No. Order</th><th>Customer</th><th>Detail Pesanan</th><th>Qty</th><th>Total</th><th>DP</th><th>Sisa</th><th>Status</th><th>Ubah Status</th></tr></thead>
         <tbody id="dash-tbl"></tbody>
       </table>
     </div>
+    <div id="dash-card-list" style="display:none"></div>
   </div>
 </div>
 
@@ -724,6 +801,21 @@ input, select, textarea { font-size: 16px !important; }
       <button class="btn btn-success" onclick="kirimOrder()" style="width:100%;padding:12px;justify-content:center;font-size:14px">✓ Kirim ke Form Order</button>
     </div>
   </div>
+</div>
+
+<button class="kalc-fab" id="kalc-fab-btn" onclick="openKalcPopup()">
+  🧮 <span id="kalc-fab-count"></span> Lihat Kalkulasi
+</button>
+<div id="kalc-popup-overlay" onclick="closeKalcPopup()"></div>
+<div id="kalc-popup">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div style="font-size:15px;font-weight:800;color:var(--tx)">🧮 Daftar Item & Kalkulasi</div>
+    <button onclick="closeKalcPopup()" style="background:var(--sf2);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;color:var(--mt);font-size:13px;cursor:pointer">✕ Tutup</button>
+  </div>
+  <div style="display:flex;gap:8px">
+            <button type="button" id="btn-lengan-pendek" class="metode-btn active" style="flex:1" onclick="pilihLengan('pendek')">👕 Lengan Pendek</button>
+            <button type="button" id="btn-lengan-panjang" class="metode-btn" style="flex:1" onclick="pilihLengan('panjang')">🧥 Lengan Panjang <span style="font-size:10px;opacity:.8">(+Rp10.000/pcs)</span></button>
+  <button class="btn btn-success" onclick="kirimOrder();closeKalcPopup()" style="width:100%;padding:12px;justify-content:center;font-size:14px;margin-top:12px">✓ Kirim ke Form Order</button>
 </div>
 
 <!-- ORDER MASUK -->
@@ -1503,7 +1595,47 @@ function renderDash(){
       <td><span class="badge b-${o.status.toLowerCase()}">${o.status}</span></td>
       <td><select class="sstat" onchange="ubahStatus(${o.id},this.value)">${["DP","Produksi","Selesai","Diambil"].map(s=>`<option${s===o.status?" selected":""}>${s}</option>`).join("")}</select></td>
     </tr>`).join("");
-}
+
+  // Render card list untuk mobile (dash-card-list)
+  const dashCardEl = document.getElementById("dash-card-list");
+  if(dashCardEl){
+    const recentOrders = orders.slice().reverse().slice(0,8);
+    if(!recentOrders.length){
+      dashCardEl.innerHTML = '<div class="empty"><div class="ei">📋</div><p>Belum ada order</p></div>';
+    } else {
+      dashCardEl.innerHTML = recentOrders.map(o => {
+        const sisa = sisaBayar(o);
+        const lunas = isLunas(o);
+        const overdue = isOverdue(o);
+        const produkLine = o.produk.split("|")[0].trim().replace(/\s*\[Sablon:[^\]]*\]/,"");
+        const extraProd = o.produk.includes("|") ? ` <span style="color:var(--p1);font-size:11px">+${o.produk.split("|").length-1} lagi</span>` : "";
+        return `<div style="background:var(--sf2);border:1px solid ${overdue?"var(--r2)":"var(--bd)"};border-radius:var(--rl);padding:12px 14px;margin-bottom:8px;${overdue?"border-left:3px solid var(--r)":""}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:800;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.nama}${overdue?'<span class="badge b-overdue" style="margin-left:6px;font-size:10px">Overdue</span>':''}</div>
+              <div style="font-size:12px;color:var(--mt);margin-top:2px" class="mono">${o.noOrder} &middot; ${o.tgl}</div>
+            </div>
+            <span class="badge b-${o.status.toLowerCase()}" style="flex-shrink:0;font-size:11px;padding:4px 10px">${o.status}</span>
+          </div>
+          <div style="font-size:12px;color:var(--mt2);margin-bottom:8px;line-height:1.5">${produkLine}${extraProd} &mdash; ${o.qty} pcs</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid var(--bd)">
+            <div>
+              <div style="font-size:11px;color:var(--mt)">Total</div>
+              <div style="font-size:14px;font-weight:800;color:var(--tx)">${fmt(o.total)}</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:11px;color:var(--mt)">DP</div>
+              <div style="font-size:14px;font-weight:800;color:var(--g)">${fmt(totalBayar(o))}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:11px;color:var(--mt)">Sisa</div>
+              <div style="font-size:14px;font-weight:800;color:${lunas?"var(--g)":"var(--r)"}">${lunas?'<span class="lunas-badge" style="font-size:11px">✓ LUNAS</span>':fmt(sisa)}</div>
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+    }
+  }}
 function ubahStatus(id,v){
   const o=orders.find(x=>x.id===id);
   if(o){
@@ -3622,6 +3754,49 @@ async function cetakBluetoothStruk(orderId){
     }
   }
 }
+
+// KALKULATOR POPUP MOBILE
+function openKalcPopup(){
+  var overlay = document.getElementById('kalc-popup-overlay');
+  var popup = document.getElementById('kalc-popup');
+  if(!overlay || !popup) return;
+  overlay.classList.add('open');
+  popup.style.display = 'block';
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      popup.classList.add('open');
+    });
+  });
+  document.body.style.overflow = 'hidden';
+}
+function closeKalcPopup(){
+  var overlay = document.getElementById('kalc-popup-overlay');
+  var popup = document.getElementById('kalc-popup');
+  if(!overlay || !popup) return;
+  popup.classList.remove('open');
+  overlay.classList.remove('open');
+  setTimeout(function(){ popup.style.display = 'none'; }, 320);
+  document.body.style.overflow = '';
+}
+
+// Update badge count di kalc-fab
+function updateKalcFabCount(){
+  var countEl = document.getElementById('kalc-fab-count');
+  var countBadge = document.getElementById('k-count');
+  if(countEl && countBadge && countBadge.textContent && countBadge.textContent !== '0'){
+    countEl.textContent = countBadge.textContent + ' item · ';
+  } else if(countEl){
+    countEl.textContent = '';
+  }
+}
+// Observasi perubahan k-count untuk update fab
+document.addEventListener('DOMContentLoaded', function(){
+  var kCount = document.getElementById('k-count');
+  if(kCount && window.MutationObserver){
+    new MutationObserver(updateKalcFabCount).observe(kCount, {childList:true, subtree:true, characterData:true});
+  }
+  updateKalcFabCount();
+});
 
 // MORE MENU MOBILE
 function toggleMoreMenu(){
