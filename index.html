@@ -420,13 +420,45 @@ body.dark .katalog-doc{filter:brightness(.92)}
   .stats{grid-template-columns:1fr 1fr!important}
   .form-grid{grid-template-columns:1fr!important}
   .rekap-grid{grid-template-columns:1fr!important}
-  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{min-width:600px}
+
+  /* ===== TABEL MOBILE - tidak perlu geser ===== */
+  .tbl-wrap{overflow-x:hidden}
+  table{min-width:0!important;width:100%!important;table-layout:fixed;font-size:11px!important}
+  th,td{padding:6px 4px!important;word-break:break-word;white-space:normal!important;overflow:hidden}
+  th{font-size:10px!important}
+
+  /* Tabel Order - 12 kolom asli: No.Order(1),Tgl(2),Customer(3),HP(4),Pesanan(5),Qty(6),Total(7),DP(8),Sisa(9),ETA(10),Status(11),Aksi(12) */
+  /* Sembunyikan: Tgl, HP, Pesanan, Qty, ETA, Aksi */
+  #tbl-order th:nth-child(2),#tbl-order td:nth-child(2),
+  #tbl-order th:nth-child(4),#tbl-order td:nth-child(4),
+  #tbl-order th:nth-child(5),#tbl-order td:nth-child(5),
+  #tbl-order th:nth-child(6),#tbl-order td:nth-child(6),
+  #tbl-order th:nth-child(10),#tbl-order td:nth-child(10),
+  #tbl-order th:nth-child(12),#tbl-order td:nth-child(12){display:none!important}
+  /* Tampilkan: No.Order(1)=22%, Customer(3)=22%, Total(7)=18%, DP(8)=13%, Sisa(9)=13%, Status(11)=12% */
+  #tbl-order th:nth-child(1),#tbl-order td:nth-child(1){width:22%}
+  #tbl-order th:nth-child(3),#tbl-order td:nth-child(3){width:22%}
+  #tbl-order th:nth-child(7),#tbl-order td:nth-child(7){width:18%}
+  #tbl-order th:nth-child(8),#tbl-order td:nth-child(8){width:13%}
+  #tbl-order th:nth-child(9),#tbl-order td:nth-child(9){width:13%}
+  #tbl-order th:nth-child(11),#tbl-order td:nth-child(11){width:12%}
+
+  /* Tabel Keuangan - 7 kolom: No.Order(1),Customer(2),Tgl(3),Omzet(4),Est.Modal(5),Est.Profit(6),Margin(7) */
+  /* Sembunyikan: Tgl, Est.Modal */
+  #tbl-keuangan th:nth-child(3),#tbl-keuangan td:nth-child(3),
+  #tbl-keuangan th:nth-child(5),#tbl-keuangan td:nth-child(5){display:none!important}
+  #tbl-keuangan th:nth-child(1),#tbl-keuangan td:nth-child(1){width:24%}
+  #tbl-keuangan th:nth-child(2),#tbl-keuangan td:nth-child(2){width:26%}
+  #tbl-keuangan th:nth-child(4),#tbl-keuangan td:nth-child(4){width:20%}
+  #tbl-keuangan th:nth-child(6),#tbl-keuangan td:nth-child(6){width:18%}
+  #tbl-keuangan th:nth-child(7),#tbl-keuangan td:nth-child(7){width:12%}
+
+  /* Tabel rekap & lainnya - beri tbl-wrap scroll jika masih tidak cukup */
+  #page-rekap .tbl-wrap,#page-database .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #page-rekap table,#page-database table{min-width:400px!important}
+
   .page-title{font-size:17px!important}
   .card{padding:14px!important}
-  /* hide some table cols on mobile */
-  th:nth-child(4),td:nth-child(4),
-  th:nth-child(8),td:nth-child(8){display:none}
   /* invoice grid */
   #page-invoice > div,
   #page-keuangan > div:nth-child(2),
@@ -476,6 +508,11 @@ input, select, textarea { font-size: 16px !important; }
 @keyframes slideUpBanner { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
 /* ===== INSTALL PWA BUTTON ===== */
 #install-pwa-btn { display:none; position:fixed; bottom:80px; right:16px; background:linear-gradient(135deg,#6c3bff,#8b5cf6); color:#fff; border:none; border-radius:50px; padding:13px 20px; font-weight:800; font-size:13px; z-index:9998; box-shadow:0 4px 20px rgba(108,59,255,.5); cursor:pointer; }
+/* ===== MORE MENU GRID BUTTON ===== */
+.more-menu-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;border:none;background:var(--sf2);border-radius:12px;cursor:pointer;font-size:10px;font-weight:700;color:var(--tx);font-family:inherit;transition:.15s;border:1px solid var(--bd);}
+.more-menu-btn:active{transform:scale(.95);background:var(--p2);}
+.more-menu-btn span{font-size:22px;line-height:1;}
+.more-menu-btn.active-page{background:var(--p2);color:var(--p1);border-color:var(--p1);}
 /* ===== BLUETOOTH PRINT BUTTON ===== */
 .btn-bt-print { background:linear-gradient(135deg,#0ea5e9,#38bdf8) !important; color:#fff !important; }
 /* ===== ANDROID BOTTOM NAV ===== */
@@ -518,12 +555,33 @@ input, select, textarea { font-size: 16px !important; }
 <!-- MOBILE BOTTOM NAV -->
 <div class="mob-bottom-nav">
   <div class="mob-nav-items">
-    <button class="mob-nav-btn active" onclick="mobNav(this,'dashboard')"><span class="mni">📊</span>Dashboard</button>
-    <button class="mob-nav-btn" onclick="mobNav(this,'order')"><span class="mni">📋</span>Order</button>
-    <button class="mob-nav-btn" onclick="mobNav(this,'siapdiambil')"><span class="mni">📦</span>Siap</button>
-    <button class="mob-nav-btn" onclick="mobNav(this,'antrian')"><span class="mni">⚡</span>Antrian</button>
-    <button class="mob-nav-btn" onclick="mobNav(this,'pengaturan')"><span class="mni">⚙️</span>Lainnya</button>
+    <button class="mob-nav-btn active" id="mbn-dashboard" onclick="mobNav(this,'dashboard')"><span class="mni">📊</span>Dashboard</button>
+    <button class="mob-nav-btn" id="mbn-order" onclick="mobNav(this,'order')"><span class="mni">📋</span>Order</button>
+    <button class="mob-nav-btn" id="mbn-invoice" onclick="mobNav(this,'invoice')"><span class="mni">🧾</span>Invoice</button>
+    <button class="mob-nav-btn" id="mbn-customer" onclick="mobNav(this,'customer')"><span class="mni">👥</span>Customer</button>
+    <button class="mob-nav-btn" id="mbn-more" onclick="toggleMoreMenu()"><span class="mni">☰</span>Menu</button>
   </div>
+  <!-- MORE MENU POPUP -->
+  <div id="mob-more-menu" style="display:none;position:fixed;bottom:68px;left:0;right:0;background:var(--sf);border-top:2px solid var(--p1);border-radius:18px 18px 0 0;z-index:300;padding:12px 8px 8px;box-shadow:0 -8px 32px rgba(0,0,0,.25);">
+    <div style="text-align:center;font-size:11px;font-weight:800;color:var(--mt);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Semua Menu</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 4px;">
+      <button class="more-menu-btn" onclick="mobNavMore('dashboard')"><span>📊</span>Dashboard</button>
+      <button class="more-menu-btn" onclick="mobNavMore('order')"><span>📋</span>Order</button>
+      <button class="more-menu-btn" onclick="mobNavMore('siapdiambil')"><span>📦</span>Siap Ambil</button>
+      <button class="more-menu-btn" onclick="mobNavMore('antrian')"><span>⚡</span>Antrian</button>
+      <button class="more-menu-btn" onclick="mobNavMore('invoice')"><span>🧾</span>Invoice</button>
+      <button class="more-menu-btn" onclick="mobNavMore('customer')"><span>👥</span>Customer</button>
+      <button class="more-menu-btn" onclick="mobNavMore('rekap')"><span>📈</span>Rekap</button>
+      <button class="more-menu-btn" onclick="mobNavMore('keuangan')"><span>💰</span>Keuangan</button>
+      <button class="more-menu-btn" onclick="mobNavMore('katalog')"><span>🎨</span>Katalog</button>
+      <button class="more-menu-btn" onclick="mobNavMore('kalkulator')"><span>🧮</span>Kalkulator</button>
+      <button class="more-menu-btn" onclick="mobNavMore('database')"><span>🗄️</span>Database</button>
+      <button class="more-menu-btn" onclick="mobNavMore('pengaturan')"><span>⚙️</span>Pengaturan</button>
+    </div>
+    <button onclick="closeMoreMenu()" style="width:100%;margin-top:10px;padding:10px;border:none;background:var(--sf2);border-radius:10px;color:var(--mt);font-weight:700;font-size:13px;cursor:pointer;">✕ Tutup</button>
+  </div>
+  <!-- OVERLAY untuk tutup more menu -->
+  <div id="mob-more-overlay" onclick="closeMoreMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:299;"></div>
 </div>
 
 <!-- LOADING OVERLAY -->
@@ -709,7 +767,7 @@ input, select, textarea { font-size: 16px !important; }
     </select>
   </div>
   <div class="tbl-wrap">
-    <table>
+    <table id="tbl-order">
       <thead><tr><th>No. Order</th><th>Tanggal</th><th>Customer</th><th>HP</th><th>Pesanan</th><th>Qty</th><th>Total</th><th>DP</th><th>Sisa</th><th>ETA</th><th>Status</th><th>Aksi</th></tr></thead>
       <tbody id="order-tbl"></tbody>
     </table>
@@ -1050,7 +1108,7 @@ _Ateena Clothing Store_</textarea>
   <div class="card">
     <div class="card-header"><div class="card-title"><span class="ct-dot" style="background:#d97706"></span>Rincian per Order</div></div>
     <div class="tbl-wrap">
-      <table>
+      <table id="tbl-keuangan">
         <thead><tr><th>No. Order</th><th>Customer</th><th>Tgl</th><th>Omzet</th><th>Est. Modal</th><th>Est. Profit</th><th>Margin</th></tr></thead>
         <tbody id="keu-tbl"></tbody>
       </table>
@@ -3563,6 +3621,63 @@ async function cetakBluetoothStruk(orderId){
       alert('Gagal cetak: ' + err.message);
     }
   }
+}
+
+// MORE MENU MOBILE
+function toggleMoreMenu(){
+  var menu = document.getElementById('mob-more-menu');
+  var overlay = document.getElementById('mob-more-overlay');
+  if(!menu) return;
+  var isOpen = menu.style.display !== 'none';
+  if(isOpen){
+    closeMoreMenu();
+  } else {
+    menu.style.display = 'block';
+    overlay.style.display = 'block';
+    // animate
+    menu.style.transform = 'translateY(20px)';
+    menu.style.opacity = '0';
+    menu.style.transition = 'transform .25s ease, opacity .25s ease';
+    setTimeout(function(){ menu.style.transform = 'translateY(0)'; menu.style.opacity = '1'; }, 10);
+  }
+}
+function closeMoreMenu(){
+  var menu = document.getElementById('mob-more-menu');
+  var overlay = document.getElementById('mob-more-overlay');
+  if(!menu) return;
+  menu.style.transform = 'translateY(20px)';
+  menu.style.opacity = '0';
+  setTimeout(function(){ menu.style.display = 'none'; overlay.style.display = 'none'; menu.style.transform=''; menu.style.opacity=''; }, 220);
+  // Hapus active state dari tombol More
+  var moreBtn = document.getElementById('mbn-more');
+  if(moreBtn) moreBtn.classList.remove('active');
+}
+function mobNavMore(page){
+  closeMoreMenu();
+  setTimeout(function(){
+    var btn = document.getElementById('mbn-'+page);
+    if(btn){
+      mobNav(btn, page);
+    } else {
+      // page tidak ada di bottom nav utama, panggil langsung
+      var mainBtn = null;
+      document.querySelectorAll('.nav-btn').forEach(function(b){
+        var oc = b.getAttribute('onclick')||'';
+        if(oc.indexOf("'"+page+"'") !== -1) mainBtn = b;
+      });
+      if(mainBtn){ nav(mainBtn, page); }
+      else {
+        document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); p.style.display='none'; });
+        var pg = document.getElementById('page-'+page);
+        if(pg){ pg.classList.add('active'); pg.style.display='block'; }
+        window.scrollTo({top:0,behavior:'instant'});
+      }
+      // Update more-menu-btn active state
+      document.querySelectorAll('.more-menu-btn').forEach(function(b){ b.classList.remove('active-page'); });
+      // Hapus active dari bottom nav utama
+      document.querySelectorAll('.mob-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+    }
+  }, 230);
 }
 
 // ANDROID BOTTOM NAVIGATION
