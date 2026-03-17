@@ -480,8 +480,7 @@ input, select, textarea { font-size: 16px !important; }
 .btn-bt-print { background:linear-gradient(135deg,#0ea5e9,#38bdf8) !important; color:#fff !important; }
 /* ===== ANDROID BOTTOM NAV ===== */
 @media (max-width:768px) {
-  .sidebar { display:none !important; }
-  .main { margin-left:0 !important; padding-bottom:78px !important; }
+  .main { padding-bottom:78px !important; }
   #android-bottom-nav { display:flex !important; }
 }
 #android-bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:linear-gradient(180deg,rgba(15,12,41,.98),rgba(24,18,52,1)); border-top:1px solid rgba(255,255,255,.07); z-index:900; padding-bottom:env(safe-area-inset-bottom); }
@@ -3416,119 +3415,14 @@ function autoCloudSync(){
 
 <!-- ===== PWA ANDROID ENHANCEMENTS JS ===== -->
 <script>
-// SERVICE WORKER - EMBEDDED (no external file needed)
-if('serviceWorker' in navigator){
+// SERVICE WORKER: Untuk fitur offline penuh, upload ke hosting (Netlify)
+// Mode offline dasar tetap bekerja via localStorage tanpa SW
+if('serviceWorker' in navigator && location.protocol === 'https:' && !location.href.startsWith('blob')){
+  // Hanya register SW jika di hosting HTTPS (bukan file lokal)
   window.addEventListener('load',()=>{
-    const swCode = `// Service Worker - Ateena Store PWA
-// Versi cache - update angka ini setiap ada perubahan
-const CACHE_NAME = 'ateena-store-v1';
-const OFFLINE_URL = 'Ateena_Android_PWA.html';
-
-// File yang di-cache untuk offline
-const CACHE_FILES = [
-  'Ateena_Android_PWA.html',
-  'manifest.json',
-  'https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js',
-  'https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js',
-  'https://cdn.jsdelivr.net/npm/chart.js'
-];
-
-// Install: cache semua file penting
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW] Caching app shell...');
-      return cache.addAll([OFFLINE_URL]).catch(e => {
-        console.warn('[SW] Cache partial fail:', e);
-      });
-    }).then(() => self.skipWaiting())
-  );
-});
-
-// Activate: hapus cache lama
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.filter(key => key !== CACHE_NAME)
-            .map(key => { console.log('[SW] Deleting old cache:', key); return caches.delete(key); })
-      );
-    }).then(() => self.clients.claim())
-  );
-});
-
-// Fetch: serve dari cache jika offline
-self.addEventListener('fetch', event => {
-  // Skip non-GET requests dan chrome-extension
-  if(event.request.method !== 'GET') return;
-  if(event.request.url.startsWith('chrome-extension')) return;
-  
-  // Strategi: Network First, fallback to Cache
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        // Cache response yang berhasil
-        if(response && response.status === 200 && response.type !== 'opaque'){
-          const respClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
-        }
-        return response;
-      })
-      .catch(() => {
-        // Offline: coba ambil dari cache
-        return caches.match(event.request)
-          .then(cachedResp => {
-            if(cachedResp) return cachedResp;
-            // Fallback ke halaman utama
-            if(event.request.destination === 'document'){
-              return caches.match(OFFLINE_URL);
-            }
-            return new Response('Offline', { status: 503 });
-          });
-      })
-  );
-});
-
-// Background Sync (untuk data yang gagal sync saat offline)
-self.addEventListener('sync', event => {
-  if(event.tag === 'sync-orders'){
-    console.log('[SW] Background sync orders...');
-  }
-});
-
-// Push Notifications
-self.addEventListener('push', event => {
-  if(!event.data) return;
-  const data = event.data.json();
-  event.waitUntil(
-    self.registration.showNotification(data.title || 'Ateena Store', {
-      body: data.body || 'Ada update order baru',
-      icon: data.icon || '/icon-192.png',
-      badge: '/badge-72.png',
-      tag: data.tag || 'ateena',
-      requireInteraction: false,
-      data: { url: data.url || '/' }
-    })
-  );
-});
-
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
-  event.waitUntil(
-    clients.matchAll({type:'window'}).then(clientList => {
-      for(const client of clientList){
-        if(client.url && 'focus' in client) return client.focus();
-      }
-      if(clients.openWindow) return clients.openWindow('/');
-    })
-  );
-});
-`;
-    const blob = new Blob([swCode], {type: 'application/javascript'});
-    const swUrl = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(swUrl)
-      .then(r=>{ console.log('SW OK (inline)'); URL.revokeObjectURL(swUrl); })
-      .catch(e=>console.warn('SW inline fail:', e));
+    navigator.serviceWorker.register('sw.js')
+      .then(r=>console.log('SW OK'))
+      .catch(e=>{}); // silent - sw.js opsional
   });
 }
 
@@ -3676,27 +3570,46 @@ document.addEventListener('DOMContentLoaded',()=>{
   const bnav = document.createElement('div');
   bnav.id = 'android-bottom-nav';
   const items = [
-    {icon:'🏠',label:'Dashboard',sec:'dashboard'},
-    {icon:'📋',label:'Order',sec:'order'},
-    {icon:'💳',label:'Invoice',sec:'invoice'},
-    {icon:'👥',label:'Customer',sec:'customer'},
-    {icon:'⚙️',label:'Lainnya',sec:'settings'},
+    {icon:'🏠', label:'Dashboard', page:'dashboard'},
+    {icon:'📋', label:'Order',     page:'order'},
+    {icon:'💳', label:'Invoice',   page:'invoice'},
+    {icon:'👥', label:'Customer',  page:'customer'},
+    {icon:'⚙️', label:'Setting',   page:'pengaturan'},
   ];
   bnav.innerHTML = items.map(n=>
-    `<button class="abn-btn" id="abn-${n.sec}" onclick="window.showSection&&showSection('${n.sec}');updateBottomNav('${n.sec}')">
-      <span class="abn-icon">${n.icon}</span>${n.label}
-    </button>`
+    '<button class="abn-btn" id="abn-'+n.page+'" onclick="abnNav(this,\''+n.page+'\')">'+
+    '<span class="abn-icon">'+n.icon+'</span>'+n.label+
+    '</button>'
   ).join('');
   document.body.appendChild(bnav);
-  // Wrap showSection to sync bottom nav
-  const _origShow = window.showSection;
-  if(typeof _origShow==='function'){
-    window.showSection = s=>{ _origShow(s); updateBottomNav(s); };
-  }
   updateBottomNav('dashboard');
 });
+
+function abnNav(btn, page){
+  // Cari nav-btn yang sesuai dengan cara aman (loop, tidak pakai querySelector attr)
+  var mainBtn = null;
+  document.querySelectorAll('.nav-btn').forEach(function(b){
+    var oc = b.getAttribute('onclick') || '';
+    if(oc.indexOf("'"+page+"'") !== -1){ mainBtn = b; }
+  });
+  if(mainBtn){
+    nav(mainBtn, page);
+  } else {
+    // Fallback: langsung toggle page
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); p.style.display='none'; });
+    var pg = document.getElementById('page-'+page);
+    if(pg){ pg.classList.add('active'); pg.style.display='block'; }
+    window.scrollTo({top:0,behavior:'instant'});
+    document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  }
+  updateBottomNav(page);
+  if(typeof closeSidebar==='function') closeSidebar();
+}
+
 function updateBottomNav(sec){
-  document.querySelectorAll('.abn-btn').forEach(b=>b.classList.toggle('active', b.id==='abn-'+sec));
+  document.querySelectorAll('.abn-btn').forEach(b=>{
+    b.classList.toggle('active', b.id==='abn-'+sec);
+  });
 }
 </script>
 
