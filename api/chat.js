@@ -4,53 +4,67 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Handle preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Hanya izinkan POST
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  // Cek API key tersedia
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({
-      error: 'API key tidak ditemukan. Pastikan ANTHROPIC_API_KEY sudah diset di Vercel Environment Variables.'
-    });
+    return res.status(500).json({ error: 'API key tidak ditemukan. Pastikan GEMINI_API_KEY sudah diset di Vercel Environment Variables.' });
   }
 
   try {
-    const { model, max_tokens, system, messages } = req.body;
+    const { system, messages } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Invalid request: messages harus berupa array' });
     }
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: model || 'claude-sonnet-4-20250514',
-        max_tokens: max_tokens || 1000,
-        system: system || '',
-        messages: messages,
-      }),
+    // Gabungkan system prompt ke pesan pertama user
+    const systemText = system ? system + '\n\n' : '';
+
+    // Konversi format Anthropic ke format Gemini
+    const geminiContents = messages.map((msg, index) => {
+      let text = msg.content;
+      // Tambahkan system prompt di depan pesan user pertama
+      if (index === 0 && msg.role === 'user' && systemText) {
+        text = systemText + text;
+      }
+      return {
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: text }]
+      };
     });
 
-    const data = await response.json();
-    return res.status(response.status).json(data);
+    const geminiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: geminiContents,
+          generationConfig: {
+            maxOutputTokens: 1000,
+            temperature: 0.7,
+          }
+        })
+      }
+    );
+
+    const geminiData = await geminiRes.json();
+
+    // Cek error dari Gemini
+    if (geminiData.error) {
+      return res.status(400).json({ error: geminiData.error.message });
+    }
+
+    // Konversi response Gemini ke format Anthropic agar index.html tidak perlu diubah
+    const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
+
+    return res.status(200).json({
+      content: [{ type: 'text', text: replyText }]
+    });
 
   } catch (error) {
-    return res.status(500).json({
-      error: 'Internal server error',
-      message: error.message
-    });
+    return res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 };
