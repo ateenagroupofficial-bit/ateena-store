@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Environment variables — JANGAN pernah commit file ini!
+.env
+.env.local
+.env.production
+
+# Vercel
+.vercel
