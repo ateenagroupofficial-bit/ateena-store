@@ -1,5 +1,4 @@
 module.exports = async function handler(req, res) {
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -9,7 +8,7 @@ module.exports = async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'API key tidak ditemukan. Pastikan GEMINI_API_KEY sudah diset di Vercel Environment Variables.' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY tidak ditemukan di Environment Variables.' });
   }
 
   try {
@@ -19,13 +18,11 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid request: messages harus berupa array' });
     }
 
-    // Gabungkan system prompt ke pesan pertama user
     const systemText = system ? system + '\n\n' : '';
 
-    // Konversi format Anthropic ke format Gemini
+    // Konversi ke format Gemini
     const geminiContents = messages.map((msg, index) => {
       let text = msg.content;
-      // Tambahkan system prompt di depan pesan user pertama
       if (index === 0 && msg.role === 'user' && systemText) {
         text = systemText + text;
       }
@@ -35,8 +32,9 @@ module.exports = async function handler(req, res) {
       };
     });
 
+    // Pakai gemini-1.5-flash — stabil dan gratis
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -52,19 +50,24 @@ module.exports = async function handler(req, res) {
 
     const geminiData = await geminiRes.json();
 
-    // Cek error dari Gemini
+    // Tampilkan error Gemini dengan jelas
     if (geminiData.error) {
-      return res.status(400).json({ error: geminiData.error.message });
+      return res.status(400).json({
+        error: geminiData.error.message,
+        detail: geminiData.error
+      });
     }
 
-    // Konversi response Gemini ke format Anthropic agar index.html tidak perlu diubah
     const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
 
+    // Kembalikan dalam format yang sama dengan Anthropic
     return res.status(200).json({
       content: [{ type: 'text', text: replyText }]
     });
 
   } catch (error) {
-    return res.status(500).json({ error: 'Internal server error', message: error.message });
+    return res.status(500).json({
+      error: 'Internal server error: ' + error.message
+    });
   }
 };
