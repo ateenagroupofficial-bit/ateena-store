@@ -15,7 +15,7 @@ module.exports = async function handler(req, res) {
     const { system, messages } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
-      return res.status(400).json({ error: 'Invalid request: messages harus berupa array' });
+      return res.status(400).json({ error: 'Invalid request' });
     }
 
     const systemText = system ? system + '\n\n' : '';
@@ -31,48 +31,57 @@ module.exports = async function handler(req, res) {
       };
     });
 
-    // Coba gemini-2.0-flash dulu, fallback ke gemini-pro
-    const models = [
-      'gemini-2.0-flash',
-      'gemini-1.5-flash-latest',
-      'gemini-pro'
-    ];
+    // Cek model yang tersedia dulu
+    const listRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
+    );
+    const listData = await listRes.json();
 
-    let lastError = null;
-
-    for (const modelName of models) {
-      const geminiRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: geminiContents,
-            generationConfig: {
-              maxOutputTokens: 1000,
-              temperature: 0.7,
-            }
-          })
-        }
-      );
-
-      const geminiData = await geminiRes.json();
-
-      // Kalau tidak ada error, kembalikan hasilnya
-      if (!geminiData.error) {
-        const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
-        return res.status(200).json({
-          content: [{ type: 'text', text: replyText }]
-        });
-      }
-
-      // Simpan error, coba model berikutnya
-      lastError = geminiData.error;
+    if (listData.error) {
+      return res.status(400).json({ error: 'Gagal ambil daftar model: ' + listData.error.message });
     }
 
-    // Semua model gagal
-    return res.status(400).json({
-      error: 'Semua model gagal. Error terakhir: ' + (lastError?.message || JSON.stringify(lastError))
+    // Ambil model pertama yang support generateContent
+    const availableModels = (listData.models || [])
+      .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
+      .map(m => m.name.replace('models/', ''));
+
+    if (availableModels.length === 0) {
+      return res.status(400).json({ error: 'Tidak ada model Gemini yang tersedia di akun ini.', models: listData.models });
+    }
+
+    // Prioritaskan model flash/pro terbaru
+    const preferred = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
+    let selectedModel = availableModels[0];
+    for (const p of preferred) {
+      if (availableModels.find(m => m.includes(p.replace('gemini-', '')))) {
+        selectedModel = availableModels.find(m => m.includes(p.replace('gemini-', '')));
+        break;
+      }
+    }
+
+    const geminiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: geminiContents,
+          generationConfig: { maxOutputTokens: 1000, temperature: 0.7 }
+        })
+      }
+    );
+
+    const geminiData = await geminiRes.json();
+
+    if (geminiData.error) {
+      return res.status(400).json({ error: geminiData.error.message, modelUsed: selectedModel });
+    }
+
+    const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
+
+    return res.status(200).json({
+      content: [{ type: 'text', text: replyText }]
     });
 
   } catch (error) {
