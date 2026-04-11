@@ -8,7 +8,7 @@ module.exports = async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY tidak ditemukan di Environment Variables.' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY tidak ditemukan.' });
   }
 
   try {
@@ -20,7 +20,6 @@ module.exports = async function handler(req, res) {
 
     const systemText = system ? system + '\n\n' : '';
 
-    // Konversi ke format Gemini
     const geminiContents = messages.map((msg, index) => {
       let text = msg.content;
       if (index === 0 && msg.role === 'user' && systemText) {
@@ -32,42 +31,51 @@ module.exports = async function handler(req, res) {
       };
     });
 
-    // Pakai gemini-1.5-flash — stabil dan gratis
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: geminiContents,
-          generationConfig: {
-            maxOutputTokens: 1000,
-            temperature: 0.7,
-          }
-        })
+    // Coba gemini-2.0-flash dulu, fallback ke gemini-pro
+    const models = [
+      'gemini-2.0-flash',
+      'gemini-1.5-flash-latest',
+      'gemini-pro'
+    ];
+
+    let lastError = null;
+
+    for (const modelName of models) {
+      const geminiRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: geminiContents,
+            generationConfig: {
+              maxOutputTokens: 1000,
+              temperature: 0.7,
+            }
+          })
+        }
+      );
+
+      const geminiData = await geminiRes.json();
+
+      // Kalau tidak ada error, kembalikan hasilnya
+      if (!geminiData.error) {
+        const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
+        return res.status(200).json({
+          content: [{ type: 'text', text: replyText }]
+        });
       }
-    );
 
-    const geminiData = await geminiRes.json();
-
-    // Tampilkan error Gemini dengan jelas
-    if (geminiData.error) {
-      return res.status(400).json({
-        error: geminiData.error.message,
-        detail: geminiData.error
-      });
+      // Simpan error, coba model berikutnya
+      lastError = geminiData.error;
     }
 
-    const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
-
-    // Kembalikan dalam format yang sama dengan Anthropic
-    return res.status(200).json({
-      content: [{ type: 'text', text: replyText }]
+    // Semua model gagal
+    return res.status(400).json({
+      error: 'Semua model gagal. Error terakhir: ' + (lastError?.message || JSON.stringify(lastError))
     });
 
   } catch (error) {
-    return res.status(500).json({
-      error: 'Internal server error: ' + error.message
-    });
+    return res.status(500).json({ error: 'Internal server error: ' + error.message });
   }
 };
