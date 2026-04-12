@@ -1,3 +1,36 @@
+const https = require('https');
+
+function httpsPost(url, data, headers) {
+  return new Promise((resolve, reject) => {
+    const urlObj = new URL(url);
+    const body = JSON.stringify(data);
+    const options = {
+      hostname: urlObj.hostname,
+      path: urlObj.pathname + urlObj.search,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+        ...headers
+      }
+    };
+    const req = https.request(options, (res) => {
+      let responseData = '';
+      res.on('data', (chunk) => responseData += chunk);
+      res.on('end', () => {
+        try {
+          resolve({ status: res.statusCode, data: JSON.parse(responseData) });
+        } catch (e) {
+          resolve({ status: res.statusCode, data: { error: responseData } });
+        }
+      });
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -6,9 +39,9 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY tidak ditemukan.' });
+    return res.status(500).json({ error: 'GROQ_API_KEY tidak ditemukan di Environment Variables.' });
   }
 
   try {
@@ -18,40 +51,41 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid request' });
     }
 
-    const systemText = system ? system + '\n\n' : '';
+    // Format Groq: sama dengan OpenAI
+    const groqMessages = [];
 
-    const geminiContents = messages.map((msg, index) => {
-      let text = msg.content;
-      if (index === 0 && msg.role === 'user' && systemText) {
-        text = systemText + text;
-      }
-      return {
-        role: msg.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: text }]
-      };
+    // Tambahkan system prompt
+    if (system) {
+      groqMessages.push({ role: 'system', content: system });
+    }
+
+    // Tambahkan semua pesan
+    messages.forEach(msg => {
+      groqMessages.push({ role: msg.role, content: msg.content });
     });
 
-    // Pakai gemini-2.0-flash yang sudah terkonfirmasi ada di akun
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+    const result = await httpsPost(
+      'https://api.groq.com/openai/v1/chat/completions',
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: geminiContents,
-          generationConfig: { maxOutputTokens: 1000, temperature: 0.7 }
-        })
+        model: 'llama-3.3-70b-versatile',
+        messages: groqMessages,
+        max_tokens: 1000,
+        temperature: 0.7
+      },
+      {
+        'Authorization': 'Bearer ' + apiKey
       }
     );
 
-    const geminiData = await geminiRes.json();
+    const groqData = result.data;
 
-    if (geminiData.error) {
-      return res.status(400).json({ error: geminiData.error.message });
+    if (groqData.error) {
+      return res.status(400).json({ error: groqData.error.message || JSON.stringify(groqData.error) });
     }
 
-    const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
+    const replyText = groqData?.choices?.[0]?.message?.content || 'Maaf, tidak ada respons.';
 
+    // Kembalikan dalam format yang sama dengan Anthropic agar index.html tidak perlu diubah
     return res.status(200).json({
       content: [{ type: 'text', text: replyText }]
     });
