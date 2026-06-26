@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ateena.store",
+      "sha256_cert_fingerprints": [
+        "AF:86:9D:8C:67:21:F0:2F:65:7B:AD:B7:1E:DA:1F:48:B8:5A:29:7D:DF:9D:C2:BA:1D:D8:CA:57:4A:DA:E7:6B"
+      ]
+    }
+  }
+]
