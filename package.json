@@ -1,0 +1,9 @@
+{
+  "name": "ateena-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ateena Clothing Store - PWA (sistem administrasi sablon)",
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
+}
