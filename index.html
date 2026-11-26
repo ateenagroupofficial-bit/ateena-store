@@ -7116,6 +7116,13 @@ _Ateena Clothing Store_</textarea>
         <button class="btn btn-primary" onclick="cloudPull()" style="width:100%;justify-content:center"><svg class="pico pico-sm" aria-hidden="true" focusable="false"><use href="#ico-cloud-down"></use></svg> Muat Data dari Cloud</button>
       </div>
       <div style="height:1px;background:var(--bd);margin:14px 0"></div>
+      <p style="font-size:12px;color:var(--mt);margin-bottom:8px;line-height:1.6">Khusus Database Harga. Gunakan ini saat satu perangkat sengaja mengubah atau mengurangi bahan/sablon, atau mengubah keterangan Jenis Jersey, Jenis Bendera, Jenis Merchandise, dan Harga Kalkulator.</p>
+      <div class="btn-row" style="margin-top:0;flex-direction:column;gap:8px">
+        <button class="btn btn-success" onclick="dbHargaPushToCloud()" style="width:100%;justify-content:center">Kirim Database Harga ke Cloud</button>
+        <button class="btn btn-primary" onclick="dbHargaPullFromCloud()" style="width:100%;justify-content:center">Ambil Database Harga dari Cloud</button>
+      </div>
+      <p style="font-size:11px;color:var(--mt2);margin:8px 0 0;line-height:1.5">Urutan yang aman: di perangkat mobile pilih Kirim, lalu di desktop pilih Ambil. Order, invoice, config, dan stok tidak diubah oleh tombol ini.</p>
+      <div style="height:1px;background:var(--bd);margin:14px 0"></div>
       <p style="font-size:12px;color:var(--mt);margin-bottom:10px;line-height:1.6">Backup lokal — download sebagai file JSON untuk cadangan tambahan.</p>
       <div class="btn-row" style="margin-top:0">
         <button class="btn" onclick="backupData()" style="flex:1;justify-content:center"><svg class="pico pico-sm" aria-hidden="true" focusable="false"><use href="#ico-download"></use></svg> Download Backup (JSON)</button>
@@ -10103,6 +10110,26 @@ const BENDERA_PRICE_BOOK=(function(){
   return base;
 })();
 
+// Terapkan price book bendera dari backup/cloud tanpa mengganti referensi objek.
+// BENDERA_PRICE_BOOK dipakai banyak fungsi harga, jadi isinya diganti di tempat.
+function applyBenderaPriceBook(saved){
+  if(!saved||typeof saved!=='object') return false;
+  var base=bndrEmptyPriceBook();
+  try{
+    if(saved.printing){
+      Object.assign(base.printing.tetron,saved.printing.tetron||{});
+      Object.assign(base.printing.satin,saved.printing.satin||{});
+    }
+    if(saved.logo) Object.assign(base.logo.satin,saved.logo.satin||{});
+    if(saved.umbul) Object.assign(base.umbul,saved.umbul||{});
+    if(saved.rumbai) Object.assign(base.rumbai,saved.rumbai||{});
+  }catch(e){ return false; }
+  Object.keys(BENDERA_PRICE_BOOK).forEach(function(k){ delete BENDERA_PRICE_BOOK[k]; });
+  Object.assign(BENDERA_PRICE_BOOK,base);
+  try{ localStorage.setItem('ateena_bendera_pricebook_v1',JSON.stringify(BENDERA_PRICE_BOOK)); }catch(e){}
+  return true;
+}
+
 const BENDERA_TYPES_KEY='ateena_bendera_types_v1';
 const BENDERA_DEFAULT_TYPES={
   printing:{label:'Full Print',badge:'PRINT',badgeClass:'',desc:'Cetak penuh · Tetron / Satin',mode:'printing',ukuran:'',harga:0},
@@ -10158,6 +10185,10 @@ function simpanBenderaTypes(book){
     try{ renderBenderaSettingUI(); }catch(e){}
     try{ updateLivePreview(); }catch(e){}
     try{ updateDatabaseBadges(); }catch(e){}
+    // Tandai submenu Database Harga berubah supaya ikut cloud/backup berikutnya.
+    try{ dbExtrasMarkDirty(); }catch(e){}
+    try{ saveData(); }catch(e){}
+    try{ autoCloudSync(); }catch(e){}
     return true;
   }catch(e){
     showNotif('Gagal Simpan','Gagal menyimpan jenis bendera ke perangkat.','error');
@@ -10218,6 +10249,10 @@ function simpanMerchandiseTypes(book){
     try{ renderMerchandiseSettingUI(); }catch(e){}
     try{ updateLivePreview(); }catch(e){}
     try{ updateDatabaseBadges(); }catch(e){}
+    // Tandai submenu Database Harga berubah supaya ikut cloud/backup berikutnya.
+    try{ dbExtrasMarkDirty(); }catch(e){}
+    try{ saveData(); }catch(e){}
+    try{ autoCloudSync(); }catch(e){}
     return true;
   }catch(e){
     showNotif('Gagal Simpan','Gagal menyimpan merchandise ke perangkat.','error');
@@ -10323,6 +10358,10 @@ function simpanJerseyTypes(book){
     try{ renderHargaKalkulatorUI(); }catch(e){}
     try{ updateLivePreview(); }catch(e){}
     try{ updateDatabaseBadges(); }catch(e){}
+    // Tandai submenu Database Harga berubah supaya ikut cloud/backup berikutnya.
+    try{ dbExtrasMarkDirty(); }catch(e){}
+    try{ saveData(); }catch(e){}
+    try{ autoCloudSync(); }catch(e){}
     return true;
   }catch(e){
     showNotif('Gagal Simpan','Gagal menyimpan jenis jersey ke perangkat.','error');
@@ -17482,6 +17521,9 @@ function simpanHargaKalkulator(){
   };
   try{
     localStorage.setItem(HK_KEY,JSON.stringify(data));
+    try{ dbExtrasMarkDirty(); }catch(e){}
+    try{ saveData(); }catch(e){}
+    try{ autoCloudSync(); }catch(e){}
     showNotif('✅ Harga Banner Disimpan','Perubahan harga banner langsung berlaku di Kalkulator Pesanan.');
   }catch(e){
     showNotif('❌ Gagal Simpan','Gagal menyimpan ke perangkat.','error');
@@ -17495,6 +17537,109 @@ function renderHargaKalkulatorUI(){
 }
 function hkBannerPerM2(){ return loadHargaKalkulator().bannerPerM2; }
 function hkBannerPlongPerM2(){ return loadHargaKalkulator().bannerPlongPerM2; }
+// ===== DATABASE HARGA — SUBMENU TAMBAHAN (JERSEY/BENDERA/MERCH/KALKULATOR) =====
+// Data ini disimpan di key localStorage terpisah. Sebelumnya tidak ikut cloud/backup,
+// sehingga kustomisasi "keterangan" di perangkat mobile tidak pernah sampai ke desktop.
+const DB_EXTRAS_DIRTY_KEY='ateena_db_extras_dirty_v1';
+const DB_EXTRAS_SYNCED_AT_KEY='ateena_db_extras_synced_at_v1';
+const BENDERA_PRICEBOOK_KEY='ateena_bendera_pricebook_v1';
+
+function dbExtrasMarkDirty(){
+  try{ localStorage.setItem(DB_EXTRAS_DIRTY_KEY,'1'); }catch(e){}
+}
+function dbExtrasIsDirty(){
+  try{ return localStorage.getItem(DB_EXTRAS_DIRTY_KEY)==='1'; }catch(e){ return false; }
+}
+function dbExtrasClearDirty(at){
+  try{
+    localStorage.removeItem(DB_EXTRAS_DIRTY_KEY);
+    if(at) localStorage.setItem(DB_EXTRAS_SYNCED_AT_KEY,at);
+  }catch(e){}
+}
+function dbExtrasReadRaw(key){
+  try{
+    const raw=localStorage.getItem(key);
+    return raw?JSON.parse(raw):null;
+  }catch(e){ return null; }
+}
+function dbExtrasHasData(obj){
+  if(!obj||typeof obj!=='object') return false;
+  if(obj.__order){
+    const order=Array.isArray(obj.__order)?obj.__order:Object.values(obj.__order||{});
+    return order.some(function(k){ return obj[k]&&typeof obj[k]==='object'; });
+  }
+  return Object.keys(obj).length>0;
+}
+function getDbHargaExtras(){
+  const out={};
+  const j=dbExtrasReadRaw(JERSEY_TYPES_KEY); if(dbExtrasHasData(j)) out.jerseyTypes=j;
+  const b=dbExtrasReadRaw(BENDERA_TYPES_KEY); if(dbExtrasHasData(b)) out.benderaTypes=b;
+  const bp=dbExtrasReadRaw(BENDERA_PRICEBOOK_KEY); if(dbExtrasHasData(bp)) out.benderaPricebook=bp;
+  const m=dbExtrasReadRaw(MERCH_KEY); if(dbExtrasHasData(m)) out.merchandiseTypes=m;
+  const hk=dbExtrasReadRaw(HK_KEY); if(dbExtrasHasData(hk)) out.hargaKalkulator=hk;
+  return out;
+}
+function refreshDatabaseHargaUI(){
+  try{ renderDatabase(); }catch(e){}
+  try{ renderHargaKalkulatorUI(); }catch(e){}
+  try{ updateDatabaseBadges(); }catch(e){}
+}
+function applyDbHargaExtras(extras,opts){
+  opts=opts||{};
+  if(!extras||typeof extras!=='object') return false;
+  const onlyMissing=!!opts.onlyMissing;
+  let changed=false;
+  const canSet=function(key){ try{ return !onlyMissing || !localStorage.getItem(key); }catch(e){ return !onlyMissing; } };
+  const setRaw=function(key,val){
+    if(!dbExtrasHasData(val)||!canSet(key)) return false;
+    try{ localStorage.setItem(key,JSON.stringify(val)); changed=true; return true; }
+    catch(e){ return false; }
+  };
+  if(setRaw(JERSEY_TYPES_KEY,extras.jerseyTypes)){
+    JERSEY_TYPES=loadJerseyTypes();
+    syncJerseyLegacy();
+  }
+  if(setRaw(BENDERA_TYPES_KEY,extras.benderaTypes)){
+    BENDERA_TYPES=loadBenderaTypes();
+  }
+  if(dbExtrasHasData(extras.benderaPricebook)&&canSet(BENDERA_PRICEBOOK_KEY)){
+    if(applyBenderaPriceBook(extras.benderaPricebook)) changed=true;
+  }
+  if(setRaw(MERCH_KEY,extras.merchandiseTypes)){
+    MERCHANDISE_PRICE_BOOK=loadMerchandiseTypes();
+  }
+  setRaw(HK_KEY,extras.hargaKalkulator);
+  if(changed){
+    if(opts.markDirty) dbExtrasMarkDirty();
+    refreshDatabaseHargaUI();
+  }
+  return changed;
+}
+function applyCloudDbExtras(cloudData,force){
+  if(!cloudData||!cloudData.dbExtras) return false;
+  const cloudAt=cloudData.dbExtrasAt||'';
+  let localAt='';
+  try{ localAt=localStorage.getItem(DB_EXTRAS_SYNCED_AT_KEY)||''; }catch(e){}
+  if(!force){
+    if(dbExtrasIsDirty()){
+      if(cloudAt&&cloudAt>localAt){
+        try{ showNotif('Database Harga Cloud Lebih Baru','Keterangan submenu di cloud lebih baru, tetapi perangkat ini punya perubahan yang belum terkirim. Buka Pengaturan > Cloud Sync > Ambil Database Harga dari Cloud jika ingin memakai versi cloud.',{tag:'db-extras-conflict'}); }catch(e){}
+      }
+      return false;
+    }
+    if(localAt&&(!cloudAt||cloudAt<=localAt)) return false;
+  }
+  const applied=applyDbHargaExtras(cloudData.dbExtras,{});
+  if(applied){
+    try{ saveData(); }catch(e){}
+    dbExtrasClearDirty(cloudAt||new Date().toISOString());
+  }
+  return applied;
+}
+function afterCloudWrite(payload){
+  if(payload&&payload.dbExtrasAt) dbExtrasClearDirty(payload.dbExtrasAt);
+}
+
 function backupData(){
   if(!authIsOwner()){showNotif('⛔ Owner Saja','Hanya Pemilik yang boleh backup data.');return;}
   const data={
@@ -17507,6 +17652,7 @@ function backupData(){
     tarifDesainArr: TARIF_DESAIN_ARR,
     stokSku: stokSkuData,
     stokTx: stokTxData,
+    dbExtras: getDbHargaExtras(),
     exportedAt:new Date().toISOString()
   };
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
@@ -17542,6 +17688,7 @@ function restoreData(input){
       if(Array.isArray(data.tarifDesainArr)&&data.tarifDesainArr.length) TARIF_DESAIN_ARR.splice(0,TARIF_DESAIN_ARR.length,...data.tarifDesainArr);
       if(Array.isArray(data.stokSku)&&data.stokSku.length) stokSkuData.splice(0,stokSkuData.length,...data.stokSku);
       if(Array.isArray(data.stokTx)&&data.stokTx.length) stokTxData.splice(0,stokTxData.length,...data.stokTx);
+      if(data.dbExtras) applyDbHargaExtras(data.dbExtras,{markDirty:true});
       nextId=data.nextId||Math.max(...orders.map(o=>o.id),6)+1;
       nextInvNum=data.nextInvNum||invoices.length+1;
       __ateenaCloudSafe=true;
@@ -17554,6 +17701,7 @@ function restoreData(input){
       try{ renderPengaturan(); }catch(e){}
       try{ renderDash(); }catch(e){}
       try{ renderOrder(); }catch(e){}
+      try{ renderDatabase(); }catch(e){}
     }catch(err){alert("❌ File backup tidak valid!");}
   };
   reader.readAsText(file);
@@ -17585,6 +17733,7 @@ function restoreLocalBackup(){
   if(Array.isArray(data.tarifDesainArr)&&data.tarifDesainArr.length) TARIF_DESAIN_ARR.splice(0,TARIF_DESAIN_ARR.length,...data.tarifDesainArr);
   if(Array.isArray(data.stokSku)&&data.stokSku.length) stokSkuData.splice(0,stokSkuData.length,...data.stokSku);
   if(Array.isArray(data.stokTx)&&data.stokTx.length) stokTxData.splice(0,stokTxData.length,...data.stokTx);
+  if(data.dbExtras) applyDbHargaExtras(data.dbExtras,{markDirty:true});
   nextId=data.nextId||Math.max(...orders.map(o=>o.id),6)+1;
   nextInvNum=data.nextInvNum||invoices.length+1;
   __ateenaCloudSafe=true;
@@ -17597,6 +17746,7 @@ function restoreLocalBackup(){
   try{ renderPengaturan(); }catch(e){}
   try{ renderDash(); }catch(e){}
   try{ renderOrder(); }catch(e){}
+  try{ renderDatabase(); }catch(e){}
 }
 
 // ===== CETAK STRUK =====
@@ -18023,6 +18173,7 @@ function saveData(){
       tarifDesainArr: TARIF_DESAIN_ARR,
       stokSku: stokSkuData,
       stokTx: stokTxData,
+      dbExtras: getDbHargaExtras(),
       savedAt: new Date().toISOString()
     });
     // Simpan salinan data sebelumnya. Kalau data baru ternyata salah/reset,
@@ -18142,8 +18293,10 @@ function saveAbsensi(){
   // Sync ke Firebase jika terkoneksi
   if(typeof fbDb!=="undefined" && typeof fbConnected!=="undefined" && fbConnected){
     try {
-      fbDb.ref("ateena/data").set(getCloudPayload())
+      const payload=getCloudPayload();
+      fbDb.ref("ateena/data").update(payload)
         .then(()=>{
+          afterCloudWrite(payload);
           updateCloudUI("success");
           if(syncEl) syncEl.innerHTML = '✅ Tersinkron';
         })
@@ -25996,27 +26149,37 @@ function updateCloudUI(state){
   try{ updatePengaturanBadges(state); }catch(e){}
 }
 
-function getCloudPayload(){
+function getCloudPayload(includeDbExtras){
   // Foto sekarang disimpan sebagai URL Cloudinary (kecil), bisa ikut sync
-  return {orders,invoices,config,nextId,nextInvNum,
+  const payload={orders,invoices,config,nextId,nextInvNum,
     dbBahan:DB_BAHAN_ARR, dbSablon:DB_SABLON_ARR,
     dbUkuran:DB_UKURAN, dbSablonWarna:DB_SABLON_WARNA,
     absensi:absensiData, karyawan:karyawanData, barokahQty:barokahQtyData,
     tarifSablonArr:TARIF_SABLON_ARR, tarifDesainArr:TARIF_DESAIN_ARR,
     stokSku:stokSkuData, stokTx:stokTxData,
     savedAt:new Date().toISOString()};
+  // Submenu Database Harga hanya dikirim otomatis kalau perangkat ini baru mengubahnya.
+  // Ini mencegah perangkat lama menimpa keterangan yang lebih baru dari perangkat lain.
+  const extras=getDbHargaExtras();
+  if(Object.keys(extras).length && (includeDbExtras || dbExtrasIsDirty())){
+    payload.dbExtras=extras;
+    payload.dbExtrasAt=new Date().toISOString();
+  }
+  return payload;
 }
 
 function cloudPush(){
   if(!fbDb){alert("Tidak terhubung ke Firebase. Pastikan koneksi internet aktif.");return;}
-  if(!confirm("Simpan data lokal ke cloud sekarang?\nData cloud saat ini akan diganti dengan "+orders.length+" order di perangkat ini."))return;
+  if(!confirm("Simpan data lokal ke cloud sekarang?\nData cloud saat ini akan diganti dengan "+orders.length+" order di perangkat ini, termasuk Database Harga & keterangan submenu dari perangkat ini."))return;
   __ateenaCloudSafe=true;
   updateCloudUI("syncing");
-  fbDb.ref("ateena/data").set(getCloudPayload())
+  const payload=getCloudPayload(true);
+  fbDb.ref("ateena/data").update(payload)
     .then(()=>{
       __ateenaLastCloudOrderCount=orders.length;
       __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length;
       __ateenaLastCloudSablonCount=DB_SABLON_ARR.length;
+      afterCloudWrite(payload);
       updateCloudUI("success");
       saveData();
     })
@@ -26029,7 +26192,7 @@ function cloudPush(){
 
 function cloudPull(){
   if(!fbDb){alert("Tidak terhubung ke Firebase. Pastikan koneksi internet aktif.");return;}
-  if(!confirm("Muat data dari cloud? Data lokal saat ini akan diganti dengan data cloud."))return;
+  if(!confirm("Muat data dari cloud? Data lokal saat ini akan diganti dengan data cloud, termasuk Database Harga & keterangan submenu jika tersedia."))return;
   fbDb.ref("ateena/data").once("value")
     .then(snap=>{
       const data=snap.val();
@@ -26059,18 +26222,95 @@ function cloudPull(){
       if(data.tarifDesainArr&&data.tarifDesainArr.length) TARIF_DESAIN_ARR.splice(0,TARIF_DESAIN_ARR.length,...data.tarifDesainArr);
       if(data.stokSku&&data.stokSku.length) stokSkuData.splice(0,stokSkuData.length,...data.stokSku);
       if(data.stokTx&&data.stokTx.length) stokTxData.splice(0,stokTxData.length,...data.stokTx);
+      applyCloudDbExtras(data,true);
       __ateenaCloudSafe=true;
       __ateenaLastCloudOrderCount=orders.length;
       __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length;
       __ateenaLastCloudSablonCount=DB_SABLON_ARR.length;
       saveData();
       renderDash();
+      try{ renderDatabase(); }catch(e){}
       updateCloudUI("loaded");
       alert("✅ Data berhasil dimuat dari cloud! ("+orders.length+" order)");
     })
     .catch(e=>{
       console.error("Cloud pull error:",e);
       alert("Gagal muat dari cloud: "+e.message);
+    });
+}
+
+// ===== SINKRON DATABASE HARGA SAJA (MANUAL, BYPASS GUARD) =====
+// Dipakai saat satu perangkat sengaja mengubah/mengurangi Database Harga.
+// Guard otomatis tetap aktif untuk mencegah data lama menimpa data baru.
+function dbHargaPushToCloud(){
+  if(!authIsOwner()){showNotif('⛔ Owner Saja','Hanya Pemilik yang boleh mengirim Database Harga.');return;}
+  if(!fbDb||!fbConnected){alert("Tidak terhubung ke Firebase. Pastikan koneksi internet aktif.");return;}
+  const extras=getDbHargaExtras();
+  const sentAt=new Date().toISOString();
+  const payload={
+    dbBahan:DB_BAHAN_ARR,
+    dbSablon:DB_SABLON_ARR,
+    dbUkuran:DB_UKURAN,
+    dbSablonWarna:DB_SABLON_WARNA,
+    tarifSablonArr:TARIF_SABLON_ARR,
+    tarifDesainArr:TARIF_DESAIN_ARR,
+    savedAt:sentAt
+  };
+  if(Object.keys(extras).length){
+    payload.dbExtras=extras;
+    payload.dbExtrasAt=sentAt;
+  }
+  if(!confirm("Kirim Database Harga dari perangkat ini ke cloud?\nBahan: "+DB_BAHAN_ARR.length+", Sablon: "+DB_SABLON_ARR.length+".\nOrder, invoice, config, dan stok TIDAK diubah."))return;
+  __ateenaCloudSafe=true;
+  updateCloudUI("syncing");
+  fbDb.ref("ateena/data").update(payload)
+    .then(()=>{
+      __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length;
+      __ateenaLastCloudSablonCount=DB_SABLON_ARR.length;
+      if(payload.dbExtrasAt) dbExtrasClearDirty(payload.dbExtrasAt);
+      saveData();
+      updateCloudUI("success");
+      showNotif('Database Harga Terkirim','Bahan '+DB_BAHAN_ARR.length+' dan sablon '+DB_SABLON_ARR.length+' sudah dikirim ke cloud.');
+    })
+    .catch(e=>{
+      console.error("DB Harga push error:",e);
+      updateCloudUI("error");
+      alert("Gagal mengirim Database Harga: "+e.message);
+    });
+}
+
+function dbHargaPullFromCloud(){
+  if(!authIsOwner()){showNotif('⛔ Owner Saja','Hanya Pemilik yang boleh mengambil Database Harga.');return;}
+  if(!fbDb||!fbConnected){alert("Tidak terhubung ke Firebase. Pastikan koneksi internet aktif.");return;}
+  fbDb.ref("ateena/data").once("value")
+    .then(snap=>{
+      const data=snap.val();
+      if(!data){alert("Belum ada data di cloud.");return;}
+      const cloudBahanCount=Array.isArray(data.dbBahan)?data.dbBahan.length:(data.dbBahan?Object.keys(data.dbBahan).length:0);
+      const cloudSablonCount=Array.isArray(data.dbSablon)?data.dbSablon.length:(data.dbSablon?Object.keys(data.dbSablon).length:0);
+      const hasExtras=!!(data.dbExtras&&Object.keys(data.dbExtras).length);
+      if(!confirm("Ambil Database Harga dari cloud?\nBahan: "+cloudBahanCount+", Sablon: "+cloudSablonCount+(hasExtras?", termasuk keterangan submenu Jersey/Bendera/Merch/Kalkulator":"")+".\nOrder, invoice, config, dan stok TIDAK diubah."))return;
+      clearTimeout(saveTimer); saveTimer=null;
+      clearTimeout(cloudSyncTimer); cloudSyncTimer=null;
+      if(data.dbBahan&&data.dbBahan.length) DB_BAHAN_ARR.splice(0,DB_BAHAN_ARR.length,...data.dbBahan);
+      if(data.dbSablon&&data.dbSablon.length) DB_SABLON_ARR.splice(0,DB_SABLON_ARR.length,...data.dbSablon);
+      if(data.dbUkuran) Object.assign(DB_UKURAN,data.dbUkuran);
+      if(data.dbSablonWarna) Object.assign(DB_SABLON_WARNA,data.dbSablonWarna);
+      if(data.tarifSablonArr&&data.tarifSablonArr.length) TARIF_SABLON_ARR.splice(0,TARIF_SABLON_ARR.length,...data.tarifSablonArr);
+      if(data.tarifDesainArr&&data.tarifDesainArr.length) TARIF_DESAIN_ARR.splice(0,TARIF_DESAIN_ARR.length,...data.tarifDesainArr);
+      const extrasApplied=applyCloudDbExtras(data,true);
+      __ateenaCloudSafe=true;
+      __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length;
+      __ateenaLastCloudSablonCount=DB_SABLON_ARR.length;
+      saveData();
+      refreshDatabaseHargaUI();
+      try{ renderDash(); }catch(e){}
+      updateCloudUI("loaded");
+      alert("✅ Database Harga dimuat dari cloud.\nBahan: "+DB_BAHAN_ARR.length+", Sablon: "+DB_SABLON_ARR.length+(extrasApplied?"\nKeterangan submenu ikut dimuat.":"\nKeterangan submenu belum ada di cloud; kirim dari perangkat mobile dulu."));
+    })
+    .catch(e=>{
+      console.error("DB Harga pull error:",e);
+      alert("Gagal mengambil Database Harga: "+e.message);
     });
 }
 
@@ -26092,16 +26332,17 @@ function cloudSyncPush(force){
   }
   if(!force && __ateenaLastCloudBahanCount>=20 && DB_BAHAN_ARR.length < Math.max(1,Math.floor(__ateenaLastCloudBahanCount*0.5))){
     console.warn("[Ateena] Cloud push ditahan: jumlah bahan turun drastis.");
-    try{ showNotif('Sinkron Cloud Ditahan','Jumlah bahan di Database Harga turun drastis. Data cloud tidak ditimpa.',{tag:'cloud-db-shrink-guard'}); }catch(e){}
+    try{ showNotif('Sinkron Cloud Ditahan','Jumlah bahan di Database Harga turun drastis. Data cloud tidak ditimpa. Jika penurunan ini disengaja, buka Pengaturan > Cloud Sync > Kirim Database Harga ke Cloud.',{tag:'cloud-db-shrink-guard'}); }catch(e){}
     return;
   }
   if(!force && __ateenaLastCloudSablonCount>=10 && DB_SABLON_ARR.length < Math.max(1,Math.floor(__ateenaLastCloudSablonCount*0.5))){
     console.warn("[Ateena] Cloud push ditahan: jumlah sablon turun drastis.");
-    try{ showNotif('Sinkron Cloud Ditahan','Jumlah sablon di Database Harga turun drastis. Data cloud tidak ditimpa.',{tag:'cloud-db-shrink-guard'}); }catch(e){}
+    try{ showNotif('Sinkron Cloud Ditahan','Jumlah sablon di Database Harga turun drastis. Data cloud tidak ditimpa. Jika penurunan ini disengaja, buka Pengaturan > Cloud Sync > Kirim Database Harga ke Cloud.',{tag:'cloud-db-shrink-guard'}); }catch(e){}
     return;
   }
-  fbDb.ref("ateena/data").set(getCloudPayload())
-    .then(()=>{ __ateenaLastCloudOrderCount=orders.length; __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length; __ateenaLastCloudSablonCount=DB_SABLON_ARR.length; updateCloudUI("success"); })
+  const payload=getCloudPayload();
+  fbDb.ref("ateena/data").update(payload)
+    .then(()=>{ __ateenaLastCloudOrderCount=orders.length; __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length; __ateenaLastCloudSablonCount=DB_SABLON_ARR.length; afterCloudWrite(payload); updateCloudUI("success"); })
     .catch(e=>console.warn("Auto cloud sync failed:",e));
 }
 
@@ -26346,13 +26587,15 @@ window.addEventListener("beforeunload",flushPendingCloudSync);
         if((DB_BAHAN_ARR.length>=20 && cloudBahanCount < Math.max(1,Math.floor(DB_BAHAN_ARR.length*0.5))) ||
            (DB_SABLON_ARR.length>=10 && cloudSablonCount < Math.max(1,Math.floor(DB_SABLON_ARR.length*0.5)))){
           console.warn("[Ateena] Database Harga cloud mengecil drastis; data lokal dipertahankan.",{bahan:DB_BAHAN_ARR.length,cloudBahan:cloudBahanCount,sablon:DB_SABLON_ARR.length,cloudSablon:cloudSablonCount});
-          try{ showNotif('Sinkron Database Ditahan','Database Harga di cloud jauh lebih sedikit dari perangkat ini. Data lokal tidak ditimpa.',{tag:'cloud-db-shrink-guard'}); }catch(e){}
+          try{ showNotif('Sinkron Database Ditahan','Database Harga di cloud jauh lebih sedikit dari perangkat ini. Data lokal tidak ditimpa. Jika penurunan ini disengaja, buka Pengaturan > Cloud Sync > Ambil Database Harga dari Cloud.',{tag:'cloud-db-shrink-guard'}); }catch(e){}
           return;
         }
         __ateenaCloudSafe=true;
         __ateenaLastCloudOrderCount=cloudCount;
         __ateenaLastCloudBahanCount=cloudBahanCount;
         __ateenaLastCloudSablonCount=cloudSablonCount;
+        // Keterangan submenu Database Harga (Jersey/Bendera/Merch/Kalkulator) ikut cloud.
+        applyCloudDbExtras(cloudData,false);
         // Fingerprint ringan: id + status + dp + jumlah pembayaran + memo — supaya perubahan
         // status/pembayaran pada order yang SAMA (bukan cuma tambah/hapus) ikut terdeteksi.
         var fp=function(arr){ return arr.map(function(o){return o.id+':'+(o.status||'')+':'+(o.dp||0)+':'+((o.payments||[]).length)+':'+(o.memo||'')+':'+(o.label||'');}).join('|'); };
@@ -26425,8 +26668,10 @@ window.addEventListener("beforeunload",flushPendingCloudSync);
               __ateenaLastCloudOrderCount=orders.length;
               __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length;
               __ateenaLastCloudSablonCount=DB_SABLON_ARR.length;
-              fbDb.ref("ateena/data").set(getCloudPayload())
+              const payload=getCloudPayload(true);
+              fbDb.ref("ateena/data").update(payload)
                 .then(()=>{
+                  afterCloudWrite(payload);
                   updateCloudUI("success");
                   finishLoad(false);
                 })
@@ -26464,8 +26709,9 @@ window.addEventListener("beforeunload",flushPendingCloudSync);
             __ateenaLastCloudOrderCount=localCount;
             __ateenaLastCloudBahanCount=localBahanCount;
             __ateenaLastCloudSablonCount=localSablonCount;
-            fbDb.ref("ateena/data").set(getCloudPayload())
-              .then(()=>{ updateCloudUI("success"); finishLoad(false); })
+            const payload=getCloudPayload();
+            fbDb.ref("ateena/data").update(payload)
+              .then(()=>{ afterCloudWrite(payload); updateCloudUI("success"); finishLoad(false); })
               .catch(()=>finishLoad(false));
             return;
           }
@@ -26494,6 +26740,7 @@ window.addEventListener("beforeunload",flushPendingCloudSync);
             if(cloudData.tarifDesainArr&&cloudData.tarifDesainArr.length) TARIF_DESAIN_ARR.splice(0,TARIF_DESAIN_ARR.length,...cloudData.tarifDesainArr);
             if(cloudData.stokSku&&cloudData.stokSku.length) stokSkuData.splice(0,stokSkuData.length,...cloudData.stokSku);
             if(cloudData.stokTx&&cloudData.stokTx.length) stokTxData.splice(0,stokTxData.length,...cloudData.stokTx);
+            applyCloudDbExtras(cloudData,false);
             __ateenaCloudSafe=true;
             __ateenaLastCloudOrderCount=orders.length;
             __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length;
@@ -26511,8 +26758,10 @@ window.addEventListener("beforeunload",flushPendingCloudSync);
             __ateenaLastCloudOrderCount=orders.length;
             __ateenaLastCloudBahanCount=DB_BAHAN_ARR.length;
             __ateenaLastCloudSablonCount=DB_SABLON_ARR.length;
-            fbDb.ref("ateena/data").set(getCloudPayload())
+            const payload=getCloudPayload();
+            fbDb.ref("ateena/data").update(payload)
               .then(()=>{
+                afterCloudWrite(payload);
                 updateCloudUI("success");
                 finishLoad(false);
               })
