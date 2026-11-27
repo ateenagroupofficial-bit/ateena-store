@@ -16092,6 +16092,14 @@ function renderDatabase(){
 
 // ── Database Harga: daftar menu + modal detail ───────────────────
 function openDatabaseModal(key){
+  // Modal harus tampil stabil; hentikan intro halaman Database yang masih berjalan
+  // agar kartu di belakang overlay tidak ikut bergerak/berkedip.
+  var pg=document.getElementById('page-database');
+  if(pg){
+    pg.classList.remove('page-premium-enter');
+    var sheen=pg.querySelector('.pg-sheen');
+    if(sheen&&sheen.parentNode) sheen.parentNode.removeChild(sheen);
+  }
   try{ renderDatabase(); }catch(e){}
   openModal('db-modal-'+key);
 }
@@ -28431,8 +28439,20 @@ body.dark #page-database>.topbar{background:linear-gradient(135deg,#1e4fd8 0%,#1
 #page-database.page-premium-enter .set-list:nth-child(2) .set-item:nth-child(2){animation-delay:.14s}
 #page-database.page-premium-enter .set-list:nth-child(2) .set-item:nth-child(3){animation-delay:.18s}
 #page-database.page-premium-enter .set-list:nth-child(2) .set-item:nth-child(4){animation-delay:.22s}
+#page-database.page-premium-enter .set-list:nth-child(2) .set-item:nth-child(n+5){animation-delay:.26s}
 #page-database.page-premium-enter .set-shell>.set-section-label:nth-child(3){animation-delay:.24s}
 #page-database.page-premium-enter .set-list:nth-child(4) .set-item:nth-child(1){animation-delay:.28s}
+#page-database.page-premium-enter .set-list:nth-child(4) .set-item:nth-child(2){animation-delay:.32s}
+#page-database.page-premium-enter .set-list:nth-child(4) .set-item:nth-child(3){animation-delay:.36s}
+#page-database.page-premium-enter .set-list:nth-child(4) .set-item:nth-child(4){animation-delay:.40s}
+#page-database.page-premium-enter .set-list:nth-child(4) .set-item:nth-child(n+5){animation-delay:.44s}
+
+@media(prefers-reduced-motion:reduce){
+  .page-premium-enter>*,
+  .page-premium-enter .set-section-label,
+  .page-premium-enter .set-item{animation:none!important}
+  .pg-sheen{display:none!important}
+}
 
 #page-pengaturan.page-premium-enter .set-shell>.set-section-label:nth-child(1){animation-delay:.04s}
 #page-pengaturan.page-premium-enter .set-list:nth-child(2) .set-item:nth-child(1){animation-delay:.10s}
