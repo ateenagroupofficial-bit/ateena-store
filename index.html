@@ -7623,7 +7623,7 @@ _Ateena Clothing Store_</textarea>
     <div class="keu-hero-copy">
       <div class="stok-eyebrow">Laporan</div>
       <div class="page-title">Laporan Keuangan</div>
-      <div class="page-sub">Arus kas real dari Jurnal Umum + posisi order &amp; piutang</div>
+      <div class="page-sub">Arus kas real + laba bersih dari Detail Profit + posisi order &amp; piutang</div>
     </div>
     <div class="topbar-right" style="gap:8px">
       <span class="fin-source-badge" id="keu-source-badge">● Jurnal Umum &amp; Order</span>
@@ -7643,6 +7643,7 @@ _Ateena Clothing Store_</textarea>
   <div class="fin-tabs keu-tabs">
     <button class="fin-tab active" id="keu-tab-0" onclick="keuSwitchTab(0)">Arus Kas</button>
     <button class="fin-tab" id="keu-tab-1" onclick="keuSwitchTab(1)">Order &amp; Piutang</button>
+    <button class="fin-tab" id="keu-tab-2" onclick="keuSwitchTab(2)">Laba Bersih</button>
   </div>
 
   <div id="keu-panel-kas">
@@ -7681,7 +7682,7 @@ _Ateena Clothing Store_</textarea>
       <div class="fin-panel-hdr"><div class="fin-panel-title">Rincian Order &amp; Piutang</div><div class="fin-panel-sub" id="keu-order-sub"></div></div>
       <div class="tbl-wrap">
         <table class="fin-table" id="tbl-keuangan">
-          <thead><tr><th>Order</th><th>Customer</th><th>Tgl</th><th class="num">Total</th><th class="num">Dibayar</th><th class="num">Sisa</th><th>Status</th><th>HPP</th></tr></thead>
+          <thead><tr><th>Order</th><th>Customer</th><th>Tgl</th><th class="num">Total</th><th class="num">Dibayar</th><th class="num">Sisa</th><th>Status</th><th>HPP</th><th class="num">Laba Bersih</th></tr></thead>
           <tbody id="keu-tbl"></tbody>
         </table>
       </div>
@@ -7691,6 +7692,24 @@ _Ateena Clothing Store_</textarea>
       <div class="fin-panel-hdr"><div class="fin-panel-title">Order Paling Untung</div><div class="fin-panel-sub">Hanya order dengan HPP lengkap</div></div>
       <div class="fin-panel-body" id="keu-top-profit"></div>
     </div>
+  </div>
+
+  <div id="keu-panel-profit" style="display:none">
+    <div class="fin-compare-grid" id="keu-profit-cards"></div>
+    <div id="keu-profit-warning"></div>
+
+    <div class="fin-panel">
+      <div class="fin-panel-hdr"><div class="fin-panel-title">Laba Bersih per Order</div><div class="fin-panel-sub" id="keu-profit-sub">Dari Detail Profit tiap order</div></div>
+      <div class="tbl-wrap">
+        <table class="fin-table" id="tbl-keu-profit">
+          <thead><tr><th>Order</th><th>Customer</th><th>Tgl</th><th class="num">Omzet</th><th class="num">HPP</th><th class="num">Laba Bersih</th><th class="num">Margin</th><th>Status</th></tr></thead>
+          <tbody id="keu-profit-tbl"></tbody>
+          <tfoot id="keu-profit-tfoot"></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="fin-note">Laba bersih di sini dihitung dari <b>Detail Profit per order</b>: omzet order dikurangi HPP kaos, DTF, ongkir, tenaga kerja, operasional, dan biaya lain. Ini berbeda dari <b>Laba Rugi Kas</b> yang memakai pemasukan − pengeluaran Jurnal Umum. Order yang belum punya HPP/Detail Profit ditandai dan tidak dijumlahkan ke total laba bersih.</div>
   </div>
 </div>
 
@@ -25496,7 +25515,8 @@ function finOrderCost(o){
   var p=(typeof getProfitOrder==='function')?getProfitOrder(o):{vendorKaos:0,vendorDTF:0,ongkir:0,tenagaKerja:0,operasional:0,biayaLain:0,totalBiaya:0,labaBersih:(o&&o.total)||0,auto:{},override:{}};
   var ov=(o&&o.profitOverride)||{};
   var manualKeys=Object.keys(ov).filter(function(k){return ov[k]!=null;});
-  var costKeys=['vendorKaos','vendorDTF','ongkir','tenagaKerja','biayaLain'];
+  // Ongkir saja tidak cukup menandai HPP lengkap — harus ada komponen produksi/tenaga kerja/biaya lain.
+  var costKeys=['vendorKaos','vendorDTF','tenagaKerja','biayaLain'];
   var hasManual=costKeys.some(function(k){return ov[k]!=null;});
   var auto=p.auto||{};
   var hasAuto=costKeys.some(function(k){return (+auto[k]||0)>0;});
@@ -25512,7 +25532,8 @@ function finOrderSummary(range){
   list.forEach(function(o){var c=finOrderCost(o); (c.complete?complete:incomplete).push({o:o,c:c});});
   var hppOrder=complete.reduce(function(a,x){return a+x.c.totalBiaya;},0);
   var profitComplete=complete.reduce(function(a,x){return a+((+x.o.total||0)-x.c.totalBiaya);},0);
-  return {list:list,count:list.length,omzet:omzet,terbayar:terbayar,piutang:piutang,lunas:lunas,avg:list.length?omzet/list.length:0,complete:complete,incomplete:incomplete,hppOrder:hppOrder,profitComplete:profitComplete,coverage:list.length?Math.round(complete.length/list.length*100):0};
+  var completeOmzet=complete.reduce(function(a,x){return a+(+x.o.total||0);},0);
+  return {list:list,count:list.length,omzet:omzet,terbayar:terbayar,piutang:piutang,lunas:lunas,avg:list.length?omzet/list.length:0,complete:complete,incomplete:incomplete,hppOrder:hppOrder,profitComplete:profitComplete,completeOmzet:completeOmzet,profitMargin:completeOmzet>0?profitComplete/completeOmzet*100:0,coverage:list.length?Math.round(complete.length/list.length*100):0};
 }
 function finParseProductLines(produk){
   return String(produk||'').split('|').map(function(x){return x.trim();}).filter(Boolean).map(function(line){
@@ -25899,7 +25920,8 @@ function renderKeuangan(){
       '<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">💚</div><div class="fin-kpi-badge">'+cash.countMasuk+' trx</div></div><div class="fin-kpi-lbl">Kas Masuk</div><div class="fin-kpi-val">'+fmt(cash.masuk)+'</div><div class="fin-kpi-sub">'+range.label+' · uang benar-benar diterima</div></div>'
       +'<div class="fin-kpi red"><div class="fin-kpi-top"><div class="fin-kpi-ico">❤️</div><div class="fin-kpi-badge">'+cash.countKeluar+' trx</div></div><div class="fin-kpi-lbl">Kas Keluar</div><div class="fin-kpi-val">'+fmt(cash.keluar)+'</div><div class="fin-kpi-sub">'+range.label+' · pengeluaran tercatat</div></div>'
       +'<div class="fin-kpi '+(cash.operating>=0?'blue':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">📊</div><div class="fin-kpi-badge '+(cash.operating>=0?'up':'down')+'">'+(margin>=0?'+':'')+margin+'%</div></div><div class="fin-kpi-lbl">Arus Kas Operasional</div><div class="fin-kpi-val">'+fmt(cash.operating)+'</div><div class="fin-kpi-sub">Kas masuk − kas keluar (belum termasuk koreksi)</div></div>'
-      +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">🏦</div><div class="fin-kpi-badge">Saldo</div></div><div class="fin-kpi-lbl">Saldo Kas Saat Ini</div><div class="fin-kpi-val">'+fmt(saldo)+'</div><div class="fin-kpi-sub">Kas Toko '+fmt(saldoToko)+' · Bank '+fmt(saldoBank)+'</div></div>';
+      +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">🏦</div><div class="fin-kpi-badge">Saldo</div></div><div class="fin-kpi-lbl">Saldo Kas Saat Ini</div><div class="fin-kpi-val">'+fmt(saldo)+'</div><div class="fin-kpi-sub">Kas Toko '+fmt(saldoToko)+' · Bank '+fmt(saldoBank)+'</div></div>'
+      +'<div class="fin-kpi '+(ord.profitComplete>=0?'blue':'red')+'" onclick="keuSwitchTab(2)" style="cursor:pointer" title="Klik untuk melihat rincian laba bersih per order"><div class="fin-kpi-top"><div class="fin-kpi-ico">💼</div><div class="fin-kpi-badge '+(ord.profitComplete>=0?'up':'down')+'">'+(ord.count?(ord.profitMargin>=0?'+':'')+ord.profitMargin.toFixed(1)+'%':'—')+'</div></div><div class="fin-kpi-lbl">Laba Bersih Detail Profit</div><div class="fin-kpi-val">'+fmt(ord.profitComplete)+'</div><div class="fin-kpi-sub">'+(ord.count?(ord.complete.length+'/'+ord.count+' order lengkap'+(ord.incomplete.length?' · '+ord.incomplete.length+' belum HPP':'')):'Belum ada order di periode ini')+'</div></div>';
   }
 
   // ===== Grafik arus kas 6 bulan =====
@@ -25982,6 +26004,7 @@ function renderKeuangan(){
       var paid=typeof totalBayar==='function'?totalBayar(o):0;
       var sisa=Math.max(0,typeof sisaBayar==='function'?sisaBayar(o):0);
       var c=finOrderCost(o);
+      var laba=c.complete?((+o.total||0)-c.totalBiaya):null;
       var statusClass=String(o.status||'').toLowerCase().replace(/\s+/g,'-');
       return '<tr>'
         +'<td class="mono">'+o.noOrder+'</td>'
@@ -25992,10 +26015,57 @@ function renderKeuangan(){
         +'<td class="num" style="color:'+(sisa>0?'var(--r)':'var(--mt)')+'">'+fmt(sisa)+'</td>'
         +'<td><span class="badge b-'+statusClass+'">'+o.status+'</span></td>'
         +'<td>'+(c.complete?'<span class="fin-badge ok">Lengkap</span>':'<span class="fin-badge warn" style="cursor:pointer" onclick="openProfitDetail('+o.id+')">HPP belum diisi</span>')+'</td>'
+        +'<td class="num">'+(c.complete?'<span style="color:'+(laba>=0?'var(--g)':'var(--r)')+'">'+fmt(laba)+'</span>':'<span class="fin-badge warn" style="cursor:pointer" onclick="openProfitDetail('+o.id+')">Belum dihitung</span>')+'</td>'
+        +'</tr>';
+    }).join(''):'<tr><td colspan="9"><div class="fin-row-empty">📦 Belum ada order di periode ini</div></td></tr>';
+  }
+  var osub=document.getElementById('keu-order-sub'); if(osub) osub.textContent=ord.count+' order · HPP lengkap '+ord.complete.length+'/'+ord.count;
+
+  // ===== Panel Laba Bersih Detail Profit =====
+  var profitCards=document.getElementById('keu-profit-cards');
+  if(profitCards){
+    profitCards.innerHTML=
+      '<div class="fin-compare-card"><div class="fin-compare-lbl">Omzet Order (semua)</div><div class="fin-compare-val" style="color:var(--b)">'+fmt(ord.omzet)+'</div><div class="fin-compare-sub">'+ord.count+' order · '+range.label+'</div></div>'
+      +'<div class="fin-compare-card"><div class="fin-compare-lbl">HPP Detail Profit (order lengkap)</div><div class="fin-compare-val" style="color:var(--r)">'+fmt(ord.hppOrder)+'</div><div class="fin-compare-sub">'+ord.complete.length+' dari '+ord.count+' order punya HPP lengkap</div></div>'
+      +'<div class="fin-compare-card"><div class="fin-compare-lbl">Laba Bersih Detail Profit</div><div class="fin-compare-val" style="color:'+(ord.profitComplete>=0?'var(--g)':'var(--r)')+'">'+fmt(ord.profitComplete)+'</div><div class="fin-compare-sub">Hanya dari '+ord.complete.length+' order yang HPP-nya lengkap</div></div>'
+      +'<div class="fin-compare-card"><div class="fin-compare-lbl">Margin Laba Bersih</div><div class="fin-compare-val" style="color:'+(ord.profitMargin>=0?'var(--g)':'var(--r)')+'">'+(ord.completeOmzet>0?ord.profitMargin.toFixed(1)+'%':'—')+'</div><div class="fin-compare-sub">Laba bersih ÷ omzet order lengkap ('+fmt(ord.completeOmzet)+')</div></div>';
+  }
+  var profitWarn=document.getElementById('keu-profit-warning');
+  if(profitWarn){
+    if(!ord.count){
+      profitWarn.innerHTML='';
+    } else if(ord.incomplete.length){
+      profitWarn.innerHTML='<div class="fin-check-banner warn">⚠️ '+ord.incomplete.length+' order belum punya HPP/Detail Profit. Laba bersih hanya menjumlahkan '+ord.complete.length+' order yang lengkap. Order bertanda di tabel bisa diklik untuk mengisi.</div>';
+    } else {
+      profitWarn.innerHTML='<div class="fin-check-banner ok">✅ Semua '+ord.count+' order sudah punya HPP & Detail Profit.</div>';
+    }
+  }
+  var ptbl=document.getElementById('keu-profit-tbl');
+  if(ptbl){
+    var prows=ord.list.slice().sort(function(a,b){return String(b.tgl||'').localeCompare(String(a.tgl||''))||String(b.noOrder||'').localeCompare(String(a.noOrder||''));});
+    ptbl.innerHTML=prows.length?prows.map(function(o){
+      var c=finOrderCost(o);
+      var laba=c.complete?((+o.total||0)-c.totalBiaya):null;
+      var mg=c.complete&&(+o.total||0)>0?(laba/(+o.total||0)*100):0;
+      return '<tr style="cursor:pointer" onclick="openProfitDetail('+o.id+')">'
+        +'<td class="mono">'+o.noOrder+'</td>'
+        +'<td style="font-weight:700">'+escHtml(o.nama)+'</td>'
+        +'<td>'+o.tgl+'</td>'
+        +'<td class="num">'+fmt(o.total)+'</td>'
+        +'<td class="num" style="color:var(--r)">'+(c.complete?fmt(c.totalBiaya):'—')+'</td>'
+        +'<td class="num" style="color:'+(c.complete?(laba>=0?'var(--g)':'var(--r)'):'var(--mt)')+'">'+(c.complete?fmt(laba):'Belum dihitung')+'</td>'
+        +'<td class="num">'+(c.complete?mg.toFixed(1)+'%':'—')+'</td>'
+        +'<td>'+(c.complete?'<span class="fin-badge ok">Lengkap</span>':'<span class="fin-badge warn">HPP belum diisi</span>')+'</td>'
         +'</tr>';
     }).join(''):'<tr><td colspan="8"><div class="fin-row-empty">📦 Belum ada order di periode ini</div></td></tr>';
   }
-  var osub=document.getElementById('keu-order-sub'); if(osub) osub.textContent=ord.count+' order · HPP lengkap '+ord.complete.length+'/'+ord.count;
+  var ptf=document.getElementById('keu-profit-tfoot');
+  if(ptf){
+    ptf.innerHTML=ord.count?'<tr style="background:var(--sf2);font-weight:900"><td colspan="3">TOTAL ORDER LENGKAP ('+ord.complete.length+')</td><td class="num">'+fmt(ord.completeOmzet)+'</td><td class="num" style="color:var(--r)">'+fmt(ord.hppOrder)+'</td><td class="num" style="color:'+(ord.profitComplete>=0?'var(--g)':'var(--r)')+'">'+fmt(ord.profitComplete)+'</td><td class="num">'+(ord.completeOmzet>0?ord.profitMargin.toFixed(1)+'%':'—')+'</td><td></td></tr>':'';
+  }
+  var psub=document.getElementById('keu-profit-sub');
+  if(psub) psub.textContent=ord.complete.length+'/'+ord.count+' order lengkap · '+range.label;
+
   var top=document.getElementById('keu-top-profit');
   if(top){
     var ranked=ord.complete.map(function(x){return {o:x.o,c:x.c,profit:(+x.o.total||0)-x.c.totalBiaya};}).sort(function(a,b){return b.profit-a.profit;}).slice(0,5);
@@ -27446,8 +27516,10 @@ function keuSwitchTab(idx){
   _keuTab=idx;
   var kas=document.getElementById('keu-panel-kas');
   var order=document.getElementById('keu-panel-order');
+  var profit=document.getElementById('keu-panel-profit');
   if(kas) kas.style.display=(idx===0?'block':'none');
   if(order) order.style.display=(idx===1?'block':'none');
+  if(profit) profit.style.display=(idx===2?'block':'none');
   var tabs=document.querySelectorAll('#page-keuangan .fin-tab');
   tabs.forEach(function(t,i){t.classList.toggle('active',i===idx);});
 }
