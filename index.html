@@ -1092,6 +1092,7 @@ box-shadow:0 0 0 3px rgba(59,108,246,.1);
 body.dark .pay-edit-btn{background:rgba(122,162,255,.14);color:#afc8ff;border-color:rgba(122,162,255,.3)}
 body.dark .pay-history-item.editing{background:rgba(122,162,255,.1);border-color:rgba(122,162,255,.55)}
 .pay-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.pay-icon svg,.pay-icon .pico{width:14px;height:14px;display:block}
 .pay-icon.dp{background:var(--b2);color:var(--b)}
 .pay-icon.cicil{background:var(--p3);color:var(--p1)}
 .pay-icon.lunas-icon{background:var(--g2);color:var(--g)}
@@ -1912,8 +1913,9 @@ th { font-size:10px !important; }
 #keu-chart-tabs { display:none; }
 @media(max-width:768px){
 #keu-chart-tabs { display:flex; gap:6px; margin-bottom:10px; }
-.keu-tab-btn { flex:1; padding:8px 4px; border:1px solid var(--bd); border-radius:8px; background:var(--sf2); color:var(--mt); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; }
-.keu-tab-btn.active { background:var(--p1); color:#fff; border-color:var(--p1); }
+.keu-tab-btn { flex:1; padding:8px 4px; border:1px solid var(--bd); border-radius:8px; background:var(--sf2); color:var(--mt); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; transition:color .25s cubic-bezier(.22,1,.36,1),background-color .25s cubic-bezier(.22,1,.36,1),border-color .25s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),transform .2s ease; }
+.keu-tab-btn:active{transform:scale(.97)}
+.keu-tab-btn.active { background:var(--p1); color:#fff; border-color:var(--p1); box-shadow:0 4px 12px rgba(59,108,246,.22); }
 }
 #dash-card-list .dash-order-card {
 background:var(--sf2);
@@ -1933,13 +1935,14 @@ margin-bottom:10px;
 .db-tab-btn {
 padding:8px 14px; border:1px solid var(--bd); border-radius:20px;
 background:var(--sf2); color:var(--mt); font-size:12px; font-weight:700;
-cursor:pointer; font-family:inherit; transition:.15s;
+cursor:pointer; font-family:inherit; transition:color .25s cubic-bezier(.22,1,.36,1),background-color .25s cubic-bezier(.22,1,.36,1),border-color .25s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),transform .2s ease;
 }
-.db-tab-btn.active { background:var(--p1); color:#fff; border-color:var(--p1); }
+.db-tab-btn:active{transform:scale(.97)}
+.db-tab-btn.active { background:var(--p1); color:#fff; border-color:var(--p1); box-shadow:0 4px 12px rgba(59,108,246,.22); }
 #db-main-grid { grid-template-columns:1fr !important; }
 #db-col-left, #db-col-right { display:block; }
 .db-section { display:none; }
-.db-section.db-active { display:block; }
+.db-section.db-active { display:block; animation:tabPanelIn .28s cubic-bezier(.22,1,.36,1) both; }
 }
 @media(max-width:768px){
 }
@@ -2268,7 +2271,8 @@ font-weight:800;
 .insight-card.positive{background:var(--g2);border:1px solid rgba(5,150,105,.2)}
 .insight-card.warning{background:var(--y2);border:1px solid rgba(217,119,6,.2)}
 .insight-card.info{background:var(--b2);border:1px solid rgba(37,99,235,.2)}
-.insight-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.insight-icon{font-size:20px;flex-shrink:0;margin-top:2px;display:inline-flex;align-items:center;justify-content:center}
+.insight-icon svg,.insight-icon .pico{width:20px;height:20px;display:block}
 .insight-title{font-size:13px;font-weight:800;color:var(--tx);margin-bottom:3px}
 .insight-desc{font-size:12px;color:var(--mt);line-height:1.5}
 @media(max-width:768px){
@@ -2721,9 +2725,21 @@ animation:finSectionIn .4s cubic-bezier(.22,1,.36,1) both;
 .fin-kpi-lbl{font-size:10.5px;font-weight:800;color:var(--mt);text-transform:uppercase;letter-spacing:.05em;position:relative;z-index:1}
 .fin-kpi-val{font-size:20px;font-weight:900;letter-spacing:-.02em;color:var(--tx);margin-top:3px;position:relative;z-index:1;line-height:1.15}
 .fin-kpi-sub{font-size:10.5px;color:var(--mt);margin-top:5px;position:relative;z-index:1;line-height:1.45}
-.fin-tabs{display:flex;gap:6px;background:var(--sf2);padding:4px;border-radius:14px;margin-bottom:14px;overflow-x:auto}
-.fin-tab{flex:1;min-width:max-content;padding:9px 14px;border:none;background:transparent;border-radius:10px;font-family:inherit;font-size:11.5px;font-weight:800;color:var(--mt);cursor:pointer;transition:.15s;white-space:nowrap}
+.fin-tabs{display:flex;gap:6px;background:var(--sf2);padding:4px;border-radius:14px;margin-bottom:14px;overflow-x:auto;position:relative}
+.fin-tab{flex:1;min-width:max-content;padding:9px 14px;border:none;background:transparent;border-radius:10px;font-family:inherit;font-size:11.5px;font-weight:800;color:var(--mt);cursor:pointer;transition:color .25s cubic-bezier(.22,1,.36,1),background-color .25s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),transform .2s ease;white-space:nowrap;position:relative;overflow:hidden}
+.fin-tab:active{transform:scale(.97)}
 .fin-tab.active{background:var(--p1);color:#fff;box-shadow:0 4px 12px rgba(59,108,246,.25)}
+@keyframes tabPanelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tab-panel-in{animation:tabPanelIn .28s cubic-bezier(.22,1,.36,1) both}
+.pico-inline{width:16px;height:16px;vertical-align:-3px;flex-shrink:0;display:inline-block}
+.pico-inline.sm{width:14px;height:14px;vertical-align:-2px}
+.pico-inline.lg{width:18px;height:18px;vertical-align:-4px}
+.fin-row-ico .pico,.fin-row-ico svg{width:18px;height:18px;display:block}
+.fin-kpi-ico .pico,.fin-kpi-ico svg{width:20px;height:20px;display:block}
+.fin-hero-label .pico,.fin-hero-label svg{width:16px;height:16px;vertical-align:-3px}
+.dmodal-hdr-icon .pico,.dmodal-hdr-icon svg{width:20px;height:20px;display:block}
+.modal-hdr-icon .pico,.modal-hdr-icon svg{width:20px;height:20px;display:block}
+.fin-check-banner .pico,.fin-check-banner svg{width:16px;height:16px;vertical-align:-3px}
 .fin-panel{background:var(--sf);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
 .fin-panel-hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;background:var(--sf2);border-bottom:1px solid var(--bd);flex-wrap:wrap}
 .fin-panel-title{font-size:13px;font-weight:800;display:flex;align-items:center;gap:7px}
@@ -2759,6 +2775,7 @@ animation:finSectionIn .4s cubic-bezier(.22,1,.36,1) both;
 .fin-mini-list{display:flex;flex-direction:column;gap:7px}
 .fin-mini-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:11px;background:var(--sf2);font-size:11.5px}
 .fin-mini-item .fi-ico{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--sf);flex-shrink:0}
+.fin-mini-item .fi-ico svg,.fin-mini-item .fi-ico .pico{width:14px;height:14px;display:block}
 .fin-mini-item .fi-body{flex:1;min-width:0}
 .fin-mini-item .fi-name{font-weight:800;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fin-mini-item .fi-sub{font-size:10px;color:var(--mt);margin-top:1px}
@@ -3919,11 +3936,12 @@ body.dark .set-item-badge.amber{color:#fcd34d;border-color:#92400e}
   .page .topbar{margin-bottom:12px}
   .mob-seg{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 12px;padding:2px;scrollbar-width:none}
   .mob-seg::-webkit-scrollbar{display:none}
-  .mob-seg-btn{flex:1 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:9px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--sf);color:var(--mt);font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;white-space:nowrap;transition:.15s;min-width:0;box-shadow:var(--sh)}
+  .mob-seg-btn{flex:1 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:9px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--sf);color:var(--mt);font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;white-space:nowrap;transition:color .25s cubic-bezier(.22,1,.36,1),background-color .25s cubic-bezier(.22,1,.36,1),border-color .25s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),transform .2s ease;min-width:0;box-shadow:var(--sh)}
+  .mob-seg-btn:active{transform:scale(.97)}
   .mob-seg-btn.active{background:linear-gradient(135deg,var(--p1),var(--p2));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(59,108,246,.28)}
   .mob-seg-panel{display:none!important}
-  .mob-seg-panel.mob-active{display:block!important}
-  .mob-seg-panel.mob-active.mob-grid{display:grid!important}
+  .mob-seg-panel.mob-active{display:block!important;animation:tabPanelIn .28s cubic-bezier(.22,1,.36,1) both}
+  .mob-seg-panel.mob-active.mob-grid{display:grid!important;animation:tabPanelIn .28s cubic-bezier(.22,1,.36,1) both}
   .mob-load-more{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin:14px 0 4px;padding:12px;border-radius:13px;border:1.5px dashed var(--bd2);background:var(--sf2);color:var(--p1);font-family:inherit;font-size:12px;font-weight:800;cursor:pointer}
   .mob-load-more:active{transform:scale(.99)}
   .mob-scroll-top{display:flex;position:fixed;right:14px;bottom:78px;width:42px;height:42px;border-radius:50%;border:1px solid var(--bd);background:var(--sf);color:var(--p1);font-size:18px;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:7000;opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s;cursor:pointer}
@@ -4487,6 +4505,12 @@ body.dark #page-gaji>.topbar.page-header-card{
     </symbol>
     <symbol id="ico-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>
+    </symbol>
+    <symbol id="ico-trend-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 17l6-6 4 4 6-8"/><path d="M14 7h6v6"/>
+    </symbol>
+    <symbol id="ico-trend-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 7l6 6 4-4 6 8"/><path d="M14 17h6v-6"/>
     </symbol>
     <symbol id="ico-phone-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2M12 7v6m0 0 2.3-2.3M12 13l-2.3-2.3"/>
@@ -6604,9 +6628,9 @@ body.dark #page-gaji>.topbar.page-header-card{
   </div>
 
   <div class="mob-seg" id="analitik-mob-seg">
-    <button type="button" class="mob-seg-btn active" onclick="analitikMobileTab(0)">📈 Grafik</button>
-    <button type="button" class="mob-seg-btn" onclick="analitikMobileTab(1)">🏆 Peringkat</button>
-    <button type="button" class="mob-seg-btn" onclick="analitikMobileTab(2)">💡 Insight</button>
+    <button type="button" class="mob-seg-btn active" onclick="analitikMobileTab(0)"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-chart"></use></svg> Grafik</button>
+    <button type="button" class="mob-seg-btn" onclick="analitikMobileTab(1)"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-trend-up"></use></svg> Peringkat</button>
+    <button type="button" class="mob-seg-btn" onclick="analitikMobileTab(2)"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-sparkle"></use></svg> Insight</button>
   </div>
   <div class="mob-seg-panel mob-active" data-analitik-panel="0">
   <div class="biz-toolbar">
@@ -6621,22 +6645,22 @@ body.dark #page-gaji>.topbar.page-header-card{
 
   <div class="biz-charts-row">
     <div class="biz-chart-card">
-      <div class="biz-chart-hdr"><div class="biz-chart-hdr-title">📈 Omzet Order vs Kas Masuk</div><div class="fin-panel-sub">Dua sumber, dua sudut pandang</div></div>
+      <div class="biz-chart-hdr"><div class="biz-chart-hdr-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-trend-up"></use></svg> Omzet Order vs Kas Masuk</div><div class="fin-panel-sub">Dua sumber, dua sudut pandang</div></div>
       <div class="biz-chart-body"><div style="position:relative;height:220px"><canvas id="chart-analitik-omzet"></canvas></div></div>
     </div>
     <div class="biz-chart-card">
-      <div class="biz-chart-hdr"><div class="biz-chart-hdr-title">💵 Kas Masuk vs Kas Keluar</div><div class="fin-panel-sub">Arus kas real per bulan</div></div>
+      <div class="biz-chart-hdr"><div class="biz-chart-hdr-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg> Kas Masuk vs Kas Keluar</div><div class="fin-panel-sub">Arus kas real per bulan</div></div>
       <div class="biz-chart-body"><div style="position:relative;height:220px"><canvas id="chart-analitik-cash"></canvas></div></div>
     </div>
   </div>
 
   <div class="biz-charts-row">
     <div class="biz-chart-card">
-      <div class="biz-chart-hdr"><div class="biz-chart-hdr-title">📦 Order Masuk per Bulan</div><div class="fin-panel-sub">Jumlah order, bukan estimasi</div></div>
+      <div class="biz-chart-hdr"><div class="biz-chart-hdr-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-box"></use></svg> Order Masuk per Bulan</div><div class="fin-panel-sub">Jumlah order, bukan estimasi</div></div>
       <div class="biz-chart-body"><div style="position:relative;height:200px"><canvas id="chart-analitik-order"></canvas></div></div>
     </div>
     <div class="biz-chart-card">
-      <div class="biz-chart-hdr"><div class="biz-chart-hdr-title">🏷️ Komposisi Pengeluaran</div><div class="fin-panel-sub">Dari Jurnal Umum</div></div>
+      <div class="biz-chart-hdr"><div class="biz-chart-hdr-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-chart"></use></svg> Komposisi Pengeluaran</div><div class="fin-panel-sub">Dari Jurnal Umum</div></div>
       <div class="biz-chart-body"><div style="position:relative;height:200px"><canvas id="chart-analitik-expense"></canvas></div></div>
     </div>
   </div>
@@ -6645,11 +6669,11 @@ body.dark #page-gaji>.topbar.page-header-card{
   <div class="mob-seg-panel" data-analitik-panel="1">
   <div class="biz-podium-grid">
     <div class="biz-podium-card">
-      <div class="biz-podium-hdr">🏆 Top 5 Customer</div>
+      <div class="biz-podium-hdr"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-trend-up"></use></svg> Top 5 Customer</div>
       <div id="analitik-top-customer"></div>
     </div>
     <div class="biz-podium-card">
-      <div class="biz-podium-hdr">🎯 Produk Terlaris (Qty)</div>
+      <div class="biz-podium-hdr"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-box"></use></svg> Produk Terlaris (Qty)</div>
       <div id="analitik-top-produk"></div>
     </div>
   </div>
@@ -6657,7 +6681,7 @@ body.dark #page-gaji>.topbar.page-header-card{
   </div>
   <div class="mob-seg-panel" data-analitik-panel="2">
   <div class="fin-panel">
-    <div class="fin-panel-hdr"><div class="fin-panel-title">💡 Insights Real</div><div class="fin-panel-sub">Dihitung dari data aktual</div></div>
+    <div class="fin-panel-hdr"><div class="fin-panel-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-sparkle"></use></svg> Insights Real</div><div class="fin-panel-sub">Dihitung dari data aktual</div></div>
     <div class="fin-panel-body" id="analitik-insights"></div>
   </div>
   </div>
@@ -7726,8 +7750,8 @@ _Ateena Clothing Store_</textarea>
     </div>
     <div class="topbar-right">
       <span class="fin-source-badge">● Jurnal Umum</span>
-      <button class="fin-icon-btn" onclick="exportLabaRugiExcel()" title="Export Excel">📊</button>
-      <button class="fin-icon-btn" onclick="lrCetak()" title="Cetak">🖨️</button>
+      <button class="fin-icon-btn" onclick="exportLabaRugiExcel()" title="Export Excel"><svg class="pico-inline" aria-hidden="true" focusable="false"><use href="#ico-download"></use></svg></button>
+      <button class="fin-icon-btn" onclick="lrCetak()" title="Cetak"><svg class="pico-inline" aria-hidden="true" focusable="false"><use href="#ico-printer"></use></svg></button>
     </div>
   </div>
 
@@ -7738,7 +7762,7 @@ _Ateena Clothing Store_</textarea>
   </div>
 
   <div class="fin-hero" id="lr-hero-card">
-    <div class="fin-hero-label">💼 LABA BERSIH KAS (A - B - C)</div>
+    <div class="fin-hero-label"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg> LABA BERSIH KAS (A - B - C)</div>
     <div class="fin-hero-val" id="lr-hero-val">Rp 0</div>
     <div class="fin-hero-badge" id="lr-hero-badge">Margin 0%</div>
     <div class="fin-hero-chips" id="lr-hero-chips"></div>
@@ -7747,9 +7771,9 @@ _Ateena Clothing Store_</textarea>
   <div class="fin-kpi-grid" id="lr-kpi-grid"></div>
 
   <div class="fin-tabs">
-    <button class="fin-tab active" id="lr-tab-0" onclick="lrSwitchTab(0)">💵 Laba Rugi Kas</button>
-    <button class="fin-tab" id="lr-tab-1" onclick="lrSwitchTab(1)">⚖️ Bandingkan HPP</button>
-    <button class="fin-tab" id="lr-tab-2" onclick="lrSwitchTab(2)">📦 Order &amp; Piutang</button>
+    <button class="fin-tab active" id="lr-tab-0" onclick="lrSwitchTab(0)"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg> Laba Rugi Kas</button>
+    <button class="fin-tab" id="lr-tab-1" onclick="lrSwitchTab(1)"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-scale"></use></svg> Bandingkan HPP</button>
+    <button class="fin-tab" id="lr-tab-2" onclick="lrSwitchTab(2)"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-box"></use></svg> Order &amp; Piutang</button>
   </div>
 
   <div id="lr-panel-kas">
@@ -7757,8 +7781,8 @@ _Ateena Clothing Store_</textarea>
     <div class="fin-section">
       <div class="fin-section-hdr income-hdr"><span>A. Pendapatan Usaha (Kas)</span><span id="lr-a-total">Rp 0</span></div>
       <div class="fin-list">
-        <div class="fin-row" onclick="lrOpenKasGroup('pendapatanOrder')"><div class="fin-row-left"><span class="fin-row-ico">📦</span><div class="fin-row-info"><div class="fin-row-name">1. Pembayaran Order</div><div class="fin-row-sub">DP, pelunasan, uang muka</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--g)" id="lr-x-produk">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
-        <div class="fin-row" onclick="lrOpenKasGroup('pendapatanLain')"><div class="fin-row-left"><span class="fin-row-ico">🛍️</span><div class="fin-row-info"><div class="fin-row-name">2. Pendapatan Lain</div><div class="fin-row-sub">Penjualan lain &amp; pemasukan lainnya</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--g)" id="lr-x-cetakan">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
+        <div class="fin-row" onclick="lrOpenKasGroup('pendapatanOrder')"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-box"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">1. Pembayaran Order</div><div class="fin-row-sub">DP, pelunasan, uang muka</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--g)" id="lr-x-produk">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
+        <div class="fin-row" onclick="lrOpenKasGroup('pendapatanLain')"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">2. Pendapatan Lain</div><div class="fin-row-sub">Penjualan lain &amp; pemasukan lainnya</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--g)" id="lr-x-cetakan">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
         <div class="fin-list-total"><span>TOTAL PENDAPATAN USAHA</span><span id="lr-x-total-pendapatan">Rp 0</span></div>
       </div>
     </div>
@@ -7767,10 +7791,10 @@ _Ateena Clothing Store_</textarea>
     <div class="fin-section">
       <div class="fin-section-hdr expense-hdr"><span>B. Beban Pengeluaran (Kas)</span><span id="lr-x-total-bebanb">Rp 0</span></div>
       <div class="fin-list">
-        <div class="fin-row" onclick="lrOpenKasGroup('hpp')"><div class="fin-row-left"><span class="fin-row-ico">👕</span><div class="fin-row-info"><div class="fin-row-name">1. HPP &amp; Bahan Produksi</div><div class="fin-row-sub">Bahan Baku, DTF, Tinta</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-hpp">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
-        <div class="fin-row" onclick="lrOpenKasGroup('gaji')"><div class="fin-row-left"><span class="fin-row-ico">👷</span><div class="fin-row-info"><div class="fin-row-name">2. Gaji Karyawan</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-sablon">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
-        <div class="fin-row" onclick="lrOpenKasGroup('operasional')"><div class="fin-row-left"><span class="fin-row-ico">🏭</span><div class="fin-row-info"><div class="fin-row-name">3. Beban Operasional</div><div class="fin-row-sub">Listrik, air, Wi-Fi, transport, promosi, dll</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-operasional">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
-        <div class="fin-row" onclick="lrOpenKasGroup('lainlain')"><div class="fin-row-left"><span class="fin-row-ico">💬</span><div class="fin-row-info"><div class="fin-row-name">4. Biaya Lain-lain</div><div class="fin-row-sub">Kategori pengeluaran lainnya</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-lainlain">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
+        <div class="fin-row" onclick="lrOpenKasGroup('hpp')"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-shirt"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">1. HPP &amp; Bahan Produksi</div><div class="fin-row-sub">Bahan Baku, DTF, Tinta</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-hpp">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
+        <div class="fin-row" onclick="lrOpenKasGroup('gaji')"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-user"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">2. Gaji Karyawan</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-sablon">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
+        <div class="fin-row" onclick="lrOpenKasGroup('operasional')"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-factory"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">3. Beban Operasional</div><div class="fin-row-sub">Listrik, air, Wi-Fi, transport, promosi, dll</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-operasional">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
+        <div class="fin-row" onclick="lrOpenKasGroup('lainlain')"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-receipt"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">4. Biaya Lain-lain</div><div class="fin-row-sub">Kategori pengeluaran lainnya</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-lainlain">Rp 0</span><span class="fin-row-chevron">›</span></div></div>
         <div class="fin-list-total"><span>TOTAL BEBAN PENGELUARAN</span><span id="lr-x-total-beban-b">Rp 0</span></div>
       </div>
     </div>
@@ -7779,26 +7803,26 @@ _Ateena Clothing Store_</textarea>
     <div class="fin-section">
       <div class="fin-section-hdr" style="background:var(--sf2);color:var(--tx)"><span>C. Beban Penyusutan</span><span id="lr-x-total-penyusutan">Rp 0</span></div>
       <div class="fin-list">
-        <div class="fin-row" onclick="lrOpenPenyusutan()"><div class="fin-row-left"><span class="fin-row-ico">🛠️</span><div class="fin-row-info"><div class="fin-row-name">1. Beban Penyusutan Peralatan</div><div class="fin-row-sub">✏️ Ketuk untuk isi/ubah</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-peny-peralatan">Rp 0</span></div></div>
-        <div class="fin-row" onclick="lrOpenPenyusutan()"><div class="fin-row-left"><span class="fin-row-ico">🏢</span><div class="fin-row-info"><div class="fin-row-name">2. Beban Penyusutan Sewa Bangunan</div><div class="fin-row-sub">✏️ Ketuk untuk isi/ubah</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-peny-bangunan">Rp 0</span></div></div>
+        <div class="fin-row" onclick="lrOpenPenyusutan()"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-settings"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">1. Beban Penyusutan Peralatan</div><div class="fin-row-sub">Ketuk untuk isi/ubah</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-peny-peralatan">Rp 0</span></div></div>
+        <div class="fin-row" onclick="lrOpenPenyusutan()"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-home"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">2. Beban Penyusutan Sewa Bangunan</div><div class="fin-row-sub">Ketuk untuk isi/ubah</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-x-peny-bangunan">Rp 0</span></div></div>
         <div class="fin-list-total"><span>TOTAL BEBAN (B+C)</span><span id="lr-x-total-beban">Rp 0</span></div>
         <div class="fin-list-total" style="background:linear-gradient(135deg,#3b6cf6,#1e4fd8);color:#fff;border-radius:10px;margin-top:8px"><span>JUMLAH KESELURUHAN (A - BEBAN)</span><span id="lr-x-jumlah-keseluruhan">Rp 0</span></div>
       </div>
     </div>
 
-    <div class="fin-note">💡 Semua angka di atas berasal dari transaksi Jurnal Umum bulan ini. Ketuk baris untuk melihat transaksi aslinya. Beban penyusutan tetap diisi manual karena bukan transaksi kas.</div>
+    <div class="fin-note"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-info"></use></svg> Semua angka di atas berasal dari transaksi Jurnal Umum bulan ini. Ketuk baris untuk melihat transaksi aslinya. Beban penyusutan tetap diisi manual karena bukan transaksi kas.</div>
   </div>
 
   <div id="lr-panel-compare" style="display:none">
     <div class="fin-compare-grid" id="lr-compare-cards"></div>
 
     <div class="fin-panel">
-      <div class="fin-panel-hdr"><div class="fin-panel-title">⚖️ HPP Kas vs HPP Order</div><div class="fin-panel-sub" id="lr-compare-sub"></div></div>
+      <div class="fin-panel-hdr"><div class="fin-panel-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-scale"></use></svg> HPP Kas vs HPP Order</div><div class="fin-panel-sub" id="lr-compare-sub"></div></div>
       <div class="fin-panel-body" id="lr-compare-body"></div>
     </div>
 
     <div class="fin-panel">
-      <div class="fin-panel-hdr"><div class="fin-panel-title">📋 Order dengan HPP Lengkap</div><div class="fin-panel-sub">Ketuk baris untuk buka Detail Profit</div></div>
+      <div class="fin-panel-hdr"><div class="fin-panel-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-document"></use></svg> Order dengan HPP Lengkap</div><div class="fin-panel-sub">Ketuk baris untuk buka Detail Profit</div></div>
       <div class="tbl-wrap">
         <table class="fin-table">
           <thead><tr><th>Order</th><th>Customer</th><th class="num">Omzet</th><th class="num">HPP</th><th class="num">Laba</th><th class="num">Margin</th><th>Status</th></tr></thead>
@@ -7811,7 +7835,7 @@ _Ateena Clothing Store_</textarea>
   <div id="lr-panel-order" style="display:none">
     <div class="fin-kpi-grid" id="lr-order-kpi"></div>
     <div class="fin-panel">
-      <div class="fin-panel-hdr"><div class="fin-panel-title">📦 Order &amp; Piutang Bulan Ini</div><div class="fin-panel-sub" id="lr-order-sub"></div></div>
+      <div class="fin-panel-hdr"><div class="fin-panel-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-box"></use></svg> Order &amp; Piutang Bulan Ini</div><div class="fin-panel-sub" id="lr-order-sub"></div></div>
       <div class="tbl-wrap">
         <table class="fin-table">
           <thead><tr><th>Order</th><th>Customer</th><th class="num">Total</th><th class="num">Dibayar</th><th class="num">Sisa</th><th>Status</th><th>HPP</th></tr></thead>
@@ -7833,23 +7857,23 @@ _Ateena Clothing Store_</textarea>
   <div class="dmodal">
     <div class="dmodal-hdr">
       <div class="dmodal-hdr-left">
-        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#3b6cf6,#1e4fd8)">📊</div>
+        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#3b6cf6,#1e4fd8)"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-chart"></use></svg></div>
         <div><div class="dmodal-title">Rincian HPP &amp; Cetakan Sablon</div><div class="dmodal-sub" id="dm-lr-hpp-sub">Dari semua order bulan ini</div></div>
       </div>
       <button class="dmodal-close" onclick="closeDM('dm-lr-hpp')">✕</button>
     </div>
     <div class="dmodal-body">
       <div class="fin-list" style="padding:4px 0">
-        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico">💰</span><div class="fin-row-info"><div class="fin-row-name">Total Omzet Order</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--g)" id="lr-op-omzet">Rp 0</span></div></div>
-        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico">👕</span><div class="fin-row-info"><div class="fin-row-name">Beban HPP (Vendor Kaos)</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-kaos">Rp 0</span></div></div>
-        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico">🖨️</span><div class="fin-row-info"><div class="fin-row-name">Beban Cetakan Sablon (Vendor DTF)</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-dtf">Rp 0</span></div></div>
-        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico">🚚</span><div class="fin-row-info"><div class="fin-row-name">Ongkir</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-ongkir">Rp 0</span></div></div>
-        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico">👷</span><div class="fin-row-info"><div class="fin-row-name">Tenaga Kerja</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-tenaga">Rp 0</span></div></div>
-        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico">🏭</span><div class="fin-row-info"><div class="fin-row-name">Operasional</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-operasional">Rp 0</span></div></div>
-        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico">💬</span><div class="fin-row-info"><div class="fin-row-name">Biaya Lain</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-biayalain">Rp 0</span></div></div>
-        <div class="fin-list-total" style="cursor:pointer" onclick="lrOpenRincianOrder()"><span>💼 Laba Bersih Order Bulan Ini</span><span id="lr-op-laba">Rp 0</span></div>
+        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">Total Omzet Order</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--g)" id="lr-op-omzet">Rp 0</span></div></div>
+        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-shirt"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">Beban HPP (Vendor Kaos)</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-kaos">Rp 0</span></div></div>
+        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-printer"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">Beban Cetakan Sablon (Vendor DTF)</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-dtf">Rp 0</span></div></div>
+        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-truck"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">Ongkir</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-ongkir">Rp 0</span></div></div>
+        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-user"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">Tenaga Kerja</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-tenaga">Rp 0</span></div></div>
+        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-factory"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">Operasional</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-operasional">Rp 0</span></div></div>
+        <div class="fin-row"><div class="fin-row-left"><span class="fin-row-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-receipt"></use></svg></span><div class="fin-row-info"><div class="fin-row-name">Biaya Lain</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--r)" id="lr-op-biayalain">Rp 0</span></div></div>
+        <div class="fin-list-total" style="cursor:pointer" onclick="lrOpenRincianOrder()"><span><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg> Laba Bersih Order Bulan Ini</span><span id="lr-op-laba">Rp 0</span></div>
       </div>
-      <div style="text-align:center;padding-top:10px"><button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="lrOpenRincianOrder()">📋 Lihat Rincian per Order ›</button></div>
+      <div style="text-align:center;padding-top:10px"><button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="lrOpenRincianOrder()"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-document"></use></svg> Lihat Rincian per Order ›</button></div>
     </div>
   </div>
 </div>
@@ -7858,7 +7882,7 @@ _Ateena Clothing Store_</textarea>
 <div class="modal-overlay" id="modal-lr-penyusutan">
   <div class="modal" style="width:400px;padding:24px">
     <div class="modal-hdr">
-      <div class="modal-hdr-icon amber">🛠️</div>
+      <div class="modal-hdr-icon amber"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-settings"></use></svg></div>
       <div class="modal-hdr-info">
         <div class="modal-hdr-title">Beban Penyusutan</div>
         <div class="modal-hdr-sub">Biaya non-kas — berlaku tiap bulan sampai diubah lagi</div>
@@ -7869,20 +7893,20 @@ _Ateena Clothing Store_</textarea>
       <div class="rd-field-group">
         <label class="rd-field-label">Beban Penyusutan Peralatan (Rp)</label>
         <div class="modal-field amount-field" style="margin-bottom:0">
-          <div class="modal-field-ico">🛠️</div><span class="currency-prefix">Rp</span>
+          <div class="modal-field-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-settings"></use></svg></div><span class="currency-prefix">Rp</span>
           <div class="modal-field-inner"><input type="number" id="lr-peny-peralatan-input" placeholder="0"></div>
         </div>
       </div>
       <div class="rd-field-group">
         <label class="rd-field-label">Beban Penyusutan Sewa Bangunan (Rp)</label>
         <div class="modal-field amount-field" style="margin-bottom:0">
-          <div class="modal-field-ico">🏢</div><span class="currency-prefix">Rp</span>
+          <div class="modal-field-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-home"></use></svg></div><span class="currency-prefix">Rp</span>
           <div class="modal-field-inner"><input type="number" id="lr-peny-bangunan-input" placeholder="0"></div>
         </div>
       </div>
       <div class="modal-ftr">
         <button class="btn btn-ghost" onclick="closeModal('modal-lr-penyusutan')">Batal</button>
-        <button class="btn btn-primary" onclick="lrSimpanPenyusutan()" style="flex:1;justify-content:center">💾 Simpan</button>
+        <button class="btn btn-primary" onclick="lrSimpanPenyusutan()" style="flex:1;justify-content:center"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-save"></use></svg> Simpan</button>
       </div>
     </div>
   </div>
@@ -7908,7 +7932,7 @@ _Ateena Clothing Store_</textarea>
   <div class="dmodal">
     <div class="dmodal-hdr">
       <div class="dmodal-hdr-left">
-        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#3b6cf6,#1e4fd8)">📊</div>
+        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#3b6cf6,#1e4fd8)"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-chart"></use></svg></div>
         <div><div class="dmodal-title">Rincian Laba per Order</div><div class="dmodal-sub" id="dm-lr-ol-sub">-</div></div>
       </div>
       <button class="dmodal-close" onclick="closeDM('dm-lr-order-list')">✕</button>
@@ -7927,15 +7951,15 @@ _Ateena Clothing Store_</textarea>
     </div>
     <div class="topbar-right">
       <span class="fin-source-badge">● Aktiva &amp; Pasiva</span>
-      <button class="fin-icon-btn" onclick="neracaOpenTtd()" title="Edit Tanda Tangan">✍️</button>
-      <button class="fin-icon-btn" onclick="neracaCetak()" title="Cetak">🖨️</button>
+      <button class="fin-icon-btn" onclick="neracaOpenTtd()" title="Edit Tanda Tangan"><svg class="pico-inline" aria-hidden="true" focusable="false"><use href="#ico-edit"></use></svg></button>
+      <button class="fin-icon-btn" onclick="neracaCetak()" title="Cetak"><svg class="pico-inline" aria-hidden="true" focusable="false"><use href="#ico-printer"></use></svg></button>
     </div>
   </div>
 
   <div class="fin-check-banner" id="neraca-check-banner">Memuat...</div>
 
   <div class="fin-hero" id="neraca-hero-card">
-    <div class="fin-hero-label">🏦 TOTAL AKTIVA (KEKAYAAN)</div>
+    <div class="fin-hero-label"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-scale"></use></svg> TOTAL AKTIVA (KEKAYAAN)</div>
     <div class="fin-hero-val" id="neraca-hero-val">Rp 0</div>
     <div class="fin-hero-badge" id="neraca-hero-badge">per hari ini</div>
     <div class="fin-hero-chips" id="neraca-hero-chips"></div>
@@ -7945,27 +7969,27 @@ _Ateena Clothing Store_</textarea>
 
   <div class="fin-split-grid">
     <div class="fin-panel">
-      <div class="fin-panel-hdr"><div class="fin-panel-title">💎 Aktiva</div><div class="fin-panel-sub" id="neraca-aktiva-total">Rp 0</div></div>
+      <div class="fin-panel-hdr"><div class="fin-panel-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg> Aktiva</div><div class="fin-panel-sub" id="neraca-aktiva-total">Rp 0</div></div>
       <div id="neraca-aktiva" class="fin-list"></div>
       <div style="padding:10px 12px"><button class="btn btn-sm" style="width:100%;justify-content:center" onclick="neracaOpenTambahAkun('aktiva')">+ Tambah Akun Aktiva</button></div>
     </div>
     <div class="fin-panel">
-      <div class="fin-panel-hdr"><div class="fin-panel-title">🏛️ Pasiva (Modal + Kewajiban)</div><div class="fin-panel-sub" id="neraca-pasiva-total">Rp 0</div></div>
+      <div class="fin-panel-hdr"><div class="fin-panel-title"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-scale"></use></svg> Pasiva (Modal + Kewajiban)</div><div class="fin-panel-sub" id="neraca-pasiva-total">Rp 0</div></div>
       <div id="neraca-pasiva" class="fin-list"></div>
       <div style="padding:10px 12px"><button class="btn btn-sm" style="width:100%;justify-content:center" onclick="neracaOpenTambahAkun('pasiva')">+ Tambah Akun Pasiva</button></div>
     </div>
   </div>
 
   <div class="fin-recon" id="neraca-recon">
-    <div class="fin-panel-title" style="margin-bottom:8px">🔍 Rekonsiliasi Neraca</div>
+    <div class="fin-panel-title" style="margin-bottom:8px"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-scale"></use></svg> Rekonsiliasi Neraca</div>
     <div id="neraca-recon-body"></div>
     <div class="fin-actions-row">
-      <button class="btn btn-ghost btn-sm" onclick="neracaOpenKoreksi()">🧾 Lihat Koreksi Saldo</button>
-      <button class="btn btn-primary btn-sm" onclick="neracaSeimbangkan()">⚖️ Catat Penyesuaian</button>
+      <button class="btn btn-ghost btn-sm" onclick="neracaOpenKoreksi()"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-receipt"></use></svg> Lihat Koreksi Saldo</button>
+      <button class="btn btn-primary btn-sm" onclick="neracaSeimbangkan()"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-check"></use></svg> Catat Penyesuaian</button>
     </div>
   </div>
 
-  <div style="font-size:11px;color:var(--mt);text-align:center;padding:4px 12px 12px;line-height:1.6">💡 Akun otomatis (Kas, Piutang, Persediaan, Modal Awal, Laba Ditahan) dihitung dari data aplikasi. Akun manual bisa diedit/hapus sendiri. Ketuk baris untuk melihat rincian.</div>
+  <div style="font-size:11px;color:var(--mt);text-align:center;padding:4px 12px 12px;line-height:1.6"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-info"></use></svg> Akun otomatis (Kas, Piutang, Persediaan, Modal Awal, Laba Ditahan) dihitung dari data aplikasi. Akun manual bisa diedit/hapus sendiri. Ketuk baris untuk melihat rincian.</div>
 
   <!-- Area khusus cetak (tersembunyi di layar) -->
   <div id="neraca-print-area" style="display:none">
@@ -7988,7 +8012,7 @@ _Ateena Clothing Store_</textarea>
 <div class="modal-overlay" id="modal-tutup-buku">
   <div class="modal" style="width:560px;padding:24px">
     <div class="modal-hdr">
-      <div class="modal-hdr-icon amber">🔒</div>
+      <div class="modal-hdr-icon amber"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-lock"></use></svg></div>
       <div class="modal-hdr-info">
         <div class="modal-hdr-title">Tutup Buku</div>
         <div class="modal-hdr-sub">Arsipkan transaksi lama &amp; mulai buku baru</div>
@@ -7998,7 +8022,7 @@ _Ateena Clothing Store_</textarea>
     <div class="modal-body" id="tutup-buku-body"></div>
     <div class="modal-ftr">
       <button class="btn btn-ghost" onclick="closeModal('modal-tutup-buku')">Batal</button>
-      <button class="btn btn-primary" id="tutup-buku-confirm" onclick="finProsesTutupBuku()" style="flex:1;justify-content:center">🔒 Tutup &amp; Unduh Backup</button>
+      <button class="btn btn-primary" id="tutup-buku-confirm" onclick="finProsesTutupBuku()" style="flex:1;justify-content:center"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-lock"></use></svg> Tutup &amp; Unduh Backup</button>
     </div>
   </div>
 </div>
@@ -8007,7 +8031,7 @@ _Ateena Clothing Store_</textarea>
 <div class="modal-overlay" id="modal-neraca-akun">
   <div class="modal" style="width:420px;padding:24px">
     <div class="modal-hdr">
-      <div class="modal-hdr-icon amber">🏷️</div>
+      <div class="modal-hdr-icon amber"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-tag"></use></svg></div>
       <div class="modal-hdr-info">
         <div class="modal-hdr-title" id="neraca-akun-title">Tambah Akun</div>
         <div class="modal-hdr-sub">Akun kustom — bebas isi seperti di Excel kamu</div>
@@ -8024,7 +8048,7 @@ _Ateena Clothing Store_</textarea>
       <div class="rd-field-group">
         <label class="rd-field-label">Jumlah (Rp) <span class="rd-required">*</span></label>
         <div class="modal-field amount-field" style="margin-bottom:0">
-          <div class="modal-field-ico">💰</div><span class="currency-prefix">Rp</span>
+          <div class="modal-field-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg></div><span class="currency-prefix">Rp</span>
           <div class="modal-field-inner"><input type="number" id="neraca-akun-jumlah" placeholder="0"></div>
         </div>
       </div>
@@ -8033,9 +8057,9 @@ _Ateena Clothing Store_</textarea>
         <input id="neraca-akun-ket" placeholder="Catatan tambahan...">
       </div>
       <div class="modal-ftr">
-        <button class="btn btn-ghost" id="neraca-akun-hapus-btn" onclick="neracaHapusAkunAktif()" style="display:none;color:var(--r)">🗑️ Hapus</button>
+        <button class="btn btn-ghost" id="neraca-akun-hapus-btn" onclick="neracaHapusAkunAktif()" style="display:none;color:var(--r)"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-trash"></use></svg> Hapus</button>
         <button class="btn btn-ghost" onclick="closeModal('modal-neraca-akun')">Batal</button>
-        <button class="btn btn-primary" onclick="neracaSimpanAkun()" style="flex:1;justify-content:center">💾 Simpan</button>
+        <button class="btn btn-primary" onclick="neracaSimpanAkun()" style="flex:1;justify-content:center"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-save"></use></svg> Simpan</button>
       </div>
     </div>
   </div>
@@ -8045,7 +8069,7 @@ _Ateena Clothing Store_</textarea>
 <div class="modal-overlay" id="modal-neraca-ttd">
   <div class="modal" style="width:420px;padding:24px">
     <div class="modal-hdr">
-      <div class="modal-hdr-icon amber">✍️</div>
+      <div class="modal-hdr-icon amber"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-edit"></use></svg></div>
       <div class="modal-hdr-info">
         <div class="modal-hdr-title">Tanda Tangan Cetak</div>
         <div class="modal-hdr-sub">Muncul di bagian bawah saat Neraca dicetak</div>
@@ -8061,7 +8085,7 @@ _Ateena Clothing Store_</textarea>
       <div class="rd-field-group"><label class="rd-field-label">Jabatan / Nama 2 (Manager)</label><input id="neraca-ttd-manager" placeholder="Manager Ateena Group"></div>
       <div class="modal-ftr">
         <button class="btn btn-ghost" onclick="closeModal('modal-neraca-ttd')">Batal</button>
-        <button class="btn btn-primary" onclick="neracaSimpanTtd()" style="flex:1;justify-content:center">💾 Simpan</button>
+        <button class="btn btn-primary" onclick="neracaSimpanTtd()" style="flex:1;justify-content:center"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-save"></use></svg> Simpan</button>
       </div>
     </div>
   </div>
@@ -8072,7 +8096,7 @@ _Ateena Clothing Store_</textarea>
 <div class="modal-overlay" id="modal-neraca-modal-awal">
   <div class="modal" style="width:420px;padding:24px">
     <div class="modal-hdr">
-      <div class="modal-hdr-icon amber">🏦</div>
+      <div class="modal-hdr-icon amber"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg></div>
       <div class="modal-hdr-info">
         <div class="modal-hdr-title">Modal Awal / Penyertaan</div>
         <div class="modal-hdr-sub">Input manual — dasar perhitungan Neraca</div>
@@ -8083,13 +8107,13 @@ _Ateena Clothing Store_</textarea>
       <div class="rd-field-group">
         <label class="rd-field-label">Jumlah Modal Awal (Rp)</label>
         <div class="modal-field amount-field" style="margin-bottom:0">
-          <div class="modal-field-ico">💰</div><span class="currency-prefix">Rp</span>
+          <div class="modal-field-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg></div><span class="currency-prefix">Rp</span>
           <div class="modal-field-inner"><input type="number" id="neraca-modal-awal" placeholder="0"></div>
         </div>
       </div>
       <div class="modal-ftr">
         <button class="btn btn-ghost" onclick="closeModal('modal-neraca-modal-awal')">Batal</button>
-        <button class="btn btn-primary" onclick="neracaSimpanModal()" style="flex:1;justify-content:center">💾 Simpan</button>
+        <button class="btn btn-primary" onclick="neracaSimpanModal()" style="flex:1;justify-content:center"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-save"></use></svg> Simpan</button>
       </div>
     </div>
   </div>
@@ -8100,7 +8124,7 @@ _Ateena Clothing Store_</textarea>
   <div class="dmodal">
     <div class="dmodal-hdr">
       <div class="dmodal-hdr-left">
-        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#059669,#10b981)">💵</div>
+        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#059669,#10b981)"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-wallet"></use></svg></div>
         <div><div class="dmodal-title" id="dm-neraca-kas-title">Kas (Saldo Jurnal Umum)</div><div class="dmodal-sub" id="dm-neraca-kas-sub">Transaksi terbaru yang membentuk saldo</div></div>
       </div>
       <button class="dmodal-close" onclick="closeDM('dm-neraca-kas')">✕</button>
@@ -8114,7 +8138,7 @@ _Ateena Clothing Store_</textarea>
   <div class="dmodal">
     <div class="dmodal-hdr">
       <div class="dmodal-hdr-left">
-        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#d97706,#f59e0b)">📋</div>
+        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#d97706,#f59e0b)"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-receipt"></use></svg></div>
         <div><div class="dmodal-title">Piutang Usaha</div><div class="dmodal-sub">Order yang belum lunas</div></div>
       </div>
       <button class="dmodal-close" onclick="closeDM('dm-neraca-piutang')">✕</button>
@@ -8128,7 +8152,7 @@ _Ateena Clothing Store_</textarea>
   <div class="dmodal">
     <div class="dmodal-hdr">
       <div class="dmodal-hdr-left">
-        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#3b6cf6,#1e4fd8)">📈</div>
+        <div class="dmodal-hdr-icon" style="background:linear-gradient(135deg,#3b6cf6,#1e4fd8)"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-trend-up"></use></svg></div>
         <div><div class="dmodal-title">Laba Ditahan</div><div class="dmodal-sub">Akumulasi laba/rugi per bulan</div></div>
       </div>
       <button class="dmodal-close" onclick="closeDM('dm-neraca-laba')">✕</button>
@@ -8137,20 +8161,20 @@ _Ateena Clothing Store_</textarea>
       <div id="dm-neraca-laba-body"></div>
       <div style="border-top:1px dashed var(--bd);margin-top:14px;padding-top:14px">
         <div style="font-size:11px;color:var(--mt);line-height:1.5;margin-bottom:10px">
-          💡 Kalau angka otomatis di atas tidak sama dengan catatan Excel kamu (beda cara hitung, ada penyesuaian manual, dll), kamu bisa timpa dengan angka sendiri di sini.
+          <svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-info"></use></svg> Kalau angka otomatis di atas tidak sama dengan catatan Excel kamu (beda cara hitung, ada penyesuaian manual, dll), kamu bisa timpa dengan angka sendiri di sini.
         </div>
         <div style="display:flex;gap:8px;margin-bottom:10px">
-          <button type="button" class="metode-btn" id="ld-mode-auto" style="flex:1" onclick="neracaSetLabaMode('auto')">🔄 Otomatis</button>
-          <button type="button" class="metode-btn" id="ld-mode-manual" style="flex:1" onclick="neracaSetLabaMode('manual')">✏️ Manual</button>
+          <button type="button" class="metode-btn" id="ld-mode-auto" style="flex:1" onclick="neracaSetLabaMode('auto')"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-refresh"></use></svg> Otomatis</button>
+          <button type="button" class="metode-btn" id="ld-mode-manual" style="flex:1" onclick="neracaSetLabaMode('manual')"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-edit"></use></svg> Manual</button>
         </div>
         <div class="rd-field-group" id="ld-manual-field" style="display:none">
           <label class="rd-field-label">Laba Ditahan — Nilai Manual (Rp)</label>
           <div class="modal-field amount-field" style="margin-bottom:0">
-            <div class="modal-field-ico">📈</div><span class="currency-prefix">Rp</span>
+            <div class="modal-field-ico"><svg class="pico" aria-hidden="true" focusable="false"><use href="#ico-trend-up"></use></svg></div><span class="currency-prefix">Rp</span>
             <div class="modal-field-inner"><input type="number" id="ld-manual-value" placeholder="0"></div>
           </div>
         </div>
-        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px" onclick="neracaSimpanLabaDitahan()">💾 Simpan</button>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px" onclick="neracaSimpanLabaDitahan()"><svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-save"></use></svg> Simpan</button>
       </div>
     </div>
   </div>
@@ -19689,7 +19713,7 @@ function kasirOpenKategori(kategori){
   var subEl=document.getElementById('dm-lr-kat-sub');
   var bodyEl=document.getElementById('dm-lr-kat-body');
   var isMasuk=jenis==='pemasukan';
-  if(iconEl){ iconEl.style.background=isMasuk?'linear-gradient(135deg,#059669,#10b981)':'linear-gradient(135deg,#dc2626,#ef4444)'; iconEl.textContent=finKatIcon(kategori); }
+  if(iconEl){ iconEl.style.background=isMasuk?'linear-gradient(135deg,#059669,#10b981)':'linear-gradient(135deg,#dc2626,#ef4444)'; iconEl.innerHTML=finKatIcon(kategori); }
   if(titleEl) titleEl.textContent=kategori;
 
   var BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -20980,7 +21004,7 @@ async function exportBukuKasExcel(){
   var fileScope=global?'Filter':(BULAN[kasirViewMonth]+'_'+kasirViewYear);
   var filename='JurnalUmum_'+fileScope+(akun!=='semua'?'_'+akunLabelSingkat[akun].replace(/\s/g,''):'')+'.xlsx';
   XLSX.writeFile(wb,filename);
-  if(typeof showNotif==='function') showNotif('📊 Excel Berhasil Dibuat',filename+' sedang diunduh.');
+  if(typeof showNotif==='function') showNotif('Excel Berhasil Dibuat',filename+' sedang diunduh.');
 }
 
 
@@ -21247,14 +21271,19 @@ async function exportLabaRugiExcel(){
   XLSX.utils.book_append_sheet(wb,ws3,'Order & Piutang');
   var filename='LabaRugi_'+BULAN[lrViewMonth]+'_'+lrViewYear+'.xlsx';
   XLSX.writeFile(wb,filename);
-  if(typeof showNotif==='function') showNotif('📊 Excel Berhasil Dibuat',filename+' sedang diunduh.');
+  if(typeof showNotif==='function') showNotif('Excel Berhasil Dibuat',filename+' sedang diunduh.');
 }
 
 var _lrTab=0;
 function lrSwitchTab(idx){
   _lrTab=idx;
   var panels=['lr-panel-kas','lr-panel-compare','lr-panel-order'];
-  panels.forEach(function(id,i){var el=document.getElementById(id);if(el)el.style.display=(i===idx?'block':'none');});
+  panels.forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(!el) return;
+    el.style.display=(i===idx?'block':'none');
+    if(i===idx) animateTabPanel(el);
+  });
   var tabs=document.querySelectorAll('#page-labarugi .fin-tab');
   tabs.forEach(function(t,i){t.classList.toggle('active',i===idx);});
 }
@@ -21278,7 +21307,7 @@ function renderLabaRugi(){
   var heroVal=document.getElementById('lr-hero-val');
   if(heroVal) heroVal.textContent=fmt(x.labaBersih);
   var heroBadge=document.getElementById('lr-hero-badge');
-  if(heroBadge) heroBadge.innerHTML=(positif?'📈':'📉')+' Margin '+x.margin.toFixed(1)+'%';
+  if(heroBadge) heroBadge.innerHTML=finSvgIcon(positif?'trend-up':'trend-down','pico-inline sm')+' Margin '+x.margin.toFixed(1)+'%';
   var chips=document.getElementById('lr-hero-chips');
   if(chips) chips.innerHTML='<span class="fin-hero-chip">Kas Masuk '+fmt(x.totalPendapatan)+'</span><span class="fin-hero-chip">Beban Kas '+fmt(x.totalBebanPengeluaran)+'</span><span class="fin-hero-chip">HPP Order '+fmt(x.hppOrder)+'</span>';
 
@@ -21286,10 +21315,10 @@ function renderLabaRugi(){
   var kpi=document.getElementById('lr-kpi-grid');
   if(kpi){
     kpi.innerHTML=
-      '<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">💚</div><div class="fin-kpi-badge">Kas</div></div><div class="fin-kpi-lbl">Pendapatan Kas</div><div class="fin-kpi-val">'+fmt(x.totalPendapatan)+'</div><div class="fin-kpi-sub">Pembayaran order + pendapatan lain</div></div>'
-      +'<div class="fin-kpi red"><div class="fin-kpi-top"><div class="fin-kpi-ico">❤️</div><div class="fin-kpi-badge">Kas</div></div><div class="fin-kpi-lbl">Beban Kas</div><div class="fin-kpi-val">'+fmt(x.totalBebanPengeluaran)+'</div><div class="fin-kpi-sub">HPP + gaji + operasional + lain-lain</div></div>'
-      +'<div class="fin-kpi '+(positif?'blue':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">💼</div><div class="fin-kpi-badge '+(positif?'up':'down')+'">'+(x.margin>=0?'+':'')+x.margin.toFixed(1)+'%</div></div><div class="fin-kpi-lbl">Laba Bersih Kas</div><div class="fin-kpi-val">'+fmt(x.labaBersih)+'</div><div class="fin-kpi-sub">Setelah penyusutan non-kas</div></div>'
-      +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">⚖️</div><div class="fin-kpi-badge">'+x.op.coverage+'%</div></div><div class="fin-kpi-lbl">HPP Order</div><div class="fin-kpi-val">'+fmt(x.hppOrder)+'</div><div class="fin-kpi-sub">'+x.op.complete.length+' dari '+x.op.count+' order punya HPP lengkap</div></div>';
+      '<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('wallet')+'</div><div class="fin-kpi-badge">Kas</div></div><div class="fin-kpi-lbl">Pendapatan Kas</div><div class="fin-kpi-val">'+fmt(x.totalPendapatan)+'</div><div class="fin-kpi-sub">Pembayaran order + pendapatan lain</div></div>'
+      +'<div class="fin-kpi red"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('receipt')+'</div><div class="fin-kpi-badge">Kas</div></div><div class="fin-kpi-lbl">Beban Kas</div><div class="fin-kpi-val">'+fmt(x.totalBebanPengeluaran)+'</div><div class="fin-kpi-sub">HPP + gaji + operasional + lain-lain</div></div>'
+      +'<div class="fin-kpi '+(positif?'blue':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('wallet')+'</div><div class="fin-kpi-badge '+(positif?'up':'down')+'">'+(x.margin>=0?'+':'')+x.margin.toFixed(1)+'%</div></div><div class="fin-kpi-lbl">Laba Bersih Kas</div><div class="fin-kpi-val">'+fmt(x.labaBersih)+'</div><div class="fin-kpi-sub">Setelah penyusutan non-kas</div></div>'
+      +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('scale')+'</div><div class="fin-kpi-badge">'+x.op.coverage+'%</div></div><div class="fin-kpi-lbl">HPP Order</div><div class="fin-kpi-val">'+fmt(x.hppOrder)+'</div><div class="fin-kpi-sub">'+x.op.complete.length+' dari '+x.op.count+' order punya HPP lengkap</div></div>';
   }
 
   // ===== A. Pendapatan =====
@@ -21386,10 +21415,10 @@ function renderLabaRugi(){
   if(okpi){
     var unpaid=x.op.list.filter(function(o){return !isLunas(o)&&o.status!=='Diambil';}).length;
     okpi.innerHTML=
-      '<div class="fin-kpi blue"><div class="fin-kpi-top"><div class="fin-kpi-ico">📦</div><div class="fin-kpi-badge">'+x.op.count+' order</div></div><div class="fin-kpi-lbl">Omzet Order</div><div class="fin-kpi-val">'+fmt(x.op.omzet)+'</div><div class="fin-kpi-sub">Nilai order (akrual) bulan ini</div></div>'
-      +'<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">✅</div><div class="fin-kpi-badge">'+x.op.lunas+' lunas</div></div><div class="fin-kpi-lbl">Sudah Dibayar</div><div class="fin-kpi-val">'+fmt(x.op.terbayar)+'</div><div class="fin-kpi-sub">Total pembayaran per order</div></div>'
-      +'<div class="fin-kpi '+(x.op.piutang>0?'amber':'green')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">⏳</div><div class="fin-kpi-badge">'+unpaid+' order</div></div><div class="fin-kpi-lbl">Piutang</div><div class="fin-kpi-val">'+fmt(x.op.piutang)+'</div><div class="fin-kpi-sub">Sisa tagihan order bulan ini</div></div>'
-      +'<div class="fin-kpi"><div class="fin-kpi-top"><div class="fin-kpi-ico">🎯</div><div class="fin-kpi-badge">Rata-rata</div></div><div class="fin-kpi-lbl">Nilai Order</div><div class="fin-kpi-val">'+fmt(x.op.avg)+'</div><div class="fin-kpi-sub">Per order bulan ini</div></div>';
+      '<div class="fin-kpi blue"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('box')+'</div><div class="fin-kpi-badge">'+x.op.count+' order</div></div><div class="fin-kpi-lbl">Omzet Order</div><div class="fin-kpi-val">'+fmt(x.op.omzet)+'</div><div class="fin-kpi-sub">Nilai order (akrual) bulan ini</div></div>'
+      +'<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('check')+'</div><div class="fin-kpi-badge">'+x.op.lunas+' lunas</div></div><div class="fin-kpi-lbl">Sudah Dibayar</div><div class="fin-kpi-val">'+fmt(x.op.terbayar)+'</div><div class="fin-kpi-sub">Total pembayaran per order</div></div>'
+      +'<div class="fin-kpi '+(x.op.piutang>0?'amber':'green')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('clock')+'</div><div class="fin-kpi-badge">'+unpaid+' order</div></div><div class="fin-kpi-lbl">Piutang</div><div class="fin-kpi-val">'+fmt(x.op.piutang)+'</div><div class="fin-kpi-sub">Sisa tagihan order bulan ini</div></div>'
+      +'<div class="fin-kpi"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('chart')+'</div><div class="fin-kpi-badge">Rata-rata</div></div><div class="fin-kpi-lbl">Nilai Order</div><div class="fin-kpi-val">'+fmt(x.op.avg)+'</div><div class="fin-kpi-sub">Per order bulan ini</div></div>';
   }
   var otbl=document.getElementById('lr-order-tbl');
   if(otbl){
@@ -21506,7 +21535,7 @@ function lrOpenRincianOrder(){
             +'<div class="pay-info"><div class="pay-label">'+escHtml(o.noOrder+' · '+o.nama)+'</div><div class="pay-date">'+o.tgl+' · '+(c.complete?'HPP '+fmt(c.totalBiaya):'HPP belum diisi')+'</div></div>'
             +'<div class="pay-amount" style="color:'+(c.complete?(laba>=0?'var(--g)':'var(--r)'):'var(--mt)')+'">'+(c.complete?fmt(laba):'—')+'</div></div>';
         }).join('')
-        +'<div style="font-size:11px;color:var(--mt);text-align:center;padding:10px 4px 2px">💡 Ketuk order untuk buka/ubah Detail Profit-nya. Order tanpa HPP lengkap ditandai — dan tidak diestimasi.</div>';
+        +'<div style="font-size:11px;color:var(--mt);text-align:center;padding:10px 4px 2px">'+finSvgIcon('info','pico-inline sm')+' Ketuk order untuk buka/ubah Detail Profit-nya. Order tanpa HPP lengkap ditandai — dan tidak diestimasi.</div>';
     }
   }
   document.getElementById('dm-lr-order-list').classList.add('open');
@@ -21627,52 +21656,52 @@ function renderNeraca(){
   if(checkEl){
     checkEl.className='fin-check-banner '+(balanced?'ok':'warn');
     checkEl.innerHTML=balanced
-      ?'✅ Neraca Seimbang — Aktiva = Pasiva ('+fmt(totalAktiva)+')'
-      :'⚠️ Selisih '+fmt(Math.abs(selisih))+' — '+(selisih>0?'Aktiva lebih besar dari Pasiva':'Pasiva lebih besar dari Aktiva')+'. Lihat rekonsiliasi di bawah.';
+      ?finSvgIcon('check','pico-inline sm')+' Neraca Seimbang — Aktiva = Pasiva ('+fmt(totalAktiva)+')'
+      :finSvgIcon('warning','pico-inline sm')+' Selisih '+fmt(Math.abs(selisih))+' — '+(selisih>0?'Aktiva lebih besar dari Pasiva':'Pasiva lebih besar dari Aktiva')+'. Lihat rekonsiliasi di bawah.';
   }
 
   // ===== KPI =====
   var kpi=document.getElementById('neraca-kpi-grid');
   if(kpi){
     kpi.innerHTML=
-      '<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">💵</div><div class="fin-kpi-badge">Kas & Bank</div></div><div class="fin-kpi-lbl">Kas & Bank</div><div class="fin-kpi-val">'+fmt(kas)+'</div><div class="fin-kpi-sub">Kas Toko '+fmt(kasToko)+' · Bank '+fmt(kasBank)+'</div></div>'
-      +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">📋</div><div class="fin-kpi-badge">Piutang</div></div><div class="fin-kpi-lbl">Piutang Usaha</div><div class="fin-kpi-val">'+fmt(piutang)+'</div><div class="fin-kpi-sub">Order belum lunas</div></div>'
-      +'<div class="fin-kpi blue"><div class="fin-kpi-top"><div class="fin-kpi-ico">📦</div><div class="fin-kpi-badge">Stok</div></div><div class="fin-kpi-lbl">Persediaan Barang</div><div class="fin-kpi-val">'+fmt(persediaan)+'</div><div class="fin-kpi-sub">Saldo SKU × HPP</div></div>'
-      +'<div class="fin-kpi '+(balanced?'green':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">⚖️</div><div class="fin-kpi-badge '+(balanced?'up':'down')+'">'+(balanced?'Seimbang':'Selisih')+'</div></div><div class="fin-kpi-lbl">Aktiva − Pasiva</div><div class="fin-kpi-val">'+fmt(selisih)+'</div><div class="fin-kpi-sub">'+(balanced?'Aktiva = Pasiva':'Perlu penyesuaian')+'</div></div>';
+      '<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('wallet')+'</div><div class="fin-kpi-badge">Kas & Bank</div></div><div class="fin-kpi-lbl">Kas & Bank</div><div class="fin-kpi-val">'+fmt(kas)+'</div><div class="fin-kpi-sub">Kas Toko '+fmt(kasToko)+' · Bank '+fmt(kasBank)+'</div></div>'
+      +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('receipt')+'</div><div class="fin-kpi-badge">Piutang</div></div><div class="fin-kpi-lbl">Piutang Usaha</div><div class="fin-kpi-val">'+fmt(piutang)+'</div><div class="fin-kpi-sub">Order belum lunas</div></div>'
+      +'<div class="fin-kpi blue"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('box')+'</div><div class="fin-kpi-badge">Stok</div></div><div class="fin-kpi-lbl">Persediaan Barang</div><div class="fin-kpi-val">'+fmt(persediaan)+'</div><div class="fin-kpi-sub">Saldo SKU × HPP</div></div>'
+      +'<div class="fin-kpi '+(balanced?'green':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('scale')+'</div><div class="fin-kpi-badge '+(balanced?'up':'down')+'">'+(balanced?'Seimbang':'Selisih')+'</div></div><div class="fin-kpi-lbl">Aktiva − Pasiva</div><div class="fin-kpi-val">'+fmt(selisih)+'</div><div class="fin-kpi-sub">'+(balanced?'Aktiva = Pasiva':'Perlu penyesuaian')+'</div></div>';
   }
 
   // ===== Baris akun manual =====
   function renderCustomRows(list,section){
     return list.map(function(x){
       return '<div class="fin-row" onclick="neracaEditAkun(\''+section+'\',\''+x.id+'\')">'
-        +'<div class="fin-row-left"><span class="fin-row-ico">🏷️</span><div class="fin-row-info"><div class="fin-row-name">'+escHtml(x.nama)+'</div>'+(x.ket?'<div class="fin-row-sub">'+escHtml(x.ket)+'</div>':'')+'</div></div>'
-        +'<div class="fin-row-right"><span class="fin-row-val">'+fmt(+x.jumlah||0)+'</span><span class="fin-row-chevron">✏️</span></div>'
+        +'<div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('tag')+'</span><div class="fin-row-info"><div class="fin-row-name">'+escHtml(x.nama)+'</div>'+(x.ket?'<div class="fin-row-sub">'+escHtml(x.ket)+'</div>':'')+'</div></div>'
+        +'<div class="fin-row-right"><span class="fin-row-val">'+fmt(+x.jumlah||0)+'</span><span class="fin-row-chevron">'+finSvgIcon('edit','pico-inline sm')+'</span></div>'
       +'</div>';
     }).join('');
   }
   function manualHeader(label,total){
-    return '<div class="fin-row" style="cursor:default;background:var(--sf2)"><div class="fin-row-left"><span class="fin-row-ico">🏷️</span><div class="fin-row-info"><div class="fin-row-name" style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mt)">'+label+'</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--mt)">'+fmt(total)+'</span></div></div>';
+    return '<div class="fin-row" style="cursor:default;background:var(--sf2)"><div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('tag')+'</span><div class="fin-row-info"><div class="fin-row-name" style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mt)">'+label+'</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--mt)">'+fmt(total)+'</span></div></div>';
   }
   function manualEmpty(){
-    return '<div class="fin-row" style="cursor:default"><div class="fin-row-left"><span class="fin-row-ico">➕</span><div class="fin-row-info"><div class="fin-row-name" style="color:var(--mt);font-weight:600">Belum ada akun manual</div></div></div></div>';
+    return '<div class="fin-row" style="cursor:default"><div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('plus')+'</span><div class="fin-row-info"><div class="fin-row-name" style="color:var(--mt);font-weight:600">Belum ada akun manual</div></div></div></div>';
   }
 
   // ===== Aktiva list =====
   var aktivaEl=document.getElementById('neraca-aktiva');
   if(aktivaEl) aktivaEl.innerHTML=
     '<div class="fin-row" onclick="neracaOpenKasDetail(\'kas_toko\')">'
-      +'<div class="fin-row-left"><span class="fin-row-ico">💵</span><div class="fin-row-info"><div class="fin-row-name">Kas Toko</div><div class="fin-row-sub">Saldo kas tunai</div></div></div>'
+      +'<div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('wallet')+'</span><div class="fin-row-info"><div class="fin-row-name">Kas Toko</div><div class="fin-row-sub">Saldo kas tunai</div></div></div>'
       +'<div class="fin-row-right"><span class="fin-row-val" style="color:'+(kasToko>=0?'var(--g)':'var(--r)')+'">'+fmt(kasToko)+'</span><span class="fin-row-chevron">›</span></div>'
     +'</div>'
     +'<div class="fin-row" onclick="neracaOpenKasDetail(\'rekening_modal\')">'
-      +'<div class="fin-row-left"><span class="fin-row-ico">🏦</span><div class="fin-row-info"><div class="fin-row-name">Rekening Modal / Bank</div><div class="fin-row-sub">Saldo rekening</div></div></div>'
+      +'<div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('scale')+'</span><div class="fin-row-info"><div class="fin-row-name">Rekening Modal / Bank</div><div class="fin-row-sub">Saldo rekening</div></div></div>'
       +'<div class="fin-row-right"><span class="fin-row-val" style="color:'+(kasBank>=0?'var(--g)':'var(--r)')+'">'+fmt(kasBank)+'</span><span class="fin-row-chevron">›</span></div>'
     +'</div>'
     +'<div class="fin-row" onclick="neracaOpenPiutangDetail()">'
-      +'<div class="fin-row-left"><span class="fin-row-ico">📋</span><div class="fin-row-info"><div class="fin-row-name">Piutang Usaha</div><div class="fin-row-sub">Order belum lunas</div></div></div>'
+      +'<div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('receipt')+'</span><div class="fin-row-info"><div class="fin-row-name">Piutang Usaha</div><div class="fin-row-sub">Order belum lunas</div></div></div>'
       +'<div class="fin-row-right"><span class="fin-row-val" style="color:var(--y)">'+fmt(piutang)+'</span><span class="fin-row-chevron">›</span></div>'
     +'</div>'
-    +'<div class="fin-row" onclick="neracaOpenPersediaanDetail()"><div class="fin-row-left"><span class="fin-row-ico">📦</span><div class="fin-row-info"><div class="fin-row-name">Persediaan Barang</div><div class="fin-row-sub">Saldo SKU × HPP</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--b)">'+fmt(persediaan)+'</span><span class="fin-row-chevron">›</span></div></div>'
+    +'<div class="fin-row" onclick="neracaOpenPersediaanDetail()"><div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('box')+'</span><div class="fin-row-info"><div class="fin-row-name">Persediaan Barang</div><div class="fin-row-sub">Saldo SKU × HPP</div></div></div><div class="fin-row-right"><span class="fin-row-val" style="color:var(--b)">'+fmt(persediaan)+'</span><span class="fin-row-chevron">›</span></div></div>'
     +manualHeader('Akun Manual (Aset)',customAktivaTotal)
     +(customAktiva.length?renderCustomRows(customAktiva,'aktiva'):manualEmpty())
     +'<div class="fin-list-total"><span>TOTAL AKTIVA</span><span style="color:var(--b)">'+fmt(totalAktiva)+'</span></div>';
@@ -21682,11 +21711,11 @@ function renderNeraca(){
   var pasivaEl=document.getElementById('neraca-pasiva');
   if(pasivaEl) pasivaEl.innerHTML=
     '<div class="fin-row" onclick="neracaOpenModalAwal()">'
-      +'<div class="fin-row-left"><span class="fin-row-ico">🏦</span><div class="fin-row-info"><div class="fin-row-name">Modal Awal / Penyertaan</div><div class="fin-row-sub">Ketuk untuk ubah</div></div></div>'
-      +'<div class="fin-row-right"><span class="fin-row-val">'+fmt(modalAwal)+'</span><span class="fin-row-chevron">✏️</span></div>'
+      +'<div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('wallet')+'</span><div class="fin-row-info"><div class="fin-row-name">Modal Awal / Penyertaan</div><div class="fin-row-sub">Ketuk untuk ubah</div></div></div>'
+      +'<div class="fin-row-right"><span class="fin-row-val">'+fmt(modalAwal)+'</span><span class="fin-row-chevron">'+finSvgIcon('edit','pico-inline sm')+'</span></div>'
     +'</div>'
     +'<div class="fin-row" onclick="neracaOpenLabaDetail()">'
-      +'<div class="fin-row-left"><span class="fin-row-ico">📈</span><div class="fin-row-info"><div class="fin-row-name">Laba Ditahan</div><div class="fin-row-sub">'+(config.labaDitahanOverride!=null?'✏️ Nilai manual':'Akumulasi laba/rugi kas')+'</div></div></div>'
+      +'<div class="fin-row-left"><span class="fin-row-ico">'+finSvgIcon('trend-up')+'</span><div class="fin-row-info"><div class="fin-row-name">Laba Ditahan</div><div class="fin-row-sub">'+(config.labaDitahanOverride!=null?'Nilai manual':'Akumulasi laba/rugi kas')+'</div></div></div>'
       +'<div class="fin-row-right"><span class="fin-row-val" style="color:'+(labaDitahan>=0?'var(--g)':'var(--r)')+'">'+fmt(labaDitahan)+'</span><span class="fin-row-chevron">›</span></div>'
     +'</div>'
     +manualHeader('Akun Manual (Kewajiban/Modal)',customPasivaTotal)
@@ -21698,41 +21727,41 @@ function renderNeraca(){
   var recon=document.getElementById('neraca-recon-body');
   if(recon){
     recon.innerHTML='<div class="fin-recon">'
-      +'<div class="fin-recon-row"><span>💵 Kas & Bank</span><span>'+fmt(kas)+'</span></div>'
-      +'<div class="fin-recon-row"><span>📋 Piutang Usaha</span><span>'+fmt(piutang)+'</span></div>'
-      +'<div class="fin-recon-row"><span>📦 Persediaan Barang</span><span>'+fmt(persediaan)+'</span></div>'
-      +'<div class="fin-recon-row"><span>🏷️ Akun Manual Aktiva</span><span>'+fmt(customAktivaTotal)+'</span></div>'
+      +'<div class="fin-recon-row"><span>'+finSvgIcon('wallet','pico-inline sm')+' Kas & Bank</span><span>'+fmt(kas)+'</span></div>'
+      +'<div class="fin-recon-row"><span>'+finSvgIcon('receipt','pico-inline sm')+' Piutang Usaha</span><span>'+fmt(piutang)+'</span></div>'
+      +'<div class="fin-recon-row"><span>'+finSvgIcon('box','pico-inline sm')+' Persediaan Barang</span><span>'+fmt(persediaan)+'</span></div>'
+      +'<div class="fin-recon-row"><span>'+finSvgIcon('tag','pico-inline sm')+' Akun Manual Aktiva</span><span>'+fmt(customAktivaTotal)+'</span></div>'
       +'<div class="fin-recon-row"><span style="font-weight:800">Total Aktiva</span><span style="color:var(--b);font-weight:800">'+fmt(totalAktiva)+'</span></div>'
-      +'<div class="fin-recon-row"><span>🏦 Modal Awal</span><span>'+fmt(modalAwal)+'</span></div>'
-      +'<div class="fin-recon-row"><span>📈 Laba Ditahan</span><span>'+fmt(labaDitahan)+'</span></div>'
-      +'<div class="fin-recon-row"><span>🏷️ Akun Manual Pasiva</span><span>'+fmt(customPasivaTotal)+'</span></div>'
+      +'<div class="fin-recon-row"><span>'+finSvgIcon('wallet','pico-inline sm')+' Modal Awal</span><span>'+fmt(modalAwal)+'</span></div>'
+      +'<div class="fin-recon-row"><span>'+finSvgIcon('trend-up','pico-inline sm')+' Laba Ditahan</span><span>'+fmt(labaDitahan)+'</span></div>'
+      +'<div class="fin-recon-row"><span>'+finSvgIcon('tag','pico-inline sm')+' Akun Manual Pasiva</span><span>'+fmt(customPasivaTotal)+'</span></div>'
       +'<div class="fin-recon-row"><span style="font-weight:800">Total Pasiva</span><span style="color:var(--p1);font-weight:800">'+fmt(totalPasiva)+'</span></div>'
       +'<div class="fin-recon-row"><span style="font-weight:900">Selisih</span><span style="color:'+(balanced?'var(--g)':'var(--r)')+';font-weight:900">'+fmt(selisih)+'</span></div>'
       +'</div>'
       +'<div class="fin-note">'+(balanced
-        ?'✅ Aktiva dan pasiva sudah seimbang. Akun manual tetap bisa ditambah/diedit kapan saja.'
-        :'📌 Selisih bisa berasal dari saldo awal/koreksi (neto '+fmt(koreksi)+'), setoran/prive owner, atau aset yang belum dicatat. Gunakan tombol <b>Catat Penyesuaian</b> untuk mencatatnya sebagai akun manual — tidak ada angka yang diubah diam-diam.')
+        ?finSvgIcon('check','pico-inline sm')+' Aktiva dan pasiva sudah seimbang. Akun manual tetap bisa ditambah/diedit kapan saja.'
+        :finSvgIcon('info','pico-inline sm')+' Selisih bisa berasal dari saldo awal/koreksi (neto '+fmt(koreksi)+'), setoran/prive owner, atau aset yang belum dicatat. Gunakan tombol <b>Catat Penyesuaian</b> untuk mencatatnya sebagai akun manual — tidak ada angka yang diubah diam-diam.')
       +'</div>';
   }
 
   // ===== Konten cetak =====
   var aktivaPrintEl=document.getElementById('neraca-aktiva-print');
   if(aktivaPrintEl) aktivaPrintEl.innerHTML=
-    '<div class="keu-profit-row"><span>💵 Kas Toko</span><span class="profit-pos">'+fmt(kasToko)+'</span></div>'
-    +'<div class="keu-profit-row"><span>🏦 Rekening Modal / Bank</span><span class="profit-pos">'+fmt(kasBank)+'</span></div>'
-    +'<div class="keu-profit-row"><span>📋 Piutang Usaha (order belum lunas)</span><span class="profit-pos">'+fmt(piutang)+'</span></div>'
-    +'<div class="keu-profit-row"><span>📦 Persediaan Barang</span><span class="profit-pos">'+fmt(persediaan)+'</span></div>'
-    +customAktiva.map(function(x){ return '<div class="keu-profit-row"><span>🏷️ '+escHtml(x.nama)+(x.ket?' ('+escHtml(x.ket)+')':'')+'</span><span>'+fmt(+x.jumlah||0)+'</span></div>'; }).join('')
+    '<div class="keu-profit-row"><span>'+finSvgIcon('wallet','pico-inline sm')+' Kas Toko</span><span class="profit-pos">'+fmt(kasToko)+'</span></div>'
+    +'<div class="keu-profit-row"><span>'+finSvgIcon('scale','pico-inline sm')+' Rekening Modal / Bank</span><span class="profit-pos">'+fmt(kasBank)+'</span></div>'
+    +'<div class="keu-profit-row"><span>'+finSvgIcon('receipt','pico-inline sm')+' Piutang Usaha (order belum lunas)</span><span class="profit-pos">'+fmt(piutang)+'</span></div>'
+    +'<div class="keu-profit-row"><span>'+finSvgIcon('box','pico-inline sm')+' Persediaan Barang</span><span class="profit-pos">'+fmt(persediaan)+'</span></div>'
+    +customAktiva.map(function(x){ return '<div class="keu-profit-row"><span>'+finSvgIcon('tag','pico-inline sm')+' '+escHtml(x.nama)+(x.ket?' ('+escHtml(x.ket)+')':'')+'</span><span>'+fmt(+x.jumlah||0)+'</span></div>'; }).join('')
     +'<div class="keu-profit-row" style="font-weight:900;font-size:15px;border-top:2px solid var(--bd)"><span>TOTAL AKTIVA</span><span style="color:var(--b)">'+fmt(totalAktiva)+'</span></div>';
   var pasivaPrintEl=document.getElementById('neraca-pasiva-print');
   if(pasivaPrintEl) pasivaPrintEl.innerHTML=
-    '<div class="keu-profit-row"><span>🏦 Modal Awal / Penyertaan</span><span>'+fmt(modalAwal)+'</span></div>'
-    +'<div class="keu-profit-row"><span>📈 Laba Ditahan (akumulasi laba/rugi kas)</span><span class="'+(labaDitahan>=0?'profit-pos':'profit-neg')+'">'+fmt(labaDitahan)+'</span></div>'
-    +customPasiva.map(function(x){ return '<div class="keu-profit-row"><span>🏷️ '+escHtml(x.nama)+(x.ket?' ('+escHtml(x.ket)+')':'')+'</span><span>'+fmt(+x.jumlah||0)+'</span></div>'; }).join('')
+    '<div class="keu-profit-row"><span>'+finSvgIcon('wallet','pico-inline sm')+' Modal Awal / Penyertaan</span><span>'+fmt(modalAwal)+'</span></div>'
+    +'<div class="keu-profit-row"><span>'+finSvgIcon('trend-up','pico-inline sm')+' Laba Ditahan (akumulasi laba/rugi kas)</span><span class="'+(labaDitahan>=0?'profit-pos':'profit-neg')+'">'+fmt(labaDitahan)+'</span></div>'
+    +customPasiva.map(function(x){ return '<div class="keu-profit-row"><span>'+finSvgIcon('tag','pico-inline sm')+' '+escHtml(x.nama)+(x.ket?' ('+escHtml(x.ket)+')':'')+'</span><span>'+fmt(+x.jumlah||0)+'</span></div>'; }).join('')
     +'<div class="keu-profit-row" style="font-weight:900;font-size:15px;border-top:2px solid var(--bd)"><span>TOTAL PASIVA</span><span style="color:var(--p1)">'+fmt(totalPasiva)+'</span></div>';
   var checkPrintEl=document.getElementById('neraca-balance-check-print');
   if(checkPrintEl) checkPrintEl.innerHTML='<div style="padding:12px 16px;border-radius:12px;text-align:center;font-weight:800;background:'+(balanced?'var(--g2)':'var(--y2)')+';color:'+(balanced?'var(--g)':'var(--y)')+'">'
-    +(balanced?'✅ Neraca SEIMBANG — Aktiva = Pasiva':'⚠️ Selisih '+fmt(Math.abs(selisih))+' — cek kembali transaksi kasir & order')
+    +(balanced?finSvgIcon('check','pico-inline sm')+' Neraca SEIMBANG — Aktiva = Pasiva':finSvgIcon('warning','pico-inline sm')+' Selisih '+fmt(Math.abs(selisih))+' — cek kembali transaksi kasir & order')
     +'</div>';
 
   // ===== Tanda tangan =====
@@ -21916,17 +21945,17 @@ function neracaOpenKoreksi(){
   var list=kasirData.filter(function(t){return t.tipe==='koreksi'&&(!cutoff||t.tgl>=cutoff);}).sort(function(a,b){return String(b.tgl||'').localeCompare(String(a.tgl||''));});
   var total=list.reduce(function(a,t){return a+(+t.jumlah||0);},0);
   if(titleEl) titleEl.textContent='Koreksi Saldo & Penyesuaian';
-  if(iconEl){ iconEl.style.background='linear-gradient(135deg,#2563eb,#3b82f6)'; iconEl.textContent='🧾'; }
+  if(iconEl){ iconEl.style.background='linear-gradient(135deg,#2563eb,#3b82f6)'; iconEl.innerHTML=finSvgIcon('receipt'); }
   if(subEl) subEl.textContent=list.length+' transaksi · neto '+fmt(total);
   if(bodyEl){
     bodyEl.innerHTML=list.length
       ?'<div class="mini-stat-row"><div class="mini-stat"><div class="ml">Neto Koreksi</div><div class="mv" style="color:var(--b)">'+fmt(total)+'</div></div></div>'
         +list.map(function(t){
-          return '<div class="pay-history-item"><div class="pay-icon lunas-icon">🧾</div>'
+          return '<div class="pay-history-item"><div class="pay-icon lunas-icon">'+finSvgIcon('receipt')+'</div>'
             +'<div class="pay-info"><div class="pay-label">'+escHtml(t.ket||t.kategori||'Koreksi')+'</div><div class="pay-date">'+t.tgl+' · '+(t.akun==='rekening_modal'?'Bank':'Kas Toko')+'</div></div>'
             +'<div class="pay-amount" style="color:var(--b)">'+fmt(t.jumlah)+'</div></div>';
         }).join('')
-      :'<div class="empty"><div class="ei">🧾</div><p>Belum ada transaksi koreksi sejak pembukuan baru.</p></div>';
+      :'<div class="empty"><div class="ei">'+finSvgIcon('receipt')+'</div><p>Belum ada transaksi koreksi sejak pembukuan baru.</p></div>';
   }
   document.getElementById('dm-lr-kategori').classList.add('open');
 }
@@ -23421,9 +23450,9 @@ function renderAnalitikKPI(months){
 
   el.innerHTML=
     '<div class="fin-kpi blue"><div class="fin-kpi-top"><div class="fin-kpi-ico">💰</div>'+(omzetGrowth==null?'<div class="fin-kpi-badge">—</div>':'<div class="fin-kpi-badge '+(omzetGrowth>=0?'up':'down')+'">'+(omzetGrowth>=0?'▲':'▼')+' '+Math.abs(omzetGrowth)+'%</div>')+'</div><div class="fin-kpi-lbl">Omzet Order</div><div class="fin-kpi-val">'+fmt(ord.omzet)+'</div><div class="fin-kpi-sub">'+ord.count+' order · akrual'+(omzetGrowth==null?' · belum ada pembanding':'')+'</div></div>'
-    +'<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">💵</div>'+(cashGrowth==null?'<div class="fin-kpi-badge">—</div>':'<div class="fin-kpi-badge '+(cashGrowth>=0?'up':'down')+'">'+(cashGrowth>=0?'▲':'▼')+' '+Math.abs(cashGrowth)+'%</div>')+'</div><div class="fin-kpi-lbl">Kas Masuk</div><div class="fin-kpi-val">'+fmt(cash.masuk)+'</div><div class="fin-kpi-sub">Uang benar-benar diterima'+(cashGrowth==null?' · belum ada pembanding':'')+'</div></div>'
-    +'<div class="fin-kpi '+(labaKas>=0?'blue':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">📊</div><div class="fin-kpi-badge '+(labaKas>=0?'up':'down')+'">'+(margin>=0?'+':'')+margin+'%</div></div><div class="fin-kpi-lbl">Laba Kas</div><div class="fin-kpi-val">'+fmt(labaKas)+'</div><div class="fin-kpi-sub">Kas masuk − kas keluar</div></div>'
-    +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">⏳</div><div class="fin-kpi-badge">'+ord.list.filter(function(o){return !isLunas(o)&&o.status!=='Diambil';}).length+' order</div></div><div class="fin-kpi-lbl">Piutang</div><div class="fin-kpi-val">'+fmt(ord.piutang)+'</div><div class="fin-kpi-sub">Sisa tagihan periode ini</div></div>'
+    +'<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('wallet')+'</div>'+(cashGrowth==null?'<div class="fin-kpi-badge">—</div>':'<div class="fin-kpi-badge '+(cashGrowth>=0?'up':'down')+'">'+(cashGrowth>=0?'▲':'▼')+' '+Math.abs(cashGrowth)+'%</div>')+'</div><div class="fin-kpi-lbl">Kas Masuk</div><div class="fin-kpi-val">'+fmt(cash.masuk)+'</div><div class="fin-kpi-sub">Uang benar-benar diterima'+(cashGrowth==null?' · belum ada pembanding':'')+'</div></div>'
+    +'<div class="fin-kpi '+(labaKas>=0?'blue':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('chart')+'</div><div class="fin-kpi-badge '+(labaKas>=0?'up':'down')+'">'+(margin>=0?'+':'')+margin+'%</div></div><div class="fin-kpi-lbl">Laba Kas</div><div class="fin-kpi-val">'+fmt(labaKas)+'</div><div class="fin-kpi-sub">Kas masuk − kas keluar</div></div>'
+    +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('clock')+'</div><div class="fin-kpi-badge">'+ord.list.filter(function(o){return !isLunas(o)&&o.status!=='Diambil';}).length+' order</div></div><div class="fin-kpi-lbl">Piutang</div><div class="fin-kpi-val">'+fmt(ord.piutang)+'</div><div class="fin-kpi-sub">Sisa tagihan periode ini</div></div>'
     +'<div class="fin-kpi"><div class="fin-kpi-top"><div class="fin-kpi-ico">✅</div><div class="fin-kpi-badge">'+lunasPct+'%</div></div><div class="fin-kpi-lbl">Tingkat Lunas</div><div class="fin-kpi-val">'+lunasList.length+' / '+list.length+'</div><div class="fin-kpi-sub">Order lunas</div></div>'
     +'<div class="fin-kpi"><div class="fin-kpi-top"><div class="fin-kpi-ico">🔄</div><div class="fin-kpi-badge">'+uniqCount+' customer</div></div><div class="fin-kpi-lbl">Repeat Customer</div><div class="fin-kpi-val">'+repeatPct+'%</div><div class="fin-kpi-sub">Dari '+uniqCount+' customer unik</div></div>';
 }
@@ -23563,36 +23592,36 @@ function renderAnalitikInsights(months){
   });
   var best=monthly.slice().sort(function(a,b){return b.omzet-a.omzet;})[0];
   var worst=monthly.slice().sort(function(a,b){return a.omzet-b.omzet;})[0];
-  if(best&&best.omzet>0) insights.push({type:'positive',icon:'🏆',title:'Omzet order tertinggi: '+best.label+' — '+fmt(best.omzet),desc:'Bulan terbaik dari '+months+' bulan terakhir. Bandingkan strategi bulan ini dengan bulan tersebut.'});
-  if(worst&&worst.omzet>0&&worst.label!==best.label) insights.push({type:'info',icon:'📉',title:'Omzet terendah: '+worst.label+' — '+fmt(worst.omzet),desc:'Bukan prediksi — ini angka order real. Cek apakah ada bulan dengan order sedikit atau banyak order belum lunas.'});
+  if(best&&best.omzet>0) insights.push({type:'positive',icon:finSvgIcon('trend-up'),title:'Omzet order tertinggi: '+best.label+' — '+fmt(best.omzet),desc:'Bulan terbaik dari '+months+' bulan terakhir. Bandingkan strategi bulan ini dengan bulan tersebut.'});
+  if(worst&&worst.omzet>0&&worst.label!==best.label) insights.push({type:'info',icon:finSvgIcon('trend-down'),title:'Omzet terendah: '+worst.label+' — '+fmt(worst.omzet),desc:'Bukan prediksi — ini angka order real. Cek apakah ada bulan dengan order sedikit atau banyak order belum lunas.'});
 
   // Kas vs order
-  insights.push({type:'info',icon:'💵',title:'Kas masuk '+fmt(cash.masuk)+' vs omzet order '+fmt(ord.omzet),desc:'Kas real yang diterima '+fmt(cash.masuk)+'. Omzet order (akrual) '+fmt(ord.omzet)+'. Selisih bisa berasal dari piutang, DP, atau pembayaran order lama.'});
+  insights.push({type:'info',icon:finSvgIcon('wallet'),title:'Kas masuk '+fmt(cash.masuk)+' vs omzet order '+fmt(ord.omzet),desc:'Kas real yang diterima '+fmt(cash.masuk)+'. Omzet order (akrual) '+fmt(ord.omzet)+'. Selisih bisa berasal dari piutang, DP, atau pembayaran order lama.'});
 
   // Piutang
   if(ord.piutang>0){
     var unpaid=ord.list.filter(function(o){return !isLunas(o)&&o.status!=='Diambil';});
     var oldest=unpaid.slice().sort(function(a,b){return String(a.tgl||'').localeCompare(String(b.tgl||''));})[0];
-    insights.push({type:'warning',icon:'⚠️',title:unpaid.length+' order belum lunas — piutang '+fmt(ord.piutang),desc:'Piutang terbesar/tertua: '+(oldest?oldest.noOrder+' · '+oldest.nama+' ('+oldest.tgl+')':'—')+'. Follow-up pembayaran dari halaman Order.'});
+    insights.push({type:'warning',icon:finSvgIcon('warning'),title:unpaid.length+' order belum lunas — piutang '+fmt(ord.piutang),desc:'Piutang terbesar/tertua: '+(oldest?oldest.noOrder+' · '+oldest.nama+' ('+oldest.tgl+')':'—')+'. Follow-up pembayaran dari halaman Order.'});
   } else {
-    insights.push({type:'positive',icon:'✅',title:'Tidak ada piutang di periode ini',desc:'Semua order pada periode ini sudah lunas. Arus kas lebih sehat.'});
+    insights.push({type:'positive',icon:finSvgIcon('check'),title:'Tidak ada piutang di periode ini',desc:'Semua order pada periode ini sudah lunas. Arus kas lebih sehat.'});
   }
 
   // Pengeluaran terbesar
   var topExp=cash.byKatKeluar[0];
-  if(topExp) insights.push({type:'info',icon:'🏷️',title:'Pengeluaran terbesar: '+topExp.kategori+' — '+fmt(topExp.total),desc:'Mencakup '+(cash.keluar>0?Math.round(topExp.total/cash.keluar*100):0)+'% dari total kas keluar periode ini ('+fmt(cash.keluar)+').'});
+  if(topExp) insights.push({type:'info',icon:finSvgIcon('tag'),title:'Pengeluaran terbesar: '+topExp.kategori+' — '+fmt(topExp.total),desc:'Mencakup '+(cash.keluar>0?Math.round(topExp.total/cash.keluar*100):0)+'% dari total kas keluar periode ini ('+fmt(cash.keluar)+').'});
 
   // HPP coverage
-  if(ord.count>0) insights.push({type:ord.coverage>=80?'positive':'warning',icon:'⚖️',title:'HPP lengkap: '+ord.complete.length+'/'+ord.count+' order ('+ord.coverage+'%)',desc:ord.incomplete.length?ord.incomplete.length+' order belum punya rincian HPP lengkap — labanya tidak dihitung dan ditandai “HPP belum diisi”.':'Semua order sudah punya HPP lengkap, jadi laba per order bisa dihitung penuh.'});
+  if(ord.count>0) insights.push({type:ord.coverage>=80?'positive':'warning',icon:finSvgIcon('scale'),title:'HPP lengkap: '+ord.complete.length+'/'+ord.count+' order ('+ord.coverage+'%)',desc:ord.incomplete.length?ord.incomplete.length+' order belum punya rincian HPP lengkap — labanya tidak dihitung dan ditandai “HPP belum diisi”.':'Semua order sudah punya HPP lengkap, jadi laba per order bisa dihitung penuh.'});
 
   // Customer loyal
   var byCustomer={};
   list.forEach(function(o){var k=String(o.nama||'').trim();if(k)byCustomer[k]=(byCustomer[k]||0)+1;});
   var loyal=Object.keys(byCustomer).filter(function(k){return byCustomer[k]>=3;});
-  if(loyal.length) insights.push({type:'positive',icon:'⭐',title:loyal.length+' customer setia (3+ order)',desc:'Customer dengan order berulang di periode ini. Berikan apresiasi atau diskon untuk menjaga hubungan.'});
+  if(loyal.length) insights.push({type:'positive',icon:finSvgIcon('sparkle'),title:loyal.length+' customer setia (3+ order)',desc:'Customer dengan order berulang di periode ini. Berikan apresiasi atau diskon untuk menjaga hubungan.'});
 
   // Rata-rata order real
-  if(ord.count>0) insights.push({type:'info',icon:'🎯',title:'Rata-rata nilai order: '+fmt(ord.avg),desc:'Dari '+ord.count+' order real. Naikkan rata-rata order dengan paket bundling atau upsell produk.'});
+  if(ord.count>0) insights.push({type:'info',icon:finSvgIcon('chart'),title:'Rata-rata nilai order: '+fmt(ord.avg),desc:'Dari '+ord.count+' order real. Naikkan rata-rata order dengan paket bundling atau upsell produk.'});
 
   el.innerHTML=insights.map(function(ins){
     return '<div class="insight-card '+ins.type+'">'
@@ -25584,7 +25613,7 @@ function finOpenKategoriModal(tipe,categories,label,range){
   var titleEl=document.getElementById('dm-lr-kat-title');
   var subEl=document.getElementById('dm-lr-kat-sub');
   var bodyEl=document.getElementById('dm-lr-kat-body');
-  if(iconEl){ iconEl.style.background=isMasuk?'linear-gradient(135deg,#059669,#10b981)':'linear-gradient(135deg,#dc2626,#ef4444)'; iconEl.textContent=finKatIcon(cats[0]); }
+  if(iconEl){ iconEl.style.background=isMasuk?'linear-gradient(135deg,#059669,#10b981)':'linear-gradient(135deg,#dc2626,#ef4444)'; iconEl.innerHTML=finKatIcon(cats[0]); }
   if(titleEl) titleEl.textContent=label||cats.join(', ');
   if(subEl) subEl.textContent=list.length+' transaksi · '+(range&&range.label?range.label:'periode ini');
   if(bodyEl){
@@ -25880,26 +25909,26 @@ function finProsesTutupBuku(){
   try{ renderLabaRugi(); }catch(e){}
   try{ renderNeraca(); }catch(e){}
   try{ renderAnalitik(); }catch(e){}
-  showNotif('🔒 Buku Ditutup','Transaksi s/d '+sampai+' diarsipkan. Backup file sudah diunduh.'+(stored?'':' (Backup lokal penuh — simpan file unduhan Anda.)'));
+  showNotif('Buku Ditutup','Transaksi s/d '+sampai+' diarsipkan. Backup file sudah diunduh.'+(stored?'':' (Backup lokal penuh — simpan file unduhan Anda.)'));
 }
 var chartKeuCash=null,chartKeuExpense=null;
 
 function finKatIcon(k){
   var s=String(k||'').toLowerCase();
-  if(s.indexOf('bahan')>=0) return '🧵';
-  if(s.indexOf('dtf')>=0) return '🖨️';
-  if(s.indexOf('tinta')>=0||s.indexOf('cat')>=0) return '🎨';
-  if(s.indexOf('gaji')>=0) return '👷';
-  if(s.indexOf('listrik')>=0) return '⚡';
-  if(s.indexOf('air')>=0) return '💧';
-  if(s.indexOf('wi-fi')>=0||s.indexOf('wifi')>=0||s.indexOf('internet')>=0) return '📶';
-  if(s.indexOf('transport')>=0||s.indexOf('ongkir')>=0) return '🚚';
-  if(s.indexOf('promosi')>=0||s.indexOf('iklan')>=0) return '📣';
-  if(s.indexOf('konsumsi')>=0) return '🍱';
-  if(s.indexOf('alat')>=0||s.indexOf('mesin')>=0) return '🛠️';
-  if(s.indexOf('order')>=0||s.indexOf('lunas')>=0||s.indexOf('muka')>=0) return '📦';
-  if(s.indexOf('lain')>=0) return '💬';
-  return '💵';
+  if(s.indexOf('bahan')>=0) return finSvgIcon('fabric');
+  if(s.indexOf('dtf')>=0||s.indexOf('sablon')>=0) return finSvgIcon('printer');
+  if(s.indexOf('tinta')>=0||s.indexOf('cat')>=0) return finSvgIcon('palette');
+  if(s.indexOf('gaji')>=0) return finSvgIcon('user');
+  if(s.indexOf('listrik')>=0) return finSvgIcon('bolt');
+  if(s.indexOf('air')>=0) return finSvgIcon('info');
+  if(s.indexOf('wi-fi')>=0||s.indexOf('wifi')>=0||s.indexOf('internet')>=0) return finSvgIcon('cloud');
+  if(s.indexOf('transport')>=0||s.indexOf('ongkir')>=0) return finSvgIcon('truck');
+  if(s.indexOf('promosi')>=0||s.indexOf('iklan')>=0) return finSvgIcon('chat');
+  if(s.indexOf('konsumsi')>=0) return finSvgIcon('receipt');
+  if(s.indexOf('alat')>=0||s.indexOf('mesin')>=0) return finSvgIcon('settings');
+  if(s.indexOf('order')>=0||s.indexOf('lunas')>=0||s.indexOf('muka')>=0) return finSvgIcon('box');
+  if(s.indexOf('lain')>=0) return finSvgIcon('receipt');
+  return finSvgIcon('wallet');
 }
 function keuOpenKategori(tipe,kategori){
   var filterEl=document.getElementById('keu-filter');
@@ -25928,11 +25957,11 @@ function renderKeuangan(){
   if(kpi){
     var margin=cash.masuk>0?Math.round((cash.operating/cash.masuk)*100):0;
     kpi.innerHTML=
-      '<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">💚</div><div class="fin-kpi-badge">'+cash.countMasuk+' trx</div></div><div class="fin-kpi-lbl">Kas Masuk</div><div class="fin-kpi-val">'+fmt(cash.masuk)+'</div><div class="fin-kpi-sub">'+range.label+' · uang benar-benar diterima</div></div>'
-      +'<div class="fin-kpi red"><div class="fin-kpi-top"><div class="fin-kpi-ico">❤️</div><div class="fin-kpi-badge">'+cash.countKeluar+' trx</div></div><div class="fin-kpi-lbl">Kas Keluar</div><div class="fin-kpi-val">'+fmt(cash.keluar)+'</div><div class="fin-kpi-sub">'+range.label+' · pengeluaran tercatat</div></div>'
-      +'<div class="fin-kpi '+(cash.operating>=0?'blue':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">📊</div><div class="fin-kpi-badge '+(cash.operating>=0?'up':'down')+'">'+(margin>=0?'+':'')+margin+'%</div></div><div class="fin-kpi-lbl">Arus Kas Operasional</div><div class="fin-kpi-val">'+fmt(cash.operating)+'</div><div class="fin-kpi-sub">Kas masuk − kas keluar (belum termasuk koreksi)</div></div>'
-      +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">🏦</div><div class="fin-kpi-badge">Saldo</div></div><div class="fin-kpi-lbl">Saldo Kas Saat Ini</div><div class="fin-kpi-val">'+fmt(saldo)+'</div><div class="fin-kpi-sub">Kas Toko '+fmt(saldoToko)+' · Bank '+fmt(saldoBank)+'</div></div>'
-      +'<div class="fin-kpi '+(ord.profitComplete>=0?'blue':'red')+'" onclick="keuSwitchTab(2)" style="cursor:pointer" title="Klik untuk melihat rincian laba bersih per order"><div class="fin-kpi-top"><div class="fin-kpi-ico">💼</div><div class="fin-kpi-badge '+(ord.profitComplete>=0?'up':'down')+'">'+(ord.count?(ord.profitMargin>=0?'+':'')+ord.profitMargin.toFixed(1)+'%':'—')+'</div></div><div class="fin-kpi-lbl">Laba Bersih Detail Profit</div><div class="fin-kpi-val">'+fmt(ord.profitComplete)+'</div><div class="fin-kpi-sub">'+(ord.count?(ord.complete.length+'/'+ord.count+' order lengkap'+(ord.incomplete.length?' · '+ord.incomplete.length+' belum HPP':'')):'Belum ada order di periode ini')+'</div></div>';
+      '<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('wallet')+'</div><div class="fin-kpi-badge">'+cash.countMasuk+' trx</div></div><div class="fin-kpi-lbl">Kas Masuk</div><div class="fin-kpi-val">'+fmt(cash.masuk)+'</div><div class="fin-kpi-sub">'+range.label+' · uang benar-benar diterima</div></div>'
+      +'<div class="fin-kpi red"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('receipt')+'</div><div class="fin-kpi-badge">'+cash.countKeluar+' trx</div></div><div class="fin-kpi-lbl">Kas Keluar</div><div class="fin-kpi-val">'+fmt(cash.keluar)+'</div><div class="fin-kpi-sub">'+range.label+' · pengeluaran tercatat</div></div>'
+      +'<div class="fin-kpi '+(cash.operating>=0?'blue':'red')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('chart')+'</div><div class="fin-kpi-badge '+(cash.operating>=0?'up':'down')+'">'+(margin>=0?'+':'')+margin+'%</div></div><div class="fin-kpi-lbl">Arus Kas Operasional</div><div class="fin-kpi-val">'+fmt(cash.operating)+'</div><div class="fin-kpi-sub">Kas masuk − kas keluar (belum termasuk koreksi)</div></div>'
+      +'<div class="fin-kpi amber"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('scale')+'</div><div class="fin-kpi-badge">Saldo</div></div><div class="fin-kpi-lbl">Saldo Kas Saat Ini</div><div class="fin-kpi-val">'+fmt(saldo)+'</div><div class="fin-kpi-sub">Kas Toko '+fmt(saldoToko)+' · Bank '+fmt(saldoBank)+'</div></div>'
+      +'<div class="fin-kpi '+(ord.profitComplete>=0?'blue':'red')+'" onclick="keuSwitchTab(2)" style="cursor:pointer" title="Klik untuk melihat rincian laba bersih per order"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('wallet')+'</div><div class="fin-kpi-badge '+(ord.profitComplete>=0?'up':'down')+'">'+(ord.count?(ord.profitMargin>=0?'+':'')+ord.profitMargin.toFixed(1)+'%':'—')+'</div></div><div class="fin-kpi-lbl">Laba Bersih Detail Profit</div><div class="fin-kpi-val">'+fmt(ord.profitComplete)+'</div><div class="fin-kpi-sub">'+(ord.count?(ord.complete.length+'/'+ord.count+' order lengkap'+(ord.incomplete.length?' · '+ord.incomplete.length+' belum HPP':'')):'Belum ada order di periode ini')+'</div></div>';
   }
 
   // ===== Grafik arus kas 6 bulan =====
@@ -25994,7 +26023,7 @@ function renderKeuangan(){
       var color=isKoreksi?'var(--b)':isMasuk?'var(--g)':'var(--r)';
       var prefix=isKoreksi?'':(isMasuk?'+':'-');
       return '<div class="fin-mini-item"><div class="fi-ico">'+finKatIcon(t.kategori)+'</div><div class="fi-body"><div class="fi-name">'+escHtml(t.ket||t.kategori||'Transaksi')+'</div><div class="fi-sub">'+t.tgl+' · '+escHtml(t.kategori||'Lainnya')+' · '+(t.akun==='rekening_modal'?'Bank':'Kas Toko')+'</div></div><div class="fi-val" style="color:'+color+'">'+prefix+fmt(t.jumlah)+'</div></div>';
-    }).join('')+'</div>':'<div class="fin-row-empty">🧾 Belum ada transaksi di periode ini</div>';
+    }).join('')+'</div>':'<div class="fin-row-empty">'+finSvgIcon('receipt','pico-inline sm')+' Belum ada transaksi di periode ini</div>';
   }
   var recentSub=document.getElementById('keu-recent-sub'); if(recentSub) recentSub.textContent='12 transaksi terbaru · '+range.label;
 
@@ -26003,10 +26032,10 @@ function renderKeuangan(){
   if(okpi){
     var unpaid=ord.list.filter(function(o){return !(typeof isLunas==='function'&&isLunas(o))&&o.status!=='Diambil';}).length;
     okpi.innerHTML=
-      '<div class="fin-kpi blue"><div class="fin-kpi-top"><div class="fin-kpi-ico">📦</div><div class="fin-kpi-badge">'+ord.count+' order</div></div><div class="fin-kpi-lbl">Omzet Order</div><div class="fin-kpi-val">'+fmt(ord.omzet)+'</div><div class="fin-kpi-sub">Nilai order (akrual) · '+range.label+'</div></div>'
-      +'<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">✅</div><div class="fin-kpi-badge">'+ord.lunas+' lunas</div></div><div class="fin-kpi-lbl">Sudah Dibayar</div><div class="fin-kpi-val">'+fmt(ord.terbayar)+'</div><div class="fin-kpi-sub">Total pembayaran tercatat per order</div></div>'
-      +'<div class="fin-kpi '+(ord.piutang>0?'amber':'green')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">⏳</div><div class="fin-kpi-badge">'+unpaid+' order</div></div><div class="fin-kpi-lbl">Piutang</div><div class="fin-kpi-val">'+fmt(ord.piutang)+'</div><div class="fin-kpi-sub">Sisa tagihan order periode ini</div></div>'
-      +'<div class="fin-kpi"><div class="fin-kpi-top"><div class="fin-kpi-ico">🎯</div><div class="fin-kpi-badge">Rata-rata</div></div><div class="fin-kpi-lbl">Nilai Order</div><div class="fin-kpi-val">'+fmt(ord.avg)+'</div><div class="fin-kpi-sub">Per order · '+range.label+'</div></div>';
+      '<div class="fin-kpi blue"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('box')+'</div><div class="fin-kpi-badge">'+ord.count+' order</div></div><div class="fin-kpi-lbl">Omzet Order</div><div class="fin-kpi-val">'+fmt(ord.omzet)+'</div><div class="fin-kpi-sub">Nilai order (akrual) · '+range.label+'</div></div>'
+      +'<div class="fin-kpi green"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('check')+'</div><div class="fin-kpi-badge">'+ord.lunas+' lunas</div></div><div class="fin-kpi-lbl">Sudah Dibayar</div><div class="fin-kpi-val">'+fmt(ord.terbayar)+'</div><div class="fin-kpi-sub">Total pembayaran tercatat per order</div></div>'
+      +'<div class="fin-kpi '+(ord.piutang>0?'amber':'green')+'"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('clock')+'</div><div class="fin-kpi-badge">'+unpaid+' order</div></div><div class="fin-kpi-lbl">Piutang</div><div class="fin-kpi-val">'+fmt(ord.piutang)+'</div><div class="fin-kpi-sub">Sisa tagihan order periode ini</div></div>'
+      +'<div class="fin-kpi"><div class="fin-kpi-top"><div class="fin-kpi-ico">'+finSvgIcon('chart')+'</div><div class="fin-kpi-badge">Rata-rata</div></div><div class="fin-kpi-lbl">Nilai Order</div><div class="fin-kpi-val">'+fmt(ord.avg)+'</div><div class="fin-kpi-sub">Per order · '+range.label+'</div></div>';
   }
   var otbl=document.getElementById('keu-tbl');
   if(otbl){
@@ -26046,9 +26075,9 @@ function renderKeuangan(){
     if(!ord.count){
       profitWarn.innerHTML='';
     } else if(ord.incomplete.length){
-      profitWarn.innerHTML='<div class="fin-check-banner warn">⚠️ '+ord.incomplete.length+' order belum punya HPP/Detail Profit. Laba bersih hanya menjumlahkan '+ord.complete.length+' order yang lengkap. Order bertanda di tabel bisa diklik untuk mengisi.</div>';
+      profitWarn.innerHTML='<div class="fin-check-banner warn">'+finSvgIcon('warning','pico-inline sm')+' '+ord.incomplete.length+' order belum punya HPP/Detail Profit. Laba bersih hanya menjumlahkan '+ord.complete.length+' order yang lengkap. Order bertanda di tabel bisa diklik untuk mengisi.</div>';
     } else {
-      profitWarn.innerHTML='<div class="fin-check-banner ok">✅ Semua '+ord.count+' order sudah punya HPP & Detail Profit.</div>';
+      profitWarn.innerHTML='<div class="fin-check-banner ok">'+finSvgIcon('check','pico-inline sm')+' Semua '+ord.count+' order sudah punya HPP & Detail Profit.</div>';
     }
   }
   var ptbl=document.getElementById('keu-profit-tbl');
@@ -26083,8 +26112,8 @@ function renderKeuangan(){
     top.innerHTML=ranked.length?ranked.map(function(r,i){
       var initials=String(r.o.nama||'?').split(' ').slice(0,2).map(function(w){var ch=String(w).replace(/[^A-Za-z0-9]/g,'')[0];return ch?ch.toUpperCase():'';}).join('');
       var pct=Math.round(Math.max(0,r.profit)/Math.max(1,ranked[0].profit)*100);
-      return '<div class="podium-row"><div class="podium-ring-wrap">'+makeProgressRing(pct,{size:46,color:'#059669',track:'var(--bd)'})+'<div class="podium-avatar" style="background:linear-gradient(135deg,#059669,#10b981)">'+initials+'</div>'+(i<3?'<div class="podium-medal">'+['🥇','🥈','🥉'][i]+'</div>':'')+'</div><div class="podium-body"><div class="podium-name">'+escHtml(r.o.nama)+'</div><div class="podium-sub">'+r.o.noOrder+' · HPP '+fmt(r.c.totalBiaya)+'</div></div><div class="podium-val"><div class="podium-val-num" style="color:var(--g)">'+fmt(r.profit)+'</div></div></div>';
-    }).join(''):'<div class="fin-row-empty">🏆 Belum ada order dengan HPP lengkap di periode ini</div>';
+      return '<div class="podium-row"><div class="podium-ring-wrap">'+makeProgressRing(pct,{size:46,color:'#059669',track:'var(--bd)'})+'<div class="podium-avatar" style="background:linear-gradient(135deg,#059669,#10b981)">'+initials+'</div>'+(i<3?'<div class="podium-medal" style="font-size:10px;font-weight:900;background:var(--sf);border:1px solid var(--bd);border-radius:999px;min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:var(--tx)">'+(i+1)+'</div>':'')+'</div><div class="podium-body"><div class="podium-name">'+escHtml(r.o.nama)+'</div><div class="podium-sub">'+r.o.noOrder+' · HPP '+fmt(r.c.totalBiaya)+'</div></div><div class="podium-val"><div class="podium-val-num" style="color:var(--g)">'+fmt(r.profit)+'</div></div></div>';
+    }).join(''):'<div class="fin-row-empty">'+finSvgIcon('chart','pico-inline sm')+' Belum ada order dengan HPP lengkap di periode ini</div>';
   }
 
   keuSwitchTab(typeof _keuTab!=='undefined'?_keuTab:0);
@@ -27523,6 +27552,16 @@ document.addEventListener('DOMContentLoaded',function(){
 
 // === KEUANGAN TAB SWITCHER ===
 var _keuTab=0;
+function animateTabPanel(el){
+  if(!el) return;
+  el.classList.remove('tab-panel-in');
+  // paksa reflow agar animasi bisa diputar ulang saat pindah tab
+  void el.offsetWidth;
+  el.classList.add('tab-panel-in');
+}
+function finSvgIcon(name, cls){
+  return '<svg class="pico'+(cls?' '+cls:'')+'" aria-hidden="true" focusable="false"><use href="#ico-'+name+'"></use></svg>';
+}
 function keuSwitchTab(idx){
   _keuTab=idx;
   var kas=document.getElementById('keu-panel-kas');
@@ -27531,6 +27570,7 @@ function keuSwitchTab(idx){
   if(kas) kas.style.display=(idx===0?'block':'none');
   if(order) order.style.display=(idx===1?'block':'none');
   if(profit) profit.style.display=(idx===2?'block':'none');
+  animateTabPanel(idx===0?kas:idx===1?order:profit);
   var tabs=document.querySelectorAll('#page-keuangan .fin-tab');
   tabs.forEach(function(t,i){t.classList.toggle('active',i===idx);});
 }
@@ -27564,12 +27604,14 @@ function dashSwitchTab(idx){
   cards.forEach(function(c,i){
     if(i===idx){
       c.style.display='block';
-      c.style.opacity='1';
+      c.style.opacity='';
       c.style.transition='';
+      animateTabPanel(c);
     } else {
       c.style.display='none';
       c.style.opacity='';
       c.style.transition='';
+      c.classList.remove('tab-panel-in');
     }
   });
   tabs.forEach(function(t,i){t.classList.toggle('active',i===idx);});
@@ -27591,21 +27633,17 @@ function dashSwitchTab(idx){
 function dbSwitchTab(idx){
   var tabs=document.querySelectorAll('.db-tab-btn');
   tabs.forEach(function(t,i){t.classList.toggle('active',i===idx);});
-  // Tampilkan section yang sesuai dengan animasi fade
   var sections=document.querySelectorAll('.db-section');
   sections.forEach(function(s){
     var sIdx=parseInt(s.getAttribute('data-section')||'0');
     if(sIdx===idx){
       s.classList.add('db-active');
-      s.style.opacity='0';
-      requestAnimationFrame(function(){
-        requestAnimationFrame(function(){
-          s.style.transition='opacity .25s ease';
-          s.style.opacity='1';
-        });
-      });
+      s.style.opacity='';
+      s.style.transition='';
+      animateTabPanel(s);
     } else {
       s.classList.remove('db-active');
+      s.classList.remove('tab-panel-in');
       s.style.opacity='';
       s.style.transition='';
     }
