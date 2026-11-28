@@ -2797,6 +2797,41 @@ animation:finSectionIn .4s cubic-bezier(.22,1,.36,1) both;
   .fin-table{font-size:11px}
   .fin-table th,.fin-table td{padding:8px 7px}
 }
+@media(max-width:768px){
+  #tbl-keu-profit,#tbl-keu-profit tbody,#tbl-keu-profit tr,#tbl-keu-profit td,#tbl-keu-profit tfoot,#tbl-keu-profit tfoot tr,#tbl-keu-profit tfoot td{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box}
+  #tbl-keu-profit{table-layout:auto!important;border-collapse:separate!important;border-spacing:0!important;font-size:12px!important}
+  #tbl-keu-profit thead{display:none!important}
+  #tbl-keu-profit tbody tr{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:12px 12px 10px;margin:0 0 10px;box-shadow:var(--sh)}
+  #tbl-keu-profit tbody td{display:flex!important;align-items:flex-start;justify-content:space-between;gap:12px;padding:6px 0!important;border-bottom:1px dashed rgba(148,163,184,.22)!important;text-align:right!important;white-space:normal!important}
+  #tbl-keu-profit tbody td:last-child{border-bottom:none!important;padding-bottom:0!important}
+  #tbl-keu-profit tbody td::before{content:attr(data-label);flex:0 0 96px;max-width:96px;color:var(--mt);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:left;line-height:1.35;padding-top:1px}
+  #tbl-keu-profit tbody td[data-label="No Order"]{padding-top:0!important}
+  #tbl-keu-profit tbody td[data-label="Keterangan"]{align-items:flex-start}
+  #tbl-keu-profit tbody td[data-label="Keterangan"],#tbl-keu-profit tbody td[data-label="Customer"]{word-break:break-word}
+  #tbl-keu-profit tfoot tr{background:var(--sf2);border:1px solid var(--bd);border-radius:14px;padding:12px;margin:4px 0 0;box-shadow:var(--sh)}
+  #tbl-keu-profit tfoot td{display:flex!important;justify-content:space-between;align-items:center;gap:12px;padding:6px 0!important;border-bottom:1px dashed rgba(148,163,184,.22)!important;text-align:right!important;font-size:12px!important}
+  #tbl-keu-profit tfoot td:last-child{border-bottom:none!important;padding-bottom:0!important}
+  #tbl-keu-profit tfoot td[colspan]{display:block!important;text-align:left!important;font-size:12px!important;color:var(--tx)!important;padding-bottom:8px!important}
+  #tbl-keu-profit tfoot td[colspan]::before{content:none!important}
+  #tbl-keu-profit tfoot td:not([colspan]):nth-of-type(2)::before{content:"Qty";flex:0 0 96px;color:var(--mt);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:left}
+  #tbl-keu-profit tfoot td:not([colspan]):nth-of-type(3)::before{content:"Omzet";flex:0 0 96px;color:var(--mt);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:left}
+  #tbl-keu-profit tfoot td:not([colspan]):nth-of-type(4)::before{content:"HPP";flex:0 0 96px;color:var(--mt);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:left}
+  #tbl-keu-profit tfoot td:not([colspan]):nth-of-type(5)::before{content:"Laba Bersih";flex:0 0 96px;color:var(--mt);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:left}
+  #tbl-keu-profit tfoot td:not([colspan]):nth-of-type(6)::before{content:"Margin";flex:0 0 96px;color:var(--mt);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:left}
+  #tbl-keu-profit tfoot td:not([colspan]):nth-of-type(7){display:none!important}
+  #tbl-keu-profit .fin-badge{white-space:nowrap}
+  #keu-profit-filter-pop{width:min(320px,calc(100vw - 32px))!important}
+
+  #tbl-keuangan,#tbl-keuangan tbody,#tbl-keuangan tr,#tbl-keuangan td{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box}
+  #tbl-keuangan{table-layout:auto!important;border-collapse:separate!important;border-spacing:0!important;font-size:12px!important}
+  #tbl-keuangan thead{display:none!important}
+  #tbl-keuangan tbody tr{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:12px 12px 10px;margin:0 0 10px;box-shadow:var(--sh)}
+  #tbl-keuangan tbody td,#tbl-keuangan tbody td:nth-child(3),#tbl-keuangan tbody td:nth-child(5){display:flex!important;align-items:flex-start;justify-content:space-between;gap:12px;padding:6px 0!important;border-bottom:1px dashed rgba(148,163,184,.22)!important;text-align:right!important;white-space:normal!important}
+  #tbl-keuangan tbody td:last-child{border-bottom:none!important;padding-bottom:0!important}
+  #tbl-keuangan tbody td::before{content:attr(data-label);flex:0 0 96px;max-width:96px;color:var(--mt);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:left;line-height:1.35;padding-top:1px}
+  #tbl-keuangan tbody td[data-label="Customer"]{word-break:break-word}
+  #tbl-keuangan .fin-badge,#tbl-keuangan .badge{white-space:nowrap}
+}
 
 body.dark .fin-stat-card{background:var(--sf)}
 body.dark .fin-list{background:var(--sf)}
@@ -4511,6 +4546,9 @@ body.dark #page-gaji>.topbar.page-header-card{
     </symbol>
     <symbol id="ico-trend-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M4 7l6 6 4-4 6 8"/><path d="M14 17h6v-6"/>
+    </symbol>
+    <symbol id="ico-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 5h16l-6 7v5l-4 2v-7L4 5Z"/>
     </symbol>
     <symbol id="ico-phone-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2M12 7v6m0 0 2.3-2.3M12 13l-2.3-2.3"/>
@@ -7726,10 +7764,36 @@ _Ateena Clothing Store_</textarea>
     <div id="keu-profit-warning"></div>
 
     <div class="fin-panel">
-      <div class="fin-panel-hdr"><div class="fin-panel-title">Laba Bersih per Order</div><div class="fin-panel-sub" id="keu-profit-sub">Dari Detail Profit tiap order</div></div>
+      <div class="fin-panel-hdr" style="gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <div style="min-width:0;flex:1 1 220px">
+          <div class="fin-panel-title">Laba Bersih per Order</div>
+          <div class="fin-panel-sub" id="keu-profit-sub">Dari Detail Profit tiap order</div>
+        </div>
+        <div style="position:relative" id="keu-profit-filter-wrap">
+          <button type="button" id="keu-profit-filter-btn" onclick="keuProfitFilterToggle(event)" style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--sf);color:var(--tx);font:inherit;font-size:12px;font-weight:800;cursor:pointer;box-shadow:var(--sh);transition:.2s">
+            <svg class="pico-inline sm" aria-hidden="true" focusable="false"><use href="#ico-filter"></use></svg>
+            <span>Filter</span>
+            <span id="keu-profit-filter-dot" style="display:none;width:7px;height:7px;border-radius:50%;background:var(--p1);flex-shrink:0"></span>
+          </button>
+          <div id="keu-profit-filter-pop" style="display:none;position:absolute;right:0;top:calc(100% + 8px);width:min(320px,calc(100vw - 32px));background:var(--sf);border:1px solid var(--bd);border-radius:14px;box-shadow:0 16px 40px rgba(15,23,42,.14);padding:12px;z-index:50">
+            <div style="font-size:11px;font-weight:800;color:var(--mt);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Cari Order</div>
+            <input id="keu-profit-q" type="search" placeholder="No order / customer / keterangan..." oninput="_keuProfitQ=this.value;renderKeuangan()" style="width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:10px;background:var(--sf2);color:var(--tx);font:inherit;font-size:12px;font-weight:600;margin-bottom:10px">
+            <div style="font-size:11px;font-weight:800;color:var(--mt);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Urutkan</div>
+            <select id="keu-profit-sort" onchange="_keuProfitSort=this.value;renderKeuangan()" style="width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:10px;background:var(--sf2);color:var(--tx);font:inherit;font-size:12px;font-weight:700">
+              <option value="newest">Terbaru</option>
+              <option value="oldest">Terlama</option>
+              <option value="margin_desc">Margin Terbesar</option>
+              <option value="margin_asc">Margin Terkecil</option>
+            </select>
+            <div style="display:flex;justify-content:flex-end;margin-top:10px">
+              <button type="button" onclick="keuProfitFilterReset()" style="padding:7px 10px;border:1px solid var(--bd);border-radius:9px;background:var(--sf2);color:var(--mt);font:inherit;font-size:11px;font-weight:800;cursor:pointer">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="tbl-wrap">
         <table class="fin-table" id="tbl-keu-profit">
-          <thead><tr><th>Order</th><th>Customer</th><th>Tgl</th><th class="num">Omzet</th><th class="num">HPP</th><th class="num">Laba Bersih</th><th class="num">Margin</th><th>Status</th></tr></thead>
+          <thead><tr><th>No Order</th><th>Customer</th><th>Keterangan</th><th class="num">Qty</th><th class="num">Omzet</th><th class="num">HPP</th><th class="num">Laba Bersih</th><th class="num">Margin</th><th>Status</th></tr></thead>
           <tbody id="keu-profit-tbl"></tbody>
           <tfoot id="keu-profit-tfoot"></tfoot>
         </table>
@@ -26047,17 +26111,17 @@ function renderKeuangan(){
       var laba=c.complete?((+o.total||0)-c.totalBiaya):null;
       var statusClass=String(o.status||'').toLowerCase().replace(/\s+/g,'-');
       return '<tr>'
-        +'<td class="mono">'+o.noOrder+'</td>'
-        +'<td style="font-weight:700">'+escHtml(o.nama)+'</td>'
-        +'<td>'+o.tgl+'</td>'
-        +'<td class="num">'+fmt(o.total)+'</td>'
-        +'<td class="num" style="color:var(--g)">'+fmt(paid)+'</td>'
-        +'<td class="num" style="color:'+(sisa>0?'var(--r)':'var(--mt)')+'">'+fmt(sisa)+'</td>'
-        +'<td><span class="badge b-'+statusClass+'">'+o.status+'</span></td>'
-        +'<td>'+(c.complete?'<span class="fin-badge ok">Lengkap</span>':'<span class="fin-badge warn" style="cursor:pointer" onclick="openProfitDetail('+o.id+')">HPP belum diisi</span>')+'</td>'
-        +'<td class="num">'+(c.complete?'<span style="color:'+(laba>=0?'var(--g)':'var(--r)')+'">'+fmt(laba)+'</span>':'<span class="fin-badge warn" style="cursor:pointer" onclick="openProfitDetail('+o.id+')">Belum dihitung</span>')+'</td>'
+        +'<td class="mono" data-label="Order">'+escHtml(String(o.noOrder||''))+'</td>'
+        +'<td data-label="Customer" style="font-weight:700">'+escHtml(String(o.nama||''))+'</td>'
+        +'<td data-label="Tgl">'+escHtml(String(o.tgl||''))+'</td>'
+        +'<td class="num" data-label="Total">'+fmt(o.total)+'</td>'
+        +'<td class="num" data-label="Dibayar" style="color:var(--g)">'+fmt(paid)+'</td>'
+        +'<td class="num" data-label="Sisa" style="color:'+(sisa>0?'var(--r)':'var(--mt)')+'">'+fmt(sisa)+'</td>'
+        +'<td data-label="Status"><span class="badge b-'+statusClass+'">'+escHtml(String(o.status||''))+'</span></td>'
+        +'<td data-label="HPP">'+(c.complete?'<span class="fin-badge ok">Lengkap</span>':'<span class="fin-badge warn" style="cursor:pointer" onclick="openProfitDetail('+o.id+')">HPP belum diisi</span>')+'</td>'
+        +'<td class="num" data-label="Laba Bersih">'+(c.complete?'<span style="color:'+(laba>=0?'var(--g)':'var(--r)')+';font-weight:800">'+fmt(laba)+'</span>':'<span class="fin-badge warn" style="cursor:pointer" onclick="openProfitDetail('+o.id+')">Belum dihitung</span>')+'</td>'
         +'</tr>';
-    }).join(''):'<tr><td colspan="9"><div class="fin-row-empty">📦 Belum ada order di periode ini</div></td></tr>';
+    }).join(''):'<tr><td colspan="9"><div class="fin-row-empty">'+finSvgIcon('box','pico-inline sm')+' Belum ada order di periode ini</div></td></tr>';
   }
   var osub=document.getElementById('keu-order-sub'); if(osub) osub.textContent=ord.count+' order · HPP lengkap '+ord.complete.length+'/'+ord.count;
 
@@ -26080,31 +26144,75 @@ function renderKeuangan(){
       profitWarn.innerHTML='<div class="fin-check-banner ok">'+finSvgIcon('check','pico-inline sm')+' Semua '+ord.count+' order sudah punya HPP & Detail Profit.</div>';
     }
   }
+  var _keuProfitQEl=document.getElementById('keu-profit-q');
+  var _keuProfitSortEl=document.getElementById('keu-profit-sort');
+  var _keuProfitDot=document.getElementById('keu-profit-filter-dot');
+  if(_keuProfitQEl && _keuProfitQEl!==document.activeElement) _keuProfitQEl.value=_keuProfitQ||'';
+  if(_keuProfitSortEl) _keuProfitSortEl.value=_keuProfitSort||'newest';
+  if(_keuProfitDot) _keuProfitDot.style.display=(String(_keuProfitQ||'').trim()||(_keuProfitSort||'newest')!=='newest')?'inline-block':'none';
   var ptbl=document.getElementById('keu-profit-tbl');
   if(ptbl){
-    var prows=ord.list.slice().sort(function(a,b){return String(b.tgl||'').localeCompare(String(a.tgl||''))||String(b.noOrder||'').localeCompare(String(a.noOrder||''));});
-    ptbl.innerHTML=prows.length?prows.map(function(o){
+    var qProf=String(_keuProfitQ||'').toLowerCase().trim();
+    var prows=ord.list.map(function(o){
       var c=finOrderCost(o);
       var laba=c.complete?((+o.total||0)-c.totalBiaya):null;
-      var mg=c.complete&&(+o.total||0)>0?(laba/(+o.total||0)*100):0;
+      var mg=c.complete&&(+o.total||0)>0?(laba/(+o.total||0)*100):null;
+      var qty=(+o.qty||0);
+      var ketRaw=String(o.produk||'').split('|').map(function(x){return String(x||'').trim();}).filter(Boolean);
+      var ket=ketRaw.map(function(line){
+        try{ return typeof prettyProdukLine==='function'?prettyProdukLine(line).replace(/\s*\[Sablon:[^\]]*\]/g,'').trim():line; }
+        catch(e){ return line; }
+      }).filter(Boolean).join(', ');
+      if(ket.length>90) ket=ket.slice(0,87)+'...';
+      return {o:o,c:c,laba:laba,mg:mg,qty:qty,ket:ket,ketSearch:(ketRaw.join(' ')+' '+String(o.noOrder||'')+' '+String(o.nama||'')).toLowerCase()};
+    }).filter(function(r){
+      if(!qProf) return true;
+      return r.ketSearch.indexOf(qProf)>=0;
+    });
+    var sortProf=_keuProfitSort||'newest';
+    prows.sort(function(a,b){
+      if(sortProf==='oldest') return String(a.o.tgl||'').localeCompare(String(b.o.tgl||''))||String(a.o.noOrder||'').localeCompare(String(b.o.noOrder||''));
+      if(sortProf==='margin_desc'){
+        var am=a.mg==null?-1e15:a.mg, bm=b.mg==null?-1e15:b.mg;
+        if(bm!==am) return bm-am;
+      }
+      if(sortProf==='margin_asc'){
+        var am2=a.mg==null?1e15:a.mg, bm2=b.mg==null?1e15:b.mg;
+        if(am2!==bm2) return am2-bm2;
+      }
+      return String(b.o.tgl||'').localeCompare(String(a.o.tgl||''))||String(b.o.noOrder||'').localeCompare(String(a.o.noOrder||''));
+    });
+    ptbl.innerHTML=prows.length?prows.map(function(r){
+      var o=r.o,c=r.c,laba=r.laba,mg=r.mg;
+      var marginHtml='—';
+      if(c.complete&&mg!=null){
+        var mgColor=mg>=0?'#059669':'#dc2626';
+        var mgBg=mg>=0?'rgba(16,185,129,.14)':'rgba(239,68,68,.12)';
+        marginHtml='<span style="display:inline-block;min-width:58px;padding:4px 8px;border-radius:999px;background:'+mgBg+';color:'+mgColor+';font-weight:800;font-size:11px;text-align:center">'+mg.toFixed(1)+'%</span>';
+      }
+      var statusHtml=c.complete?'<span class="fin-badge ok">Lengkap</span>':'<span class="fin-badge warn">Belum</span>';
       return '<tr style="cursor:pointer" onclick="openProfitDetail('+o.id+')">'
-        +'<td class="mono">'+o.noOrder+'</td>'
-        +'<td style="font-weight:700">'+escHtml(o.nama)+'</td>'
-        +'<td>'+o.tgl+'</td>'
-        +'<td class="num">'+fmt(o.total)+'</td>'
-        +'<td class="num" style="color:var(--r)">'+(c.complete?fmt(c.totalBiaya):'—')+'</td>'
-        +'<td class="num" style="color:'+(c.complete?(laba>=0?'var(--g)':'var(--r)'):'var(--mt)')+'">'+(c.complete?fmt(laba):'Belum dihitung')+'</td>'
-        +'<td class="num">'+(c.complete?mg.toFixed(1)+'%':'—')+'</td>'
-        +'<td>'+(c.complete?'<span class="fin-badge ok">Lengkap</span>':'<span class="fin-badge warn">HPP belum diisi</span>')+'</td>'
+        +'<td class="mono" data-label="No Order">'+escHtml(String(o.noOrder||''))+'</td>'
+        +'<td data-label="Customer" style="font-weight:700">'+escHtml(String(o.nama||''))+'</td>'
+        +'<td data-label="Keterangan" style="min-width:180px">'+escHtml(r.ket||'-')+'</td>'
+        +'<td class="num" data-label="Qty">'+(r.qty||0)+'</td>'
+        +'<td class="num" data-label="Omzet">'+fmt(o.total)+'</td>'
+        +'<td class="num" data-label="HPP" style="color:var(--r)">'+(c.complete?fmt(c.totalBiaya):'—')+'</td>'
+        +'<td class="num" data-label="Laba Bersih" style="color:'+(c.complete?(laba>=0?'var(--g)':'var(--r)'):'var(--mt)')+'">'+(c.complete?fmt(laba):'Belum dihitung')+'</td>'
+        +'<td class="num" data-label="Margin">'+marginHtml+'</td>'
+        +'<td data-label="Status">'+statusHtml+'</td>'
         +'</tr>';
-    }).join(''):'<tr><td colspan="8"><div class="fin-row-empty">📦 Belum ada order di periode ini</div></td></tr>';
+    }).join(''):'<tr><td colspan="9"><div class="fin-row-empty">'+finSvgIcon('box','pico-inline sm')+' '+(qProf?'Tidak ada order yang cocok dengan filter':'Belum ada order di periode ini')+'</div></td></tr>';
   }
   var ptf=document.getElementById('keu-profit-tfoot');
   if(ptf){
-    ptf.innerHTML=ord.count?'<tr style="background:var(--sf2);font-weight:900"><td colspan="3">TOTAL ORDER LENGKAP ('+ord.complete.length+')</td><td class="num">'+fmt(ord.completeOmzet)+'</td><td class="num" style="color:var(--r)">'+fmt(ord.hppOrder)+'</td><td class="num" style="color:'+(ord.profitComplete>=0?'var(--g)':'var(--r)')+'">'+fmt(ord.profitComplete)+'</td><td class="num">'+(ord.completeOmzet>0?ord.profitMargin.toFixed(1)+'%':'—')+'</td><td></td></tr>':'';
+    var completeQty=ord.complete.reduce(function(a,x){return a+(+x.o.qty||0);},0);
+    var totalMg=ord.completeOmzet>0?ord.profitMargin.toFixed(1)+'%':'—';
+    var totalMgHtml=totalMg==='—'?totalMg:'<span style="display:inline-block;min-width:58px;padding:4px 8px;border-radius:999px;background:rgba(16,185,129,.14);color:#059669;font-weight:800;font-size:11px;text-align:center">'+totalMg+'</span>';
+    ptf.innerHTML=ord.count?'<tr style="background:var(--sf2);font-weight:900"><td colspan="3">TOTAL ORDER LENGKAP ('+ord.complete.length+')</td><td class="num">'+completeQty+'</td><td class="num">'+fmt(ord.completeOmzet)+'</td><td class="num" style="color:var(--r)">'+fmt(ord.hppOrder)+'</td><td class="num" style="color:'+(ord.profitComplete>=0?'var(--g)':'var(--r)')+'">'+fmt(ord.profitComplete)+'</td><td class="num">'+totalMgHtml+'</td><td></td></tr>':'';
   }
   var psub=document.getElementById('keu-profit-sub');
-  if(psub) psub.textContent=ord.complete.length+'/'+ord.count+' order lengkap · '+range.label;
+  if(psub) psub.textContent=ord.complete.length+'/'+ord.count+' order lengkap · '+range.label+(String(_keuProfitQ||'').trim()||(_keuProfitSort||'newest')!=='newest'?' · filter aktif':'');
 
   var top=document.getElementById('keu-top-profit');
   if(top){
@@ -27552,6 +27660,27 @@ document.addEventListener('DOMContentLoaded',function(){
 
 // === KEUANGAN TAB SWITCHER ===
 var _keuTab=0;
+var _keuProfitQ='';
+var _keuProfitSort='newest';
+function keuProfitFilterToggle(e){
+  if(e) e.stopPropagation();
+  var pop=document.getElementById('keu-profit-filter-pop');
+  if(!pop) return;
+  pop.style.display=pop.style.display==='block'?'none':'block';
+}
+function keuProfitFilterReset(){
+  _keuProfitQ='';
+  _keuProfitSort='newest';
+  var q=document.getElementById('keu-profit-q'); if(q) q.value='';
+  var s=document.getElementById('keu-profit-sort'); if(s) s.value='newest';
+  renderKeuangan();
+}
+document.addEventListener('click',function(e){
+  var wrap=document.getElementById('keu-profit-filter-wrap');
+  var pop=document.getElementById('keu-profit-filter-pop');
+  if(!wrap||!pop||pop.style.display!=='block') return;
+  if(!wrap.contains(e.target)) pop.style.display='none';
+});
 function animateTabPanel(el){
   if(!el) return;
   el.classList.remove('tab-panel-in');
@@ -29281,6 +29410,20 @@ body.dark #page-keuangan .biz-range-select{color-scheme:dark;background:var(--sf
 #page-keuangan .fin-note,
 #page-keuangan .fin-closed-banner{border-radius:14px}
 body.dark #page-keuangan .fin-table th{background:var(--sf2);color:#9db8ff}
+
+@media(max-width:768px){
+  #page-keuangan .fin-kpi-grid,#page-labarugi .fin-kpi-grid,#page-neraca .fin-kpi-grid,#page-analitik .fin-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-bottom:12px!important}
+  #page-keuangan .fin-kpi,#page-labarugi .fin-kpi,#page-neraca .fin-kpi,#page-analitik .fin-kpi{padding:11px 11px 10px!important;border-radius:14px!important;box-shadow:0 6px 16px rgba(30,79,216,.05)!important}
+  #page-keuangan .fin-kpi::before,#page-labarugi .fin-kpi::before,#page-neraca .fin-kpi::before,#page-analitik .fin-kpi::before{left:12px!important;right:12px!important;height:2px!important}
+  #page-keuangan .fin-kpi::after,#page-labarugi .fin-kpi::after,#page-neraca .fin-kpi::after,#page-analitik .fin-kpi::after{width:44px!important;height:44px!important;right:-14px!important;top:-14px!important}
+  #page-keuangan .fin-kpi-top,#page-labarugi .fin-kpi-top,#page-neraca .fin-kpi-top,#page-analitik .fin-kpi-top{margin-bottom:6px!important;gap:6px!important}
+  #page-keuangan .fin-kpi-ico,#page-labarugi .fin-kpi-ico,#page-neraca .fin-kpi-ico,#page-analitik .fin-kpi-ico{width:26px!important;height:26px!important;border-radius:8px!important}
+  #page-keuangan .fin-kpi-ico .pico,#page-keuangan .fin-kpi-ico svg,#page-labarugi .fin-kpi-ico .pico,#page-labarugi .fin-kpi-ico svg,#page-neraca .fin-kpi-ico .pico,#page-neraca .fin-kpi-ico svg,#page-analitik .fin-kpi-ico .pico,#page-analitik .fin-kpi-ico svg{width:14px!important;height:14px!important}
+  #page-keuangan .fin-kpi-badge,#page-labarugi .fin-kpi-badge,#page-neraca .fin-kpi-badge,#page-analitik .fin-kpi-badge{font-size:8.5px!important;padding:2px 6px!important;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  #page-keuangan .fin-kpi-lbl,#page-labarugi .fin-kpi-lbl,#page-neraca .fin-kpi-lbl,#page-analitik .fin-kpi-lbl{font-size:9.5px!important;letter-spacing:.04em!important;line-height:1.25!important}
+  #page-keuangan .fin-kpi-val,#page-labarugi .fin-kpi-val,#page-neraca .fin-kpi-val,#page-analitik .fin-kpi-val{font-size:15px!important;margin-top:2px!important;line-height:1.2!important;word-break:break-word}
+  #page-keuangan .fin-kpi-sub,#page-labarugi .fin-kpi-sub,#page-neraca .fin-kpi-sub,#page-analitik .fin-kpi-sub{font-size:9.5px!important;margin-top:4px!important;line-height:1.35!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+}
 
 /* Jurnal Umum — hero biru */
 #page-kasir>.kasir-topbar{
